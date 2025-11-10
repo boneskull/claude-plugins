@@ -1,0 +1,23 @@
+{
+  "name": "boneskull-plugins",
+  "description": "Boneskull's personal collection of Claude Code plugins",
+  "version": "1.0.0",
+  "owner": {
+    "name": "boneskull"
+  },
+  "pluginRoot": "./plugins",
+  "plugins": [
+    {
+      "name": "example-plugin",
+      "source": "./plugins/example-plugin",
+      "description": "Comprehensive example plugin with skills, commands, agents, hooks, and MCP server",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "examples",
+      "tags": ["example", "demo", "tutorial"],
+      "strict": true
+    }
+  ]
+}
