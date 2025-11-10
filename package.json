@@ -1,0 +1,25 @@
+{
+  "name": "boneskull-claude-plugins",
+  "version": "1.0.0",
+  "description": "Personal marketplace for Claude Code plugins",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.1.1"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "plugins",
+    "marketplace"
+  ],
+  "author": "boneskull",
+  "license": "BlueOak-1.0.0"
+}
