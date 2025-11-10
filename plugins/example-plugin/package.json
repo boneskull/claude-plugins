@@ -1,0 +1,25 @@
+{
+  "name": "example-plugin-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for example-plugin",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "mcp",
+    "example"
+  ],
+  "author": "boneskull",
+  "license": "BlueOak-1.0.0"
+}
