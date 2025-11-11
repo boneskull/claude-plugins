@@ -1,13 +1,19 @@
 {
-  "name": "boneskull-claude-plugins",
-  "version": "1.0.0",
-  "description": "Personal marketplace for Claude Code plugins",
+  "name": "@boneskull/claude-plugins",
+  "version": "0.0.0",
+  "description": "World's greatest marketplace for Claude Code plugins",
   "private": true,
   "scripts": {
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint": "npm run format:check",
+    "test": "exit 0",
+    "commitlint": "commitlint"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
     "prettier": "^3.1.1"
   },
   "prettier": {
@@ -20,6 +26,10 @@
     "plugins",
     "marketplace"
   ],
-  "author": "boneskull",
-  "license": "BlueOak-1.0.0"
+  "author": "Christopher Hiller <boneskull@boneskull.com>",
+  "license": "BlueOak-1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boneskull/claude-plugins.git"
+  }
 }
