@@ -18,6 +18,18 @@
       "category": "examples",
       "tags": ["example", "demo", "tutorial"],
       "strict": true
+    },
+    {
+      "name": "bupkis",
+      "source": "./plugins/bupkis",
+      "description": "Idiomatic assertion patterns for the Bupkis testing library",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": ["testing", "assertions", "bupkis"],
+      "strict": true
     }
   ]
 }
