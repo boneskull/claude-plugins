@@ -31,6 +31,21 @@ Learn to write expressive, maintainable assertions using Bupkis' powerful assert
 /plugin install bupkis@boneskull-plugins
 ```
 
+### tools
+
+Skills and documentation for various CLI, development, and language-specific tools.
+
+- **Skills**: One skill per tool (to be added incrementally)
+- **Category**: Development/Tools
+
+Learn best practices and common patterns for the tools you use every day.
+
+#### Installing the Tools Plugin
+
+```bash
+/plugin install tools@boneskull-plugins
+```
+
 ### example-plugin
 
 Comprehensive example demonstrating all Claude plugin features:
