@@ -1,0 +1,10 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "description": "Skills and documentation for various CLI, development, and language-specific tools",
+  "author": {
+    "name": "boneskull"
+  },
+  "license": "BlueOak-1.0.0",
+  "keywords": ["tools", "cli", "documentation", "reference", "best-practices"]
+}
