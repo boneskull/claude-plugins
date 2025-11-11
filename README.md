@@ -16,6 +16,21 @@ Add this marketplace to Claude Code:
 
 ## Plugins
 
+### bupkis
+
+Idiomatic assertion patterns for the Bupkis testing library.
+
+- **Skills**: bupkis-assertion-patterns with comprehensive patterns and reference documentation
+- **Category**: Development/Testing
+
+Learn to write expressive, maintainable assertions using Bupkis' powerful assertion vocabulary.
+
+#### Installing the Bupkis Plugin
+
+```bash
+/plugin install bupkis@boneskull-plugins
+```
+
 ### example-plugin
 
 Comprehensive example demonstrating all Claude plugin features:
