@@ -13,6 +13,7 @@
 ## Task 1: Create Plugin Directory Structure
 
 **Files:**
+
 - Create: `plugins/tools/`
 - Create: `plugins/tools/.claude-plugin/`
 - Create: `plugins/tools/skills/`
@@ -70,6 +71,7 @@ Note: Git doesn't track empty directories, so we need .gitkeep files.
 ## Task 2: Create Plugin Metadata
 
 **Files:**
+
 - Create: `plugins/tools/.claude-plugin/plugin.json`
 
 **Step 1: Write plugin.json**
@@ -112,13 +114,14 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Task 3: Create Plugin README
 
 **Files:**
+
 - Create: `plugins/tools/README.md`
 
 **Step 1: Write comprehensive README**
 
 Create `plugins/tools/README.md` with this content:
 
-```markdown
+````markdown
 # Tools Plugin
 
 Skills and documentation for various CLI, development, and language-specific tools.
@@ -139,12 +142,14 @@ From marketplace:
 ```bash
 /plugin install tools@boneskull-plugins
 ```
+````
 
 ## Skill Organization
 
 ### Naming Convention
 
 Tool skills follow tool names directly:
+
 - `jq` for jq command-line JSON processor
 - `ripgrep` for ripgrep search tool
 - `prettier` for Prettier code formatter
@@ -192,7 +197,8 @@ Skills will be added incrementally as needed. Each tool will follow the structur
 ## License
 
 [Blue Oak Model License 1.0.0](../../LICENSE)
-```
+
+````
 
 **Step 2: Verify README created**
 
@@ -211,13 +217,14 @@ pattern, and progressive disclosure approach.
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
-```
+````
 
 ---
 
 ## Task 4: Create LICENSE Symlink
 
 **Files:**
+
 - Create: `plugins/tools/LICENSE` (symlink to `../../LICENSE`)
 
 **Step 1: Create symlink to repository LICENSE**
@@ -254,6 +261,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Task 5: Update Marketplace Catalog
 
 **Files:**
+
 - Modify: `.claude-plugin/marketplace.json:34-35`
 
 **Step 1: Add tools plugin entry to marketplace.json**
@@ -261,18 +269,18 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 Edit `.claude-plugin/marketplace.json` and add this entry to the `plugins` array (after the bupkis entry):
 
 ```json
-    {
-      "name": "tools",
-      "source": "./plugins/tools",
-      "description": "Skills and documentation for various CLI, development, and language-specific tools",
-      "version": "1.0.0",
-      "author": {
-        "name": "boneskull"
-      },
-      "category": "development",
-      "tags": ["tools", "cli", "documentation", "reference"],
-      "strict": true
-    }
+{
+  "name": "tools",
+  "source": "./plugins/tools",
+  "description": "Skills and documentation for various CLI, development, and language-specific tools",
+  "version": "1.0.0",
+  "author": {
+    "name": "boneskull"
+  },
+  "category": "development",
+  "tags": ["tools", "cli", "documentation", "reference"],
+  "strict": true
+}
 ```
 
 **Step 2: Verify JSON is still valid**
@@ -303,13 +311,14 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Task 6: Update Repository README
 
 **Files:**
+
 - Modify: `README.md:27-48`
 
 **Step 1: Add tools plugin section to README**
 
 Edit `README.md` and add this section after the bupkis section (around line 27):
 
-```markdown
+````markdown
 ### tools
 
 Skills and documentation for various CLI, development, and language-specific tools.
@@ -324,7 +333,9 @@ Learn best practices and common patterns for the tools you use every day.
 ```bash
 /plugin install tools@boneskull-plugins
 ```
-```
+````
+
+````
 
 **Step 2: Verify README updated**
 
@@ -342,19 +353,21 @@ Document the new tools plugin in the main README.
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
-```
+````
 
 ---
 
 ## Task 7: Verify Complete Plugin Structure
 
 **Files:**
+
 - Verify: All files created correctly
 
 **Step 1: Verify directory tree structure**
 
 Run: `tree plugins/tools -a`
 Expected output:
+
 ```
 plugins/tools
 ├── .claude-plugin

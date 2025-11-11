@@ -110,7 +110,7 @@ Add entry to `.claude-plugin/marketplace.json`:
 
 Add to plugins section:
 
-```markdown
+````markdown
 ### tools
 
 Skills and documentation for various CLI, development, and language-specific tools.
@@ -125,7 +125,7 @@ Learn best practices and common patterns for the tools you use every day.
 \```bash
 /plugin install tools@boneskull-plugins
 \```
-```
+````
 
 ## Implementation
 

@@ -24,6 +24,7 @@ From marketplace:
 ### Naming Convention
 
 Tool skills follow tool names directly:
+
 - `jq` for jq command-line JSON processor
 - `ripgrep` for ripgrep search tool
 - `prettier` for Prettier code formatter
