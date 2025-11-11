@@ -30,6 +30,18 @@
       "category": "development",
       "tags": ["testing", "assertions", "bupkis"],
       "strict": true
+    },
+    {
+      "name": "tools",
+      "source": "./plugins/tools",
+      "description": "Skills and documentation for various CLI, development, and language-specific tools",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": ["tools", "cli", "documentation", "reference"],
+      "strict": true
     }
   ]
 }
