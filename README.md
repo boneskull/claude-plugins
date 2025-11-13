@@ -46,39 +46,20 @@ Learn best practices and common patterns for the tools you use every day.
 /plugin install tools@boneskull-plugins
 ```
 
-### example-plugin
+### github
 
-Comprehensive example demonstrating all Claude plugin features:
+Commands for interacting with GitHub issues and pull requests (PRs).
 
-- **Skills**: Example skill with progressive disclosure pattern
-- **Commands**: `/example-plugin:hello` and `/example-plugin:analyze`
-- **Agents**: `example-agent` for code analysis
-- **Hooks**: SessionStart and PostToolUse examples
-- **MCP Server**: TypeScript-based server with `greet` and `calculate` tools
+- **Commands**: Workflow commands for common GitHub operations
+- **Category**: Development/Version Control
 
-#### Installing the Example Plugin
+Streamline your GitHub workflow with commands for resolving review comments and managing PRs.
 
-```bash
-/plugin install example-plugin@boneskull-plugins
-```
-
-#### Using the Example Plugin
-
-**Commands:**
+#### Installing the GitHub Plugin
 
 ```bash
-/example-plugin:hello World
-/example-plugin:analyze path/to/file
+/plugin install github@boneskull-plugins
 ```
-
-**Skill:**
-The example-skill is automatically invoked when relevant.
-
-**Agent:**
-Invoke via Task tool or manually request analysis tasks.
-
-**MCP Tools:**
-Tools appear as `mcp__example-mcp__greet` and `mcp__example-mcp__calculate`.
 
 ## Development
 
@@ -92,11 +73,6 @@ npm install
 
 # Format code
 npm run format
-
-# Build example plugin MCP server
-cd plugins/example-plugin
-npm install
-npm run build
 ```
 
 ## Repository Structure
@@ -106,7 +82,9 @@ claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json      # Marketplace catalog
 ├── plugins/
-│   └── example-plugin/       # Comprehensive example plugin
+│   ├── bupkis/               # Bupkis assertion patterns
+│   ├── github/               # GitHub workflow commands
+│   └── tools/                # CLI and development tools
 ├── docs/
 │   ├── plans/                # Implementation plans
 │   └── DEVELOPMENT.md        # Development guide

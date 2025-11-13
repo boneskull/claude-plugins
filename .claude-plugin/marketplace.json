@@ -8,18 +8,6 @@
   "pluginRoot": "./plugins",
   "plugins": [
     {
-      "name": "example-plugin",
-      "source": "./plugins/example-plugin",
-      "description": "Comprehensive example plugin with skills, commands, agents, hooks, and MCP server",
-      "version": "1.0.0",
-      "author": {
-        "name": "boneskull"
-      },
-      "category": "examples",
-      "tags": ["example", "demo", "tutorial"],
-      "strict": true
-    },
-    {
       "name": "bupkis",
       "source": "./plugins/bupkis",
       "description": "Idiomatic assertion patterns for the Bupkis testing library",
@@ -29,6 +17,18 @@
       },
       "category": "development",
       "tags": ["testing", "assertions", "bupkis"],
+      "strict": true
+    },
+    {
+      "name": "github",
+      "source": "./plugins/github",
+      "description": "Commands for interacting with GitHub issues and pull requests (PRs)",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": ["github", "issues", "pull-requests", "prs"],
       "strict": true
     },
     {
