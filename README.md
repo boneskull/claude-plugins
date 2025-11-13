@@ -77,7 +77,7 @@ npm run format
 
 ## Repository Structure
 
-```
+```text
 claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json      # Marketplace catalog

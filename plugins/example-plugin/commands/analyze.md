@@ -10,7 +10,7 @@ Read and analyze a file, providing insights about its contents.
 
 ## Usage
 
-```
+```text
 /example-plugin:analyze src/index.ts
 /example-plugin:analyze README.md
 ```
@@ -27,7 +27,7 @@ Read and analyze a file, providing insights about its contents.
 
 4. Present findings in a structured format:
 
-```
+```text
 # Analysis: [filename]
 
 **Type**: [file type]

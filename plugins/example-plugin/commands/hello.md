@@ -9,7 +9,7 @@ Greet the user with a personalized message.
 
 ## Usage
 
-```
+```text
 /example-plugin:hello World
 /example-plugin:hello Claude
 /example-plugin:hello

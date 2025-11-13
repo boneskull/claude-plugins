@@ -12,7 +12,7 @@ Load reference files based on user intent:
 
 ## Pattern 2: Directory Organization
 
-```
+```text
 skill-name/
 ├── SKILL.md           # Entry point (always loaded)
 ├── references/        # Documentation (on-demand)

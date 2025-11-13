@@ -50,7 +50,7 @@ For code analysis tasks:
 
 ## Example Usage
 
-```
+```text
 Task: Analyze the MCP server implementation
 Response:
 

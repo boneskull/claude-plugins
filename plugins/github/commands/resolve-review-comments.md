@@ -90,6 +90,7 @@ gh api graphql -f query='
 ```
 
 ## Constraints
+
 - Only address comments marked as "valid" after analysis
 - Always test fixes before committing
 - Use conventional commit messages referencing the review

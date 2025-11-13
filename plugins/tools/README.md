@@ -36,7 +36,7 @@ This predictable naming makes skills easy to find.
 
 Each tool skill follows this pattern:
 
-```
+```text
 skills/<tool-name>/
 ├── SKILL.md                    # Main skill with YAML frontmatter
 └── reference/                  # Optional: progressive disclosure
@@ -55,12 +55,14 @@ Skills use reference files for detailed documentation. The main SKILL.md contain
 
 1. Create directory: `skills/<tool-name>/`
 2. Write `SKILL.md` with YAML frontmatter:
+
    ```yaml
    ---
    name: tool-name
    description: Brief description of what this skill teaches
    ---
    ```
+
 3. Add essential patterns in SKILL.md
 4. (Optional) Create `reference/` subdirectory for detailed docs
 5. Update this README to list the new skill
