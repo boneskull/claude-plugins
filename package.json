@@ -10,10 +10,13 @@
     "lint": "npm run format:check",
     "test": "exit 0",
     "commitlint": "commitlint"
+    "commitlint": "commitlint",
   },
   "devDependencies": {
     "@commitlint/cli": "20.1.0",
     "@commitlint/config-conventional": "20.0.0",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "husky": "9.1.7",
     "prettier": "3.6.2"
   },
