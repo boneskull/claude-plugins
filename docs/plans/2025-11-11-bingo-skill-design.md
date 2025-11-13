@@ -11,6 +11,7 @@ The Bingo skill provides quick reference and patterns for using Bingo, a CLI too
 ## Scope
 
 The skill covers:
+
 - Creating new projects from templates
 - Managing template updates and migrations
 - Common workflows for personal use
@@ -32,6 +33,7 @@ plugins/tools/skills/bingo/
 ### Progressive Disclosure Pattern
 
 **SKILL.md** (100-150 lines):
+
 - YAML frontmatter
 - Brief Bingo overview
 - Quick start command
@@ -39,6 +41,7 @@ plugins/tools/skills/bingo/
 - Cross-references to detailed docs
 
 **reference/** (loaded on-demand):
+
 - Full command reference
 - Extended examples
 - Template-specific guidance
@@ -66,6 +69,7 @@ SKILL.md organizes content by tasks:
    - Troubleshooting
 
 Each pattern includes:
+
 - Scenario/goal
 - Complete command with explanation
 - Expected results
@@ -74,16 +78,19 @@ Each pattern includes:
 ### Reference Files
 
 **README.md:**
+
 - Complete command syntax
 - All options and flags
 - Return codes and output
 
 **common_patterns.md:**
+
 - Expanded task examples
 - Multiple scenario variations
 - Edge cases and gotchas
 
 **templates.md:**
+
 - Available templates
 - Template-specific options
 - Recommendations per use case
@@ -100,6 +107,7 @@ description: Template management for web repositories - creating projects, apply
 ## Skill Activation
 
 The skill activates automatically when:
+
 - User mentions "Bingo"
 - Questions about repository templates
 - Asks about project setup/scaffolding
@@ -117,17 +125,20 @@ No explicit invocation required.
 ## Implementation Priorities
 
 **Must Have:**
+
 1. SKILL.md with common task patterns
 2. Quick start section
 3. Template selection guidance
 4. Update workflow
 
 **Should Have:**
+
 1. reference/README.md with command reference
 2. reference/common_patterns.md with examples
 3. reference/templates.md with template details
 
 **Could Have:**
+
 1. Troubleshooting section
 2. Migration guides
 3. Advanced customization patterns

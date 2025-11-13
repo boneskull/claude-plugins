@@ -9,6 +9,7 @@ Guide to available Bingo templates and their features.
 **Full-featured TypeScript application template**
 
 **Includes:**
+
 - TypeScript (latest version)
 - ESLint with recommended rules
 - Prettier for formatting
@@ -18,16 +19,19 @@ Guide to available Bingo templates and their features.
 - Comprehensive tsconfig.json
 
 **Best for:**
+
 - New TypeScript projects
 - Applications (not libraries)
 - Projects needing complete tooling
 
 **Creation:**
+
 ```bash
 npx bingo typescript-app
 ```
 
 **Generated structure:**
+
 ```
 my-app/
 ├── src/
@@ -44,14 +48,14 @@ my-app/
 
 ## Template Comparison
 
-| Feature | typescript-app |
-|---------|----------------|
-| TypeScript | ✓ |
-| ESLint | ✓ |
-| Prettier | ✓ |
-| Testing | Vitest |
-| Documentation | ✓ |
-| CI/CD | Optional |
+| Feature       | typescript-app |
+| ------------- | -------------- |
+| TypeScript    | ✓              |
+| ESLint        | ✓              |
+| Prettier      | ✓              |
+| Testing       | Vitest         |
+| Documentation | ✓              |
+| CI/CD         | Optional       |
 
 ## Customization Options
 
@@ -60,18 +64,21 @@ During creation, templates prompt for:
 ### typescript-app Customizations
 
 **Project metadata:**
+
 - Name
 - Description
 - Author
 - License
 
 **Tooling choices:**
+
 - Strict TypeScript mode
 - ESLint rules (recommended/strict)
 - Test coverage thresholds
 - Git hooks (Husky)
 
 **Build options:**
+
 - Bundle (esbuild, tsup, etc.)
 - Target environment
 - Source maps
@@ -95,17 +102,20 @@ During creation, templates prompt for:
 ## Template Updates
 
 Templates receive updates for:
+
 - Dependency version bumps
 - New tooling improvements
 - Security patches
 - Configuration optimizations
 
 **Update process:**
+
 ```bash
 npx bingo update
 ```
 
 Updates preserve:
+
 - Project-specific code
 - Custom configurations
 - Additional dependencies
@@ -114,12 +124,14 @@ Updates preserve:
 ## Template Customization Philosophy
 
 Bingo templates balance:
+
 - **Completeness**: Include necessary tooling
 - **Flexibility**: Allow customization
 - **Maintainability**: Easy to update
 - **Best practices**: Follow conventions
 
 **What templates DON'T include:**
+
 - Application-specific logic
 - Custom business rules
 - Proprietary configurations
@@ -128,6 +140,7 @@ Bingo templates balance:
 ## Future Templates
 
 Templates under consideration:
+
 - JavaScript app
 - TypeScript library
 - Monorepo structure

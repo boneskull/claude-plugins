@@ -35,6 +35,7 @@ npx bingo typescript-app my-project-name
 ```
 
 **What happens:**
+
 - Bingo prompts for configuration options
 - Generates project with selected tooling
 - Installs dependencies
@@ -55,6 +56,7 @@ npx bingo update --dry-run
 ```
 
 **What happens:**
+
 - Bingo detects your template
 - Applies updates while preserving customizations
 - Shows diff of changes
@@ -65,10 +67,12 @@ Template updates maintain your project-specific configurations.
 ### Choosing a Template
 
 **Available templates:**
+
 - `typescript-app` - TypeScript application with full tooling
 - More templates available - see `reference/templates.md`
 
 **Selection criteria:**
+
 - Project type (app, library, etc.)
 - Language preference
 - Tooling requirements
@@ -77,16 +81,17 @@ See `reference/templates.md` for detailed template comparison.
 
 ## When to Use What
 
-| Task | Command | When |
-|------|---------|------|
-| New project | `npx bingo <template>` | Starting from scratch |
-| Update existing | `npx bingo update` | Keeping project current |
+| Task            | Command                      | When                    |
+| --------------- | ---------------------------- | ----------------------- |
+| New project     | `npx bingo <template>`       | Starting from scratch   |
+| Update existing | `npx bingo update`           | Keeping project current |
 | Preview changes | `npx bingo update --dry-run` | Before applying updates |
-| Custom options | Interactive prompts | During creation |
+| Custom options  | Interactive prompts          | During creation         |
 
 ## Package Manager Support
 
 Bingo supports multiple package managers:
+
 - npm (default)
 - pnpm (`--packageManager pnpm`)
 - yarn (`--packageManager yarn`)
@@ -103,6 +108,7 @@ Specify during creation or Bingo detects from existing project.
 ## Progressive Disclosure
 
 For detailed information:
+
 - **Command reference**: `reference/README.md`
 - **Extended examples**: `reference/common_patterns.md`
 - **Template details**: `reference/templates.md`

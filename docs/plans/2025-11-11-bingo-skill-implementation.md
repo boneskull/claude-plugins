@@ -13,6 +13,7 @@
 ## Task 1: Create Skill Directory Structure
 
 **Files:**
+
 - Create: `plugins/tools/skills/bingo/`
 - Create: `plugins/tools/skills/bingo/reference/`
 
@@ -50,13 +51,14 @@ git commit -m "feat(tools): create bingo skill directory structure" -m "Add base
 ## Task 2: Create Main SKILL.md
 
 **Files:**
+
 - Create: `plugins/tools/skills/bingo/SKILL.md`
 
 **Step 1: Write SKILL.md with YAML frontmatter and content**
 
 Create `plugins/tools/skills/bingo/SKILL.md` with this content:
 
-```markdown
+````markdown
 ---
 name: bingo
 description: Template management for web repositories - creating projects, applying updates, and managing configurations
@@ -83,17 +85,22 @@ Bingo will prompt for customization options and generate a complete project with
 **Scenario**: Start a new project from a template
 
 \```bash
+
 # Basic usage with default template
+
 npx bingo typescript-app
 
 # Choose package manager
+
 npx bingo typescript-app --packageManager pnpm
 
 # Specify project directory
+
 npx bingo typescript-app my-project-name
 \```
 
 **What happens:**
+
 - Bingo prompts for configuration options
 - Generates project with selected tooling
 - Installs dependencies
@@ -106,14 +113,18 @@ See `reference/common_patterns.md` for more creation scenarios.
 **Scenario**: Apply template updates to an existing project
 
 \```bash
+
 # Update to latest template version
+
 npx bingo update
 
 # Preview changes without applying
+
 npx bingo update --dry-run
 \```
 
 **What happens:**
+
 - Bingo detects your template
 - Applies updates while preserving customizations
 - Shows diff of changes
@@ -124,10 +135,12 @@ Template updates maintain your project-specific configurations.
 ### Choosing a Template
 
 **Available templates:**
+
 - `typescript-app` - TypeScript application with full tooling
 - More templates available - see `reference/templates.md`
 
 **Selection criteria:**
+
 - Project type (app, library, etc.)
 - Language preference
 - Tooling requirements
@@ -136,16 +149,17 @@ See `reference/templates.md` for detailed template comparison.
 
 ## When to Use What
 
-| Task | Command | When |
-|------|---------|------|
-| New project | `npx bingo <template>` | Starting from scratch |
-| Update existing | `npx bingo update` | Keeping project current |
+| Task            | Command                      | When                    |
+| --------------- | ---------------------------- | ----------------------- |
+| New project     | `npx bingo <template>`       | Starting from scratch   |
+| Update existing | `npx bingo update`           | Keeping project current |
 | Preview changes | `npx bingo update --dry-run` | Before applying updates |
-| Custom options | Interactive prompts | During creation |
+| Custom options  | Interactive prompts          | During creation         |
 
 ## Package Manager Support
 
 Bingo supports multiple package managers:
+
 - npm (default)
 - pnpm (`--packageManager pnpm`)
 - yarn (`--packageManager yarn`)
@@ -162,6 +176,7 @@ Specify during creation or Bingo detects from existing project.
 ## Progressive Disclosure
 
 For detailed information:
+
 - **Command reference**: `reference/README.md`
 - **Extended examples**: `reference/common_patterns.md`
 - **Template details**: `reference/templates.md`
@@ -187,19 +202,21 @@ Expected: See `---` lines with name and description
 git add plugins/tools/skills/bingo/SKILL.md
 git commit -m "feat(tools): add bingo skill main documentation" -m "Document common Bingo usage patterns with task-oriented organization." -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
+````
 
 ---
 
 ## Task 3: Create Command Reference
 
 **Files:**
+
 - Create: `plugins/tools/skills/bingo/reference/README.md`
 
 **Step 1: Write command reference**
 
 Create `plugins/tools/skills/bingo/reference/README.md` with this content:
 
-```markdown
+````markdown
 # Bingo Command Reference
 
 Complete reference for Bingo CLI commands and options.
@@ -221,10 +238,12 @@ npx bingo <template> [directory] [options]
 \```
 
 **Arguments:**
+
 - `<template>` - Template name (required)
 - `[directory]` - Project directory (optional, defaults to current directory)
 
 **Options:**
+
 - `--packageManager <manager>` - Package manager to use (npm, pnpm, yarn)
 - `--skipInstall` - Skip dependency installation
 - `--skipGit` - Skip git repository initialization
@@ -232,16 +251,21 @@ npx bingo <template> [directory] [options]
 **Examples:**
 
 \```bash
+
 # Create in current directory
+
 npx bingo typescript-app
 
 # Create in specific directory
+
 npx bingo typescript-app my-app
 
 # Use pnpm
+
 npx bingo typescript-app --packageManager pnpm
 
 # Skip installation for manual setup
+
 npx bingo typescript-app --skipInstall
 \```
 
@@ -252,19 +276,24 @@ npx bingo update [options]
 \```
 
 **Options:**
+
 - `--dry-run` - Preview changes without applying
 - `--force` - Apply updates without confirmation
 
 **Examples:**
 
 \```bash
+
 # Interactive update with preview
+
 npx bingo update
 
 # Preview changes only
+
 npx bingo update --dry-run
 
 # Force update without prompts
+
 npx bingo update --force
 \```
 
@@ -281,6 +310,7 @@ npx bingo update --force
 ## Output
 
 Bingo provides:
+
 - Progress indicators during generation
 - Diff previews for updates
 - Confirmation prompts for destructive operations
@@ -289,6 +319,7 @@ Bingo provides:
 ## Interactive Mode
 
 When creating projects, Bingo prompts for:
+
 - Project metadata (name, description, author)
 - Tooling choices (linters, formatters, test frameworks)
 - Configuration options (strict mode, coverage thresholds)
@@ -307,19 +338,21 @@ Expected: Line count > 60
 git add plugins/tools/skills/bingo/reference/README.md
 git commit -m "docs(tools): add bingo command reference" -m "Complete command syntax and options reference." -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
+````
 
 ---
 
 ## Task 4: Create Common Patterns Documentation
 
 **Files:**
+
 - Create: `plugins/tools/skills/bingo/reference/common_patterns.md`
 
 **Step 1: Write common patterns**
 
 Create `plugins/tools/skills/bingo/reference/common_patterns.md` with this content:
 
-```markdown
+````markdown
 # Bingo Common Patterns
 
 Detailed examples and patterns for common Bingo workflows.
@@ -336,6 +369,7 @@ cd my-app
 \```
 
 **What you get:**
+
 - TypeScript configuration (tsconfig.json)
 - ESLint + Prettier
 - Vitest for testing
@@ -344,9 +378,9 @@ cd my-app
 
 **Next steps:**
 \```bash
-pnpm install    # Install dependencies (if skipped)
-pnpm test       # Run tests
-pnpm dev        # Start development
+pnpm install # Install dependencies (if skipped)
+pnpm test # Run tests
+pnpm dev # Start development
 \```
 
 ### Minimal Setup
@@ -364,13 +398,17 @@ Generates project with default settings, no dependency installation.
 **Using different package managers:**
 
 \```bash
+
 # pnpm (faster, space-efficient)
+
 npx bingo typescript-app --packageManager pnpm
 
 # yarn (classic workflow)
+
 npx bingo typescript-app --packageManager yarn
 
 # npm (default, widely supported)
+
 npx bingo typescript-app --packageManager npm
 \```
 
@@ -381,12 +419,15 @@ npx bingo typescript-app --packageManager npm
 **Always preview before applying:**
 
 \```bash
+
 # Step 1: Preview changes
+
 npx bingo update --dry-run
 
 # Step 2: Review diff, check for conflicts
 
 # Step 3: Apply if safe
+
 npx bingo update
 \```
 
@@ -402,10 +443,12 @@ npx bingo update
 6. Test thoroughly
 
 \```bash
+
 # Backup strategy
-git stash      # Stash local changes
+
+git stash # Stash local changes
 npx bingo update
-git stash pop  # Restore and merge
+git stash pop # Restore and merge
 \```
 
 ### Continuous Updates
@@ -414,19 +457,20 @@ git stash pop  # Restore and merge
 
 \```bash
 #!/bin/bash
+
 # update-all.sh - Update all bingo projects
 
-for dir in */; do
-  if [ -f "$dir/.bingo" ]; then
-    echo "Updating $dir..."
+for dir in \*/; do
+if [ -f "$dir/.bingo" ]; then
+echo "Updating $dir..."
     cd "$dir"
-    npx bingo update --dry-run
-    read -p "Apply? (y/n) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-      npx bingo update
-    fi
-    cd ..
-  fi
+npx bingo update --dry-run
+read -p "Apply? (y/n) " -n 1 -r
+if [[$REPLY =~ ^[Yy]$]]; then
+npx bingo update
+fi
+cd ..
+fi
 done
 \```
 
@@ -439,6 +483,7 @@ done
 Not directly supported - Bingo is for new projects or projects already using Bingo templates.
 
 **Workaround:**
+
 1. Create fresh Bingo project
 2. Copy source files to new project
 3. Merge configurations manually
@@ -451,6 +496,7 @@ Not directly supported - Bingo is for new projects or projects already using Bin
 Bingo preserves template identity - switching templates not supported after creation.
 
 **Alternative:**
+
 - Create new project with desired template
 - Migrate code manually
 - Consider if template customization achieves goal instead
@@ -462,15 +508,22 @@ Bingo preserves template identity - switching templates not supported after crea
 **Dependencies fail to install:**
 
 \```bash
+
 # Skip install, do manually
+
 npx bingo typescript-app --skipInstall
 cd my-app
 
 # Try different package manager
+
 pnpm install
+
 # or
+
 yarn install
+
 # or
+
 npm install
 \```
 
@@ -479,21 +532,29 @@ npm install
 **Template updates conflict with custom changes:**
 
 \```bash
+
 # Preview changes
+
 npx bingo update --dry-run > update-diff.txt
 
 # Review diff
+
 cat update-diff.txt
 
 # Backup customizations
+
 git branch backup-before-update
 
 # Apply update
+
 npx bingo update
 
 # If conflicts occur
-git diff  # See what changed
+
+git diff # See what changed
+
 # Resolve manually
+
 \```
 
 ### Permission Issues
@@ -501,10 +562,13 @@ git diff  # See what changed
 **npx fails with permissions:**
 
 \```bash
+
 # Use explicit npm registry
+
 npx --registry=https://registry.npmjs.org bingo typescript-app
 
 # Or install globally (not recommended)
+
 npm install -g create-bingo
 bingo typescript-app
 \```
@@ -556,7 +620,7 @@ bingo typescript-app
    - Document custom configurations
    - Use version control
    - Review updates for conflicts
-\```
+     \```
 
 **Step 2: Verify common_patterns.md created**
 
@@ -569,19 +633,21 @@ Expected: Line count > 150
 git add plugins/tools/skills/bingo/reference/common_patterns.md
 git commit -m "docs(tools): add bingo common patterns" -m "Detailed examples and workflow patterns for Bingo usage." -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
+````
 
 ---
 
 ## Task 5: Create Templates Documentation
 
 **Files:**
+
 - Create: `plugins/tools/skills/bingo/reference/templates.md`
 
 **Step 1: Write templates documentation**
 
 Create `plugins/tools/skills/bingo/reference/templates.md` with this content:
 
-```markdown
+````markdown
 # Bingo Templates
 
 Guide to available Bingo templates and their features.
@@ -593,6 +659,7 @@ Guide to available Bingo templates and their features.
 **Full-featured TypeScript application template**
 
 **Includes:**
+
 - TypeScript (latest version)
 - ESLint with recommended rules
 - Prettier for formatting
@@ -602,6 +669,7 @@ Guide to available Bingo templates and their features.
 - Comprehensive tsconfig.json
 
 **Best for:**
+
 - New TypeScript projects
 - Applications (not libraries)
 - Projects needing complete tooling
@@ -615,9 +683,9 @@ npx bingo typescript-app
 \```
 my-app/
 ├── src/
-│   └── index.ts
+│ └── index.ts
 ├── tests/
-│   └── index.test.ts
+│ └── index.test.ts
 ├── package.json
 ├── tsconfig.json
 ├── .eslintrc.js
@@ -628,14 +696,14 @@ my-app/
 
 ## Template Comparison
 
-| Feature | typescript-app |
-|---------|----------------|
-| TypeScript | ✓ |
-| ESLint | ✓ |
-| Prettier | ✓ |
-| Testing | Vitest |
-| Documentation | ✓ |
-| CI/CD | Optional |
+| Feature       | typescript-app |
+| ------------- | -------------- |
+| TypeScript    | ✓              |
+| ESLint        | ✓              |
+| Prettier      | ✓              |
+| Testing       | Vitest         |
+| Documentation | ✓              |
+| CI/CD         | Optional       |
 
 ## Customization Options
 
@@ -644,18 +712,21 @@ During creation, templates prompt for:
 ### typescript-app Customizations
 
 **Project metadata:**
+
 - Name
 - Description
 - Author
 - License
 
 **Tooling choices:**
+
 - Strict TypeScript mode
 - ESLint rules (recommended/strict)
 - Test coverage thresholds
 - Git hooks (Husky)
 
 **Build options:**
+
 - Bundle (esbuild, tsup, etc.)
 - Target environment
 - Source maps
@@ -679,6 +750,7 @@ During creation, templates prompt for:
 ## Template Updates
 
 Templates receive updates for:
+
 - Dependency version bumps
 - New tooling improvements
 - Security patches
@@ -690,6 +762,7 @@ npx bingo update
 \```
 
 Updates preserve:
+
 - Project-specific code
 - Custom configurations
 - Additional dependencies
@@ -698,12 +771,14 @@ Updates preserve:
 ## Template Customization Philosophy
 
 Bingo templates balance:
+
 - **Completeness**: Include necessary tooling
 - **Flexibility**: Allow customization
 - **Maintainability**: Easy to update
 - **Best practices**: Follow conventions
 
 **What templates DON'T include:**
+
 - Application-specific logic
 - Custom business rules
 - Proprietary configurations
@@ -712,6 +787,7 @@ Bingo templates balance:
 ## Future Templates
 
 Templates under consideration:
+
 - JavaScript app
 - TypeScript library
 - Monorepo structure
@@ -731,12 +807,14 @@ Expected: Line count > 100
 git add plugins/tools/skills/bingo/reference/templates.md
 git commit -m "docs(tools): add bingo templates reference" -m "Document available templates and selection guidance." -m "🤖 Generated with [Claude Code](https://claude.com/claude-code)" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
+````
 
 ---
 
 ## Task 6: Format and Verify
 
 **Files:**
+
 - Verify: All created files
 
 **Step 1: Run Prettier formatter**
@@ -754,6 +832,7 @@ Expected: Valid YAML frontmatter with `---` delimiters
 
 Run: `tree plugins/tools/skills/bingo -a`
 Expected output:
+
 ```
 plugins/tools/skills/bingo
 ├── SKILL.md
@@ -769,6 +848,7 @@ plugins/tools/skills/bingo
 
 Run: `ls -1 plugins/tools/skills/bingo/reference/`
 Expected:
+
 ```
 README.md
 common_patterns.md

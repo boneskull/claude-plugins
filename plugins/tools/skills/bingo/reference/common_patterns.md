@@ -14,6 +14,7 @@ cd my-app
 ```
 
 **What you get:**
+
 - TypeScript configuration (tsconfig.json)
 - ESLint + Prettier
 - Vitest for testing
@@ -21,6 +22,7 @@ cd my-app
 - Git repository initialized
 
 **Next steps:**
+
 ```bash
 pnpm install    # Install dependencies (if skipped)
 pnpm test       # Run tests
@@ -117,6 +119,7 @@ done
 Not directly supported - Bingo is for new projects or projects already using Bingo templates.
 
 **Workaround:**
+
 1. Create fresh Bingo project
 2. Copy source files to new project
 3. Merge configurations manually
@@ -129,6 +132,7 @@ Not directly supported - Bingo is for new projects or projects already using Bin
 Bingo preserves template identity - switching templates not supported after creation.
 
 **Alternative:**
+
 - Create new project with desired template
 - Migrate code manually
 - Consider if template customization achieves goal instead

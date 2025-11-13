@@ -19,10 +19,12 @@ npx bingo <template> [directory] [options]
 ```
 
 **Arguments:**
+
 - `<template>` - Template name (required)
 - `[directory]` - Project directory (optional, defaults to current directory)
 
 **Options:**
+
 - `--packageManager <manager>` - Package manager to use (npm, pnpm, yarn)
 - `--skipInstall` - Skip dependency installation
 - `--skipGit` - Skip git repository initialization
@@ -50,6 +52,7 @@ npx bingo update [options]
 ```
 
 **Options:**
+
 - `--dry-run` - Preview changes without applying
 - `--force` - Apply updates without confirmation
 
@@ -79,6 +82,7 @@ npx bingo update --force
 ## Output
 
 Bingo provides:
+
 - Progress indicators during generation
 - Diff previews for updates
 - Confirmation prompts for destructive operations
@@ -87,6 +91,7 @@ Bingo provides:
 ## Interactive Mode
 
 When creating projects, Bingo prompts for:
+
 - Project metadata (name, description, author)
 - Tooling choices (linters, formatters, test frameworks)
 - Configuration options (strict mode, coverage thresholds)
