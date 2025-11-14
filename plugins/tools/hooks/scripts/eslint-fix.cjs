@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
 const { readFileSync } = require('fs');
+const { relative } = require('path');
 
 // Read hook input from stdin
 let input;
@@ -39,6 +40,32 @@ try {
   process.exit(0);
 }
 
-// TODO: Run eslint --fix and parse output
+// Run eslint --fix with JSON output
+// Use relative path to avoid ESLint base path issues
+const relativePath = cwd ? relative(cwd, file_path) : file_path;
+let output;
+try {
+  output = execSync(`npx eslint --fix --format json "${relativePath}"`, {
+    cwd,
+    encoding: 'utf-8',
+    stdio: 'pipe'
+  });
+} catch (error) {
+  // ESLint exits with non-zero when errors exist
+  output = error.stdout || '[]';
+}
+
+// Parse results and extract remaining errors
+let results;
+try {
+  results = JSON.parse(output);
+} catch {
+  // Invalid JSON, assume no errors
+  results = [];
+}
+
+const errors = results[0]?.messages?.filter(msg => msg.severity === 2) || [];
+
+// TODO: Format and report errors
 console.log(JSON.stringify({ continue: true }));
 process.exit(0);
