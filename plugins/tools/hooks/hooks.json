@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ./hooks/scripts/eslint-fix.js",
+            "command": "node ./hooks/scripts/eslint-fix.cjs",
             "timeout": 30
           }
         ]
