@@ -14,52 +14,62 @@ Add this marketplace to Claude Code:
 /plugin marketplace add /path/to/claude-plugins
 ```
 
-## Plugins
+## Available Plugins
 
 ### bupkis
 
+**Category:** Development/Testing
+
 Idiomatic assertion patterns for the Bupkis testing library.
 
-- **Skills**: bupkis-assertion-patterns with comprehensive patterns and reference documentation
-- **Category**: Development/Testing
+**Contains:**
 
-Learn to write expressive, maintainable assertions using Bupkis' powerful assertion vocabulary.
+- **Skills:**
+  - `bupkis-assertion-patterns` - Learn expressive, maintainable assertions using Bupkis' powerful assertion vocabulary with progressive disclosure (308 lines main, 2,080 lines references)
 
-#### Installing the Bupkis Plugin
+**Installation:**
 
 ```bash
 /plugin install bupkis@boneskull-plugins
 ```
 
+### github
+
+**Category:** Development/Version Control
+
+Commands for interacting with GitHub issues and pull requests.
+
+**Contains:**
+
+- **Commands:**
+  - `/github:resolve-review-comments` - Automatically resolve GitHub PR review comments with fix → test → commit → push → reply workflow
+
+**Installation:**
+
+```bash
+/plugin install github@boneskull-plugins
+```
+
 ### tools
 
-Skills and documentation for various CLI, development, and language-specific tools.
+**Category:** Development/Tools
 
-- **Skills**: One skill per tool (to be added incrementally)
-- **Category**: Development/Tools
+Skills and documentation for various CLI and development tools.
 
-Learn best practices and common patterns for the tools you use every day.
+**Contains:**
 
-#### Installing the Tools Plugin
+- **Skills:**
+  - `git-commit-messages` - Format git commit messages correctly using multiline strings (not HEREDOC) for reliable commits
+
+**Installation:**
 
 ```bash
 /plugin install tools@boneskull-plugins
 ```
 
-### github
+---
 
-Commands for interacting with GitHub issues and pull requests (PRs).
-
-- **Commands**: Workflow commands for common GitHub operations
-- **Category**: Development/Version Control
-
-Streamline your GitHub workflow with commands for resolving review comments and managing PRs.
-
-#### Installing the GitHub Plugin
-
-```bash
-/plugin install github@boneskull-plugins
-```
+**Note:** The `example-plugin` is included in the repository as a comprehensive reference but is not published to the marketplace.
 
 ## Development
 
@@ -73,22 +83,6 @@ npm install
 
 # Format code
 npm run format
-```
-
-## Repository Structure
-
-```text
-claude-plugins/
-├── .claude-plugin/
-│   └── marketplace.json      # Marketplace catalog
-├── plugins/
-│   ├── bupkis/               # Bupkis assertion patterns
-│   ├── github/               # GitHub workflow commands
-│   └── tools/                # CLI and development tools
-├── docs/
-│   ├── plans/                # Implementation plans
-│   └── DEVELOPMENT.md        # Development guide
-└── package.json              # Dev tooling (Prettier)
 ```
 
 ## License
