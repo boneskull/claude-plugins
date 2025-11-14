@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
 const { readFileSync } = require('fs');
-const { relative } = require('path');
+const { relative, basename } = require('path');
 
 // Read hook input from stdin
 let input;
@@ -66,6 +66,32 @@ try {
 
 const errors = results[0]?.messages?.filter(msg => msg.severity === 2) || [];
 
-// TODO: Format and report errors
-console.log(JSON.stringify({ continue: true }));
+// Format and report errors if any exist
+if (errors.length > 0) {
+  const fileName = basename(file_path);
+  const MAX_ERRORS_TO_SHOW = 5;
+
+  let errorList;
+  if (errors.length > MAX_ERRORS_TO_SHOW) {
+    const shown = errors.slice(0, MAX_ERRORS_TO_SHOW);
+    errorList = shown.map(e =>
+      `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`
+    ).join('\n');
+    errorList += `\n...and ${errors.length - MAX_ERRORS_TO_SHOW} more error(s)`;
+  } else {
+    errorList = errors.map(e =>
+      `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`
+    ).join('\n');
+  }
+
+  const message = `ESLint found ${errors.length} error(s) in ${fileName}:\n${errorList}`;
+
+  console.log(JSON.stringify({
+    continue: true,
+    systemMessage: message
+  }));
+} else {
+  console.log(JSON.stringify({ continue: true }));
+}
+
 process.exit(0);
