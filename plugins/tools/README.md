@@ -51,6 +51,41 @@ Skills use reference files for detailed documentation. The main SKILL.md contain
 
 **Example:** See the [bupkis plugin](../bupkis/) for a working example of this pattern.
 
+## Hooks
+
+### ESLint Auto-Fixer
+
+Automatically runs `eslint --fix` on JavaScript and TypeScript files after Write and Edit operations.
+
+**Behavior:**
+
+- Triggers on PostToolUse event for Write/Edit tools
+- Processes: `.ts`, `.tsx`, `.js`, `.jsx`, `.cjs`, `.mjs`, `.mts`, `.cts` files
+- Auto-fixes formatting and style issues
+- Reports unfixable errors to Claude for manual correction
+- Skips silently if eslint not available
+
+**Configuration:**
+
+Hook runs automatically when plugin is installed. No additional setup required.
+
+**Supported file extensions:**
+
+- TypeScript: `.ts`, `.tsx`, `.mts`, `.cts`
+- JavaScript: `.js`, `.jsx`, `.mjs`, `.cjs`
+
+**Error handling:**
+
+The hook runs `eslint --fix` and reports any remaining errors that require manual intervention:
+
+```text
+ESLint found 2 error(s) in component.tsx:
+Line 15:7: 'useState' is not defined (no-undef)
+Line 23:5: Missing return type on function (explicit-function-return-type)
+```
+
+When errors are reported, Claude will see them and can fix them manually.
+
 ## Adding New Tool Skills
 
 1. Create directory: `skills/<tool-name>/`
