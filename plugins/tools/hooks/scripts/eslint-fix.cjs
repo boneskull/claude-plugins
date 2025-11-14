@@ -27,6 +27,18 @@ if (!JS_TS_EXTENSIONS.test(file_path)) {
   process.exit(0);
 }
 
-// TODO: Check eslint availability and run fix
+// Check if eslint is available
+try {
+  execSync('npx eslint --version', {
+    cwd,
+    stdio: 'ignore'
+  });
+} catch {
+  // ESLint not available, skip silently
+  console.log(JSON.stringify({ continue: true }));
+  process.exit(0);
+}
+
+// TODO: Run eslint --fix and parse output
 console.log(JSON.stringify({ continue: true }));
 process.exit(0);
