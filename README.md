@@ -18,14 +18,14 @@ Add this marketplace to Claude Code:
 
 ### bupkis
 
-**Category:** Development/Testing
+**Category:** development
 
 Idiomatic assertion patterns for the Bupkis testing library.
 
 **Contains:**
 
 - **Skills:**
-  - `bupkis-assertion-patterns` - Learn expressive, maintainable assertions using Bupkis' powerful assertion vocabulary with progressive disclosure (308 lines main, 2,080 lines references)
+  - `bupkis-assertion-patterns` - How to write idiomatic assertions with the Bupkis assertion library for TypeScript and JavaScript (307 lines main, 2,080 lines references)
 
 **Installation:**
 
@@ -35,14 +35,14 @@ Idiomatic assertion patterns for the Bupkis testing library.
 
 ### github
 
-**Category:** Development/Version Control
+**Category:** development
 
-Commands for interacting with GitHub issues and pull requests.
+Commands for interacting with GitHub issues and pull requests (PRs).
 
 **Contains:**
 
 - **Commands:**
-  - `/github:resolve-review-comments` - Automatically resolve GitHub PR review comments with fix → test → commit → push → reply workflow
+  - `/github:resolve-review-comments` - Address any valid, outstanding pull request (PR) review comments
 
 **Installation:**
 
@@ -52,14 +52,15 @@ Commands for interacting with GitHub issues and pull requests.
 
 ### tools
 
-**Category:** Development/Tools
+**Category:** development
 
-Skills and documentation for various CLI and development tools.
+Skills and documentation for various CLI, development, and language-specific tools.
 
 **Contains:**
 
 - **Skills:**
-  - `git-commit-messages` - Format git commit messages correctly using multiline strings (not HEREDOC) for reliable commits
+  - `git-commit-messages` - Format git commit messages correctly, avoiding HEREDOC syntax issues in favor of multiline strings (145 lines)
+  - `git-directory-management` - Manage git-tracked directories correctly - never create .gitkeep files in directories that will immediately contain tracked files (209 lines)
 
 **Installation:**
 
