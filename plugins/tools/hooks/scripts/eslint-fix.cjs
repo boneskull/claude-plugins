@@ -32,7 +32,7 @@ if (!JS_TS_EXTENSIONS.test(file_path)) {
 try {
   execSync('npx eslint --version', {
     cwd,
-    stdio: 'ignore'
+    stdio: 'ignore',
   });
 } catch {
   // ESLint not available, skip silently
@@ -48,7 +48,7 @@ try {
   output = execSync(`npx eslint --fix --format json "${relativePath}"`, {
     cwd,
     encoding: 'utf-8',
-    stdio: 'pipe'
+    stdio: 'pipe',
   });
 } catch (error) {
   // ESLint exits with non-zero when errors exist
@@ -64,7 +64,7 @@ try {
   results = [];
 }
 
-const errors = results[0]?.messages?.filter(msg => msg.severity === 2) || [];
+const errors = results[0]?.messages?.filter((msg) => msg.severity === 2) || [];
 
 // Format and report errors if any exist
 if (errors.length > 0) {
@@ -74,22 +74,30 @@ if (errors.length > 0) {
   let errorList;
   if (errors.length > MAX_ERRORS_TO_SHOW) {
     const shown = errors.slice(0, MAX_ERRORS_TO_SHOW);
-    errorList = shown.map(e =>
-      `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`
-    ).join('\n');
+    errorList = shown
+      .map(
+        (e) =>
+          `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`,
+      )
+      .join('\n');
     errorList += `\n...and ${errors.length - MAX_ERRORS_TO_SHOW} more error(s)`;
   } else {
-    errorList = errors.map(e =>
-      `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`
-    ).join('\n');
+    errorList = errors
+      .map(
+        (e) =>
+          `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`,
+      )
+      .join('\n');
   }
 
   const message = `ESLint found ${errors.length} error(s) in ${fileName}:\n${errorList}`;
 
-  console.log(JSON.stringify({
-    continue: true,
-    systemMessage: message
-  }));
+  console.log(
+    JSON.stringify({
+      continue: true,
+      systemMessage: message,
+    }),
+  );
 } else {
   console.log(JSON.stringify({ continue: true }));
 }
