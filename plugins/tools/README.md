@@ -67,9 +67,23 @@ Skills use reference files for detailed documentation. The main SKILL.md contain
 4. (Optional) Create `reference/` subdirectory for detailed docs
 5. Update this README to list the new skill
 
+## Available Skills
+
+### git-commit-messages
+
+Teaches proper git commit message formatting, avoiding HEREDOC syntax issues.
+
+**Key patterns:**
+
+- Use `-m` with multiline strings (not HEREDOC)
+- Include Claude Code attribution
+- Conventional commit format
+
+**When activated:** When creating git commits with body text, footers, or co-author attribution.
+
 ## Future Skills
 
-Skills will be added incrementally as needed. Each tool will follow the structure and conventions documented above.
+Additional skills will be added incrementally as needed. Each tool will follow the structure and conventions documented above.
 
 ## License
 
