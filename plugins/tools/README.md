@@ -81,6 +81,18 @@ Teaches proper git commit message formatting, avoiding HEREDOC syntax issues.
 
 **When activated:** When creating git commits with body text, footers, or co-author attribution.
 
+### git-directory-management
+
+Teaches proper git directory management - never create `.gitkeep` files in directories that will immediately contain tracked files.
+
+**Key patterns:**
+
+- `.gitkeep` is ONLY for truly empty directories
+- Add actual files directly, not `.gitkeep` first
+- Git tracks directories through their files
+
+**When activated:** When creating new directories in a git repository.
+
 ## Future Skills
 
 Additional skills will be added incrementally as needed. Each tool will follow the structure and conventions documented above.
