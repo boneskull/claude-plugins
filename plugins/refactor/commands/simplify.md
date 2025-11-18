@@ -1,5 +1,7 @@
 ---
 description: Simplify and refactor code to improve readability and maintainability
+argument-hint: code-description
+allowed-tools: Task
 ---
 
 You are being asked to simplify code. Use the code-simplifier agent to refactor the code while preserving its behavior.
