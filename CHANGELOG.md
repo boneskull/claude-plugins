@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.2.0...claude-plugins-v0.2.1) (2025-11-18)
+
+
+### Bug Fixes
+
+* **tools:** fix the eslint fix hook ([d0229af](https://github.com/boneskull/claude-plugins/commit/d0229af6f0ea2898bcb8b744b498344db6a4a66f))
+
 ## [0.2.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.1.0...claude-plugins-v0.2.0) (2025-11-18)
 
 
