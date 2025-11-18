@@ -32,6 +32,9 @@
     "plugins",
     "marketplace"
   ],
+  "workspaces": [
+    "plugins/*"
+  ],
   "author": "Christopher Hiller <boneskull@boneskull.com>",
   "license": "BlueOak-1.0.0",
   "repository": {
