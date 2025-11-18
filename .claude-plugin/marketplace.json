@@ -40,12 +40,7 @@
         "name": "boneskull"
       },
       "category": "development",
-      "tags": [
-        "refactoring",
-        "code-quality",
-        "simplification",
-        "clean-code"
-      ],
+      "tags": ["refactoring", "code-quality", "simplification", "clean-code"],
       "strict": true
     },
     {
