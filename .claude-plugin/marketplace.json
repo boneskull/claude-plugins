@@ -32,6 +32,23 @@
       "strict": true
     },
     {
+      "name": "refactor",
+      "source": "./plugins/refactor",
+      "description": "General-purpose software development refactoring and reorganization",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": [
+        "refactoring",
+        "code-quality",
+        "simplification",
+        "clean-code"
+      ],
+      "strict": true
+    },
+    {
       "name": "tools",
       "source": "./plugins/tools",
       "description": "Skills and documentation for various CLI, development, and language-specific tools",
