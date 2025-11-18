@@ -22,13 +22,13 @@ General-purpose software development refactoring and reorganization
 
 ### Using the /simplify command
 
-```
+```bash
 /simplify
 ```
 
 Then describe what code needs simplification:
 
-```
+```text
 The calculateTotalPrice function in src/cart.ts has too many nested conditionals
 ```
 
