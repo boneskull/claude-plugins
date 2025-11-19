@@ -218,7 +218,108 @@ Merge a completed feature branch from a git worktree into main using rebase and 
      If yes, run: git push origin --delete <feature-branch-name>
      ```
 
-### 6. Output Format
+### 6. Delete Feature Worktree
+
+**Goal:** Clean up the feature worktree directory after successful merge
+
+1. **Store the feature worktree path:**
+   - Before switching to main worktree in step 3, store the feature worktree path
+   - Example: `FEATURE_WORKTREE_PATH=$(pwd)`
+
+2. **Attempt to remove worktree:**
+
+   ```bash
+   git worktree remove <feature-worktree-path>
+   ```
+
+3. **Handle removal outcomes:**
+
+   **Success (exit code 0):**
+   - Worktree removed successfully, proceed to step 7
+
+   **Failure - Untracked files (common):**
+   - Git will refuse with error like: "fatal: '<path>' contains modified or untracked files, use --force to delete it"
+   - Check for untracked files:
+
+     ```bash
+     cd <feature-worktree-path>
+     git status --porcelain | grep '^??'
+     ```
+
+   - If untracked files exist, prompt user:
+
+     ```text
+     ⚠️  Feature worktree contains untracked files:
+     <list of untracked files>
+
+     How would you like to proceed?
+     1. Create a new commit with these files
+     2. Amend the last commit to include these files
+     3. Force-delete the worktree (rm -rf) - files will be lost
+     4. Abort - leave worktree intact for manual cleanup
+
+     Enter your choice (1-4):
+     ```
+
+   - Wait for user input and proceed accordingly:
+
+     **Option 1 - Create new commit:**
+
+     ```bash
+     cd <feature-worktree-path>
+     git add -A
+     git commit -m "chore: add remaining untracked files"
+     # Now need to update main again with this commit
+     cd <main-worktree-path>
+     git merge --ff-only <feature-branch-name>
+     git branch -d <feature-branch-name>
+     git worktree remove <feature-worktree-path>
+     ```
+
+     **Option 2 - Amend last commit:**
+
+     ```bash
+     cd <feature-worktree-path>
+     git add -A
+     git commit --amend --no-edit
+     # Now need to update main again with amended commit
+     cd <main-worktree-path>
+     # Use reset since history was rewritten
+     FEATURE_SHA=$(cd <feature-worktree-path> && git rev-parse HEAD)
+     git reset --hard $FEATURE_SHA
+     git branch -d <feature-branch-name>
+     git worktree remove <feature-worktree-path>
+     ```
+
+     **Option 3 - Force delete:**
+
+     ```bash
+     rm -rf <feature-worktree-path>
+     git worktree prune
+     ```
+
+     - Warn user: "⚠️ Untracked files have been permanently deleted."
+
+     **Option 4 - Abort:**
+     - Leave worktree intact
+     - Inform user in output that worktree still exists
+     - User can manually investigate and decide later
+
+   **Failure - Other errors:**
+   - Display git error message
+   - Offer force delete with `git worktree remove --force` or manual `rm -rf`
+   - Ask user for guidance
+
+4. **Verify worktree removal:**
+
+   ```bash
+   git worktree list
+   ```
+
+   - Ensure feature worktree no longer appears in list
+   - If it still appears, run `git worktree prune`
+
+### 7. Output Format
 
 Provide clear summary of the completed operation:
 
@@ -229,6 +330,7 @@ Actions completed:
   1. ✅ Rebased <feature-branch-name> onto main
   2. ✅ Fast-forwarded main to <feature-branch-name>
   3. ✅ Deleted local branch <feature-branch-name>
+  4. ✅ Removed feature worktree <feature-worktree-path>
 
 Current state:
   📍 Location: <main-worktree-path>
@@ -237,10 +339,17 @@ Current state:
 
 Next steps:
   1. Push to remote: git push origin main
-  2. Delete feature worktree: git worktree remove <feature-worktree-path>
-  3. (Optional) Delete remote branch: git push origin --delete <feature-branch-name>
+  2. (Optional) Delete remote branch: git push origin --delete <feature-branch-name>
 
 ✨ Linear history preserved — no merge commits created!
+```
+
+**Note:** If worktree removal was skipped (user chose option 4), modify output to say:
+
+```text
+⚠️  Feature worktree was NOT removed (user choice)
+   📁 Worktree location: <feature-worktree-path>
+   Manual cleanup: git worktree remove <feature-worktree-path> --force
 ```
 
 ## Example Usage
@@ -335,6 +444,28 @@ cd ~/projects/my-project-feature
 - Get commit SHA and use that for fast-forward merge
 - If that fails, explain that branch needs to be visible
 - Suggest pushing feature branch to remote first
+
+### 7. Worktree Contains Untracked Files
+
+**Scenario:** Git refuses to delete worktree because it contains untracked files
+
+**Handling:**
+
+- Detect untracked files with `git status --porcelain | grep '^??'`
+- List all untracked files to user
+- Provide four clear options:
+  1. Create new commit with untracked files (then update main)
+  2. Amend last commit to include untracked files (then update main)
+  3. Force-delete worktree with `rm -rf` (permanent data loss)
+  4. Abort and leave worktree for manual inspection
+- Wait for explicit user choice
+- Execute chosen option carefully
+- If option 1 or 2: Must update main branch again since new commits were added
+- If option 3: Warn about permanent deletion before executing
+- If option 4: Document worktree location in output for later cleanup
+- Never automatically force-delete without user permission
+
+**Important:** Options 1 and 2 require going back to update the main branch since new commits were created after the initial fast-forward merge. This maintains the guarantee of linear history.
 
 ## Implementation Notes
 
