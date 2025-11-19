@@ -127,6 +127,26 @@ Retroactively applies configuration and development dependencies from [boneskull
 
 **When to use:** Setting up tooling on a new project or updating an existing project to match your standard template configuration.
 
+### finish-worktree
+
+Merges a completed feature branch from a git worktree into main while maintaining linear history.
+
+**Usage:**
+
+```bash
+/tools:finish-worktree [main-worktree-path]
+```
+
+**What it does:**
+
+- Rebases feature branch onto latest main (resolving conflicts as needed)
+- Navigates to main worktree (auto-detects or prompts for path)
+- Fast-forwards main to feature branch (maintains linear history)
+- Deletes the merged feature branch
+- Never creates merge commits
+
+**When to use:** When you've completed work in a git worktree and need to merge it back to main with a clean, linear history.
+
 ## Available Skills
 
 ### git-commit-messages
