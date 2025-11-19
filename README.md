@@ -50,6 +50,25 @@ Commands for interacting with GitHub issues and pull requests (PRs).
 /plugin install github@boneskull-plugins
 ```
 
+### refactor
+
+**Category:** development
+
+General-purpose software development refactoring and reorganization.
+
+**Contains:**
+
+- **Commands:**
+  - `/refactor:simplify` - Simplify and refactor code to improve readability and maintainability
+- **Agents:**
+  - `code-simplifier` - Expert refactoring specialist that improves code clarity, reduces complexity, and enhances maintainability while preserving behavior and public APIs
+
+**Installation:**
+
+```bash
+/plugin install refactor@boneskull-plugins
+```
+
 ### tools
 
 **Category:** development
@@ -61,6 +80,10 @@ Skills and documentation for various CLI, development, and language-specific too
 - **Skills:**
   - `git-commit-messages` - Format git commit messages correctly, avoiding HEREDOC syntax issues in favor of multiline strings (145 lines)
   - `git-directory-management` - Manage git-tracked directories correctly - never create .gitkeep files in directories that will immediately contain tracked files (209 lines)
+- **Commands:**
+  - `/tools:apply-template` - Retroactively apply configuration and dev dependencies from boneskull-template to an existing project
+- **Hooks:**
+  - PostToolUse hooks configured (ESLint auto-fix on Write/Edit operations)
 
 **Installation:**
 
