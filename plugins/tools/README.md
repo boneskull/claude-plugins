@@ -102,6 +102,31 @@ When errors are reported, Claude will see them and can fix them manually.
 4. (Optional) Create `reference/` subdirectory for detailed docs
 5. Update this README to list the new skill
 
+## Commands
+
+### apply-template
+
+Retroactively applies configuration and development dependencies from [boneskull-template](https://github.com/boneskull/boneskull-template) to an existing project.
+
+**Usage:**
+
+```bash
+/tools:apply-template [target-directory]
+```
+
+**What it does:**
+
+- Intelligently merges `package.json` dependencies (chooses newest versions)
+- Copies missing configuration files (`.editorconfig`, `eslint.config.js`, etc.)
+- Handles `.github/` directory without overwriting existing files
+- Never overwrites existing files (except `package.json` which is merged)
+
+**Ignores from template:**
+
+- `docs/plans/`, `src/`, `test/`, `package-lock.json`
+
+**When to use:** Setting up tooling on a new project or updating an existing project to match your standard template configuration.
+
 ## Available Skills
 
 ### git-commit-messages
