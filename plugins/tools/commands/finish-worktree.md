@@ -202,22 +202,6 @@ Merge a completed feature branch from a git worktree into main using rebase and 
      Use `git branch -D <feature-branch-name>` to force delete? (y/n)
      ```
 
-3. **Clean up remote branch (optional):**
-   - Check if feature branch exists on remote:
-
-     ```bash
-     git ls-remote --heads origin <feature-branch-name>
-     ```
-
-   - If exists, ask user:
-
-     ```text
-     📡 Feature branch exists on remote.
-     Delete remote branch? (y/n)
-
-     If yes, run: git push origin --delete <feature-branch-name>
-     ```
-
 ### 6. Delete Feature Worktree
 
 **Goal:** Clean up the feature worktree directory after successful merge
@@ -337,10 +321,6 @@ Current state:
   🌿 Branch: main
   📝 Commits: <commit-summary>
 
-Next steps:
-  1. Push to remote: git push origin main
-  2. (Optional) Delete remote branch: git push origin --delete <feature-branch-name>
-
 ✨ Linear history preserved — no merge commits created!
 ```
 
@@ -443,7 +423,7 @@ cd ~/projects/my-project-feature
 - Attempt to resolve branch reference from feature worktree
 - Get commit SHA and use that for fast-forward merge
 - If that fails, explain that branch needs to be visible
-- Suggest pushing feature branch to remote first
+- Ask user to investigate why branch isn't visible in main worktree
 
 ### 7. Worktree Contains Untracked Files
 
