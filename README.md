@@ -81,7 +81,7 @@ Skills and documentation for various CLI, development, and language-specific too
   - `git-commit-messages` - Format git commit messages correctly, avoiding HEREDOC syntax issues in favor of multiline strings (145 lines)
   - `git-directory-management` - Manage git-tracked directories correctly - never create .gitkeep files in directories that will immediately contain tracked files (209 lines)
 - **Commands:**
-  - `/tools:apply-template` - Retroactively apply configuration and dev dependencies from boneskull-template to an existing project
+  - `/tools:apply-template` - Retroactively apply configuration and dev dependencies from [boneskull/boneskull-template](https://github.com/boneskull/boneskull-template) to an existing project
 - **Hooks:**
   - PostToolUse hooks configured (ESLint auto-fix on Write/Edit operations)
 
