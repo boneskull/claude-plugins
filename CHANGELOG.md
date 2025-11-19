@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.2.1...claude-plugins-v0.3.0) (2025-11-19)
+
+
+### Features
+
+* **tools:** add apply-template command ([8b5ce8a](https://github.com/boneskull/claude-plugins/commit/8b5ce8afbb7a6835359d9ed5cef9eab7a66a811e))
+
+
+### Bug Fixes
+
+* **tools:** enhance the apply-template tool ([16ea414](https://github.com/boneskull/claude-plugins/commit/16ea4148c57f004c5308cc8c84e0ab4ccdf2e1ed))
+
 ## [0.2.1](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.2.0...claude-plugins-v0.2.1) (2025-11-18)
 
 
