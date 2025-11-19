@@ -1,7 +1,6 @@
 {
-  "name": "boneskull-plugins",
   "description": "Boneskull's personal collection of Claude Code plugins",
-  "version": "1.0.0",
+  "name": "boneskull-plugins",
   "owner": {
     "name": "boneskull"
   },
@@ -55,5 +54,6 @@
       "tags": ["tools", "cli", "documentation", "reference"],
       "strict": true
     }
-  ]
+  ],
+  "version": "1.0.0"
 }

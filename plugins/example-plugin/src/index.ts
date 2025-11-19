@@ -8,8 +8,8 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 /**
- * Example MCP Server
- * Demonstrates basic MCP server implementation with TypeScript
+ * Example MCP Server Demonstrates basic MCP server implementation with
+ * TypeScript
  */
 
 // Define available tools

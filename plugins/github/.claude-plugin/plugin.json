@@ -1,10 +1,10 @@
 {
-  "name": "github",
-  "version": "1.0.0",
-  "description": "Commands for interacting with GitHub issues and pull requests (PRs)",
   "author": {
     "name": "boneskull"
   },
+  "description": "Commands for interacting with GitHub issues and pull requests (PRs)",
+  "keywords": ["github", "issues", "pull-requests", "prs"],
   "license": "BlueOak-1.0.0",
-  "keywords": ["github", "issues", "pull-requests", "prs"]
+  "name": "github",
+  "version": "1.0.0"
 }

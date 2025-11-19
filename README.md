@@ -86,6 +86,10 @@ npm install
 npm run format
 ```
 
+## Acknowledgements
+
+- [Nick Nisi's claude-plugins](https://github.com/nicknisi/claude-plugins) - I stole some code and ideas from his repo. Thanks, Nick!
+
 ## License
 
 [Blue Oak Model License 1.0.0](LICENSE)

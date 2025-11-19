@@ -1,15 +1,15 @@
 {
-  "name": "refactor",
-  "version": "1.0.0",
-  "description": "General-purpose software development refactoring and reorganization",
   "author": {
     "name": "boneskull"
   },
-  "license": "BlueOak-1.0.0",
+  "description": "General-purpose software development refactoring and reorganization",
   "keywords": [
     "refactoring",
     "code-simplification",
     "clean-code",
     "maintainability"
-  ]
+  ],
+  "license": "BlueOak-1.0.0",
+  "name": "refactor",
+  "version": "1.0.0"
 }

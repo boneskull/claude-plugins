@@ -74,7 +74,10 @@ try {
   });
 } catch (error) {
   // ESLint exits with non-zero when errors exist
-  const stdout = (error && typeof error === 'object' && 'stdout' in error ? error.stdout : null);
+  const stdout =
+    error && typeof error === 'object' && 'stdout' in error
+      ? error.stdout
+      : null;
   output = (typeof stdout === 'string' ? stdout : null) || '[]';
 }
 
@@ -89,7 +92,10 @@ try {
   results = [];
 }
 
-const errors = results[0]?.messages?.filter((/** @type {ESLintMessage} */ msg) => msg.severity === 2) || [];
+const errors =
+  results[0]?.messages?.filter(
+    (/** @type {ESLintMessage} */ msg) => msg.severity === 2,
+  ) || [];
 
 // Format and report errors if any exist
 if (errors.length > 0) {

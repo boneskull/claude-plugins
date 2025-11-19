@@ -1,10 +1,10 @@
 {
-  "name": "bupkis",
-  "version": "1.0.0",
-  "description": "Idiomatic assertion patterns for the Bupkis testing library",
   "author": {
     "name": "boneskull"
   },
+  "description": "Idiomatic assertion patterns for the Bupkis testing library",
+  "keywords": ["testing", "assertions", "bupkis", "typescript", "javascript"],
   "license": "BlueOak-1.0.0",
-  "keywords": ["testing", "assertions", "bupkis", "typescript", "javascript"]
+  "name": "bupkis",
+  "version": "1.0.0"
 }

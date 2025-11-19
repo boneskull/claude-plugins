@@ -52,14 +52,14 @@ Create `.claude-plugin/plugin.json` with:
 
 ```json
 {
-  "name": "<plugin-name>",
-  "version": "1.0.0",
-  "description": "<description>",
   "author": {
     "name": "boneskull"
   },
+  "description": "<description>",
+  "keywords": [],
   "license": "BlueOak-1.0.0",
-  "keywords": []
+  "name": "<plugin-name>",
+  "version": "1.0.0"
 }
 ```
 
@@ -119,16 +119,16 @@ Add an entry to `.claude-plugin/marketplace.json`:
 
 ```json
 {
-  "name": "<plugin-name>",
-  "source": "./plugins/<plugin-name>",
-  "description": "<description>",
-  "version": "1.0.0",
   "author": {
     "name": "boneskull"
   },
   "category": "utility",
+  "description": "<description>",
+  "name": "<plugin-name>",
+  "source": "./plugins/<plugin-name>",
+  "strict": true,
   "tags": [],
-  "strict": true
+  "version": "1.0.0"
 }
 ```
 

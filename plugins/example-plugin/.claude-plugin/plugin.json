@@ -1,10 +1,10 @@
 {
-  "name": "example-plugin",
-  "version": "1.0.0",
-  "description": "Comprehensive example plugin demonstrating all Claude Code plugin features",
   "author": {
     "name": "boneskull"
   },
+  "description": "Comprehensive example plugin demonstrating all Claude Code plugin features",
+  "keywords": ["example", "demo", "tutorial", "mcp", "skills"],
   "license": "BlueOak-1.0.0",
-  "keywords": ["example", "demo", "tutorial", "mcp", "skills"]
+  "name": "example-plugin",
+  "version": "1.0.0"
 }
