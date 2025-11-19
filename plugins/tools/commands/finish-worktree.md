@@ -34,51 +34,83 @@ Merge a completed feature branch from a git worktree into main using rebase and 
 
 **Goal:** Replay feature branch commits on top of latest main
 
-1. **Fetch latest main:**
+1. **Detect if rebase is already in progress:**
+
+   ```bash
+   test -d .git/rebase-merge || test -d .git/rebase-apply
+   ```
+
+   **If rebase IS in progress:**
+   - Skip to step 3 (conflict handling)
+   - Do NOT attempt to start a new rebase
+
+   **If rebase is NOT in progress:**
+   - Continue to step 2 (fetch and start rebase)
+
+2. **Fetch latest main (only if no rebase in progress):**
 
    ```bash
    git fetch origin main:main
    ```
 
-2. **Start interactive rebase:**
+3. **Start rebase (only if no rebase in progress):**
 
    ```bash
    git rebase main
    ```
 
-3. **Handle rebase conflicts:**
-   - If rebase succeeds, proceed to step 3
-   - If conflicts occur:
-     - List conflicting files: `git status --short | grep '^UU'`
-     - Instruct user to resolve conflicts:
+4. **Handle rebase conflicts:**
 
-       ```text
-       ⚠️  Rebase conflicts detected in:
-       <list of conflicting files>
+   **If rebase completed successfully:**
+   - Proceed to step 3 (Navigate to Main Worktree)
 
-       Please resolve these conflicts and run:
-         git add <resolved-files>
-         git rebase --continue
+   **If conflicts exist:**
+   - List conflicting files: `git status --short | grep '^UU'`
+   - Instruct user to resolve conflicts:
 
-       Then call /finish-worktree again to continue the merge process.
-       ```
+     ```text
+     ⚠️  Rebase conflicts detected in:
+     <list of conflicting files>
 
-     - Exit and wait for user to resolve conflicts
+     Please resolve these conflicts and run:
+       git add <resolved-files>
+       git rebase --continue
 
-4. **Repeat conflict resolution:**
+     Then call /tools:finish-worktree again to continue.
+     ```
+
+   - Exit and wait for user to resolve conflicts
+
+   **If conflicts were resolved but rebase hasn't continued:**
+   - Check status: `git status`
+   - If status shows "all conflicts fixed: run 'git rebase --continue'":
+
+     ```text
+     ✅ Conflicts resolved but rebase not continued.
+
+     Please run:
+       git rebase --continue
+
+     Then call /tools:finish-worktree again to continue.
+     ```
+
+   - Exit and wait for user to continue rebase
+
+5. **Repeat conflict resolution:**
    - After user runs `git rebase --continue`, conflicts may occur again
-   - Repeat conflict resolution instructions until rebase completes
+   - Repeat step 4 until rebase completes
    - **Critical:** Never use `git rebase --skip` — every commit must be preserved
    - **Critical:** Never alter commit messages unless user explicitly requests it
 
-5. **Verify rebase success:**
+6. **Verify rebase completion:**
 
    ```bash
    git status
    ```
 
    - Ensure output shows "nothing to commit, working tree clean"
-   - Ensure no rebase in progress
+   - Ensure no rebase in progress (no `.git/rebase-merge` or `.git/rebase-apply` directory)
+   - Only proceed to step 3 once rebase is fully complete
 
 ### 3. Navigate to Main Worktree
 
@@ -367,10 +399,33 @@ cd ~/projects/my-project-feature
 - Stop and list conflicting files
 - Provide clear instructions for resolution
 - Wait for user to resolve and continue
-- Resume from step 2 after `git rebase --continue`
+- User calls `/tools:finish-worktree` again after resolving conflicts
+- Command detects rebase in progress and resumes (doesn't restart)
 - Never automatically skip or abort rebase
 
-### 2. No Main Worktree Found
+### 2. Resuming After Rebase Conflicts
+
+**Scenario:** User calls `/tools:finish-worktree` again after resolving rebase conflicts
+
+**Handling:**
+
+- Detect rebase in progress by checking for `.git/rebase-merge` or `.git/rebase-apply`
+- Skip fetch and rebase initiation steps
+- Jump directly to conflict handling (Step 2.4)
+- Check current rebase state:
+  - If conflicts still exist → show conflict resolution instructions
+  - If conflicts resolved but not continued → instruct to run `git rebase --continue`
+  - If rebase completed → proceed to step 3 (Navigate to Main Worktree)
+- This allows iterative conflict resolution across multiple command invocations
+- Prevents "rebase already in progress" errors
+
+**Implementation notes:**
+
+- Use `test -d .git/rebase-merge || test -d .git/rebase-apply` to detect
+- Use `git status` to determine current state within rebase
+- Never attempt `git rebase main` if rebase already in progress
+
+### 3. No Main Worktree Found
 
 **Scenario:** Auto-detection cannot find main worktree
 
@@ -381,7 +436,7 @@ cd ~/projects/my-project-feature
 - Show `git worktree list` output to help user
 - Accept either absolute or relative paths
 
-### 3. Fast-Forward Impossible
+### 4. Fast-Forward Impossible
 
 **Scenario:** Main has diverged from feature branch
 
@@ -393,7 +448,7 @@ cd ~/projects/my-project-feature
 - Explain why fast-forward failed
 - Guide user through resolution
 
-### 4. Working Tree Not Clean
+### 5. Working Tree Not Clean
 
 **Scenario:** Uncommitted changes in current or main worktree
 
@@ -404,7 +459,7 @@ cd ~/projects/my-project-feature
 - Suggest `git stash` or committing changes
 - Exit without making any changes
 
-### 5. Multiple Main Worktrees
+### 6. Multiple Main Worktrees
 
 **Scenario:** User has multiple worktrees checked out to main (unusual but possible)
 
@@ -414,7 +469,7 @@ cd ~/projects/my-project-feature
 - Ask user to specify which one to use
 - Validate selection before proceeding
 
-### 6. Feature Branch Doesn't Exist Locally in Main Worktree
+### 7. Feature Branch Doesn't Exist Locally in Main Worktree
 
 **Scenario:** Feature branch only exists in its worktree, not visible from main worktree
 
@@ -425,7 +480,7 @@ cd ~/projects/my-project-feature
 - If that fails, explain that branch needs to be visible
 - Ask user to investigate why branch isn't visible in main worktree
 
-### 7. Worktree Contains Untracked Files
+### 8. Worktree Contains Untracked Files
 
 **Scenario:** Git refuses to delete worktree because it contains untracked files
 
