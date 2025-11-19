@@ -19,8 +19,12 @@ Retroactively apply configuration files and development dependencies from the [b
 ### 1. Preparation
 
 - Validate target directory exists and contains a `package.json`
-- Clone or fetch latest boneskull-template to a temporary directory
 - Verify git working tree is clean in target (warn user if not)
+- Fetch or clone latest boneskull-template:
+  - **Cache location:** `~/.cache/boneskull-template`
+  - If cache exists: `cd ~/.cache/boneskull-template && git pull origin main`
+  - If cache doesn't exist: `git clone https://github.com/boneskull/boneskull-template.git ~/.cache/boneskull-template`
+  - This avoids repeated clones and speeds up subsequent runs
 
 ### 2. Ignore List
 
@@ -34,23 +38,31 @@ Retroactively apply configuration files and development dependencies from the [b
 
 ### 3. Merge package.json
 
-**Strategy:** Intelligently merge dependencies, choosing the most recent version
+**Strategy:** Use the `merge-package.js` script to intelligently merge dependencies
 
-1. Read both `package.json` files (template and target)
-2. For each dependency section (`dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`):
-   - Compare versions between template and target
-   - Choose the most recent semantic version
-   - Add any dependencies that exist only in template
-   - Keep any dependencies that exist only in target
-3. For `scripts` section:
-   - Add scripts from template that don't exist in target
-   - Don't overwrite existing scripts (preserve user customizations)
-4. For other fields (`type`, `engines`, etc.):
-   - Preserve target's values (don't overwrite)
-   - Add fields from template that don't exist in target
-5. Write merged `package.json` to target
+1. **Create backup:** `cp package.json package.json.backup`
+2. **Run merge script:**
 
-**Version comparison logic:**
+   ```bash
+   node plugins/tools/scripts/merge-package.js \
+     <target-directory>/package.json \
+     ~/.cache/boneskull-template/package.json
+   ```
+
+3. **Install dependencies:** Run `npm install` to install newly added dependencies
+4. **Clean up:** Delete `package.json.backup` after successful merge and install
+
+The merge script automatically:
+
+- Compares versions between template and target
+- Chooses the most recent semantic version
+- Adds any dependencies that exist only in template
+- Keeps any dependencies that exist only in target
+- Adds scripts from template that don't exist in target (preserves user customizations)
+- Adds missing fields like `engines`, `knip`, `lint-staged`, etc.
+- Merges prettier config and adds plugins
+
+**Version comparison logic (handled by merge-package.js):**
 
 ```javascript
 // Use semver comparison - choose higher version
@@ -95,30 +107,29 @@ Retroactively apply configuration files and development dependencies from the [b
 
 ### 5. Post-Application Steps
 
-After copying files, inform user they should:
+After all changes are complete, inform user they should:
 
 1. **Review changes:**
+
    ```bash
    git diff package.json
    git status  # See new files
    ```
 
-2. **Install updated dependencies:**
-   ```bash
-   npm install
-   ```
+2. **Initialize tools if needed:**
 
-3. **Initialize tools if needed:**
    ```bash
    # If Husky was added:
    npm run prepare  # or: npx husky install
    ```
 
-4. **Review and customize:**
+3. **Review and customize:**
    - Check new configuration files match project needs
    - Adjust scripts in package.json
    - Customize ESLint/Prettier rules
    - Update README with new tooling info
+
+**Note:** Dependencies are automatically installed during step 3 (after merging package.json), so no separate `npm install` is needed unless the user wants to run it again.
 
 ### 6. Output Format
 
@@ -147,9 +158,8 @@ Files skipped (already exist):
 
 Next steps:
   1. Review changes: git diff package.json && git status
-  2. Install dependencies: npm install
-  3. Initialize Husky: npm run prepare
-  4. Customize configs as needed
+  2. Initialize Husky: npm run prepare
+  3. Customize configs as needed
 ```
 
 ## Example Usage
@@ -199,9 +209,14 @@ Next steps:
 
 ## Implementation Notes
 
-- Use temporary directory for template clone (cleanup after)
-- Use semver library for version comparison if available
-- Consider using git worktree for template to avoid conflicts
-- Template URL: `https://github.com/boneskull/boneskull-template.git`
-- Cache template locally to avoid repeated clones
-
+- **Template cache:** `~/.cache/boneskull-template`
+- **Template URL:** `https://github.com/boneskull/boneskull-template.git`
+- **Merge script:** `plugins/tools/scripts/merge-package.js` - handles all package.json merging logic
+- **Workflow:**
+  1. Ensure template cache exists (clone if needed, pull if exists)
+  2. Create package.json.backup
+  3. Run merge-package.js script
+  4. Run npm install
+  5. Copy missing configuration files
+  6. Delete package.json.backup
+  7. Display summary of changes

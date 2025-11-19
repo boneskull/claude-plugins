@@ -1,19 +1,40 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
 const { readFileSync } = require('fs');
-const { relative, basename } = require('path');
+const { basename, relative } = require('path');
+
+/**
+ * @typedef {Object} HookInput
+ * @property {string} [cwd]
+ * @property {string} [file_path]
+ */
+
+/**
+ * @typedef {Object} ESLintMessage
+ * @property {number} line
+ * @property {number} column
+ * @property {string} message
+ * @property {number} severity
+ * @property {string} [ruleId]
+ */
+
+/**
+ * @typedef {Object} ESLintResult
+ * @property {ESLintMessage[]} [messages]
+ */
 
 // Read hook input from stdin
+/** @type {HookInput} */
 let input;
 try {
   input = JSON.parse(readFileSync(0, 'utf-8'));
-} catch (error) {
+} catch {
   // Invalid JSON, skip gracefully
   console.log(JSON.stringify({ continue: true }));
   process.exit(0);
 }
 
-const { file_path, cwd } = input;
+const { cwd, file_path } = input;
 
 // Validate required file_path field
 if (!file_path) {
@@ -43,6 +64,7 @@ try {
 // Run eslint --fix with JSON output
 // Use relative path to avoid ESLint base path issues
 const relativePath = cwd ? relative(cwd, file_path) : file_path;
+/** @type {string} */
 let output;
 try {
   output = execSync(`npx eslint --fix --format json "${relativePath}"`, {
@@ -52,19 +74,22 @@ try {
   });
 } catch (error) {
   // ESLint exits with non-zero when errors exist
-  output = error.stdout || '[]';
+  const stdout = (error && typeof error === 'object' && 'stdout' in error ? error.stdout : null);
+  output = (typeof stdout === 'string' ? stdout : null) || '[]';
 }
 
 // Parse results and extract remaining errors
+/** @type {ESLintResult[]} */
 let results;
 try {
-  results = JSON.parse(output);
+  const parsed = JSON.parse(output);
+  results = Array.isArray(parsed) ? parsed : [];
 } catch {
   // Invalid JSON, assume no errors
   results = [];
 }
 
-const errors = results[0]?.messages?.filter((msg) => msg.severity === 2) || [];
+const errors = results[0]?.messages?.filter((/** @type {ESLintMessage} */ msg) => msg.severity === 2) || [];
 
 // Format and report errors if any exist
 if (errors.length > 0) {
@@ -76,7 +101,7 @@ if (errors.length > 0) {
     const shown = errors.slice(0, MAX_ERRORS_TO_SHOW);
     errorList = shown
       .map(
-        (e) =>
+        (/** @type {ESLintMessage} */ e) =>
           `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`,
       )
       .join('\n');
@@ -84,7 +109,7 @@ if (errors.length > 0) {
   } else {
     errorList = errors
       .map(
-        (e) =>
+        (/** @type {ESLintMessage} */ e) =>
           `Line ${e.line}:${e.column}: ${e.message} (${e.ruleId || 'unknown'})`,
       )
       .join('\n');
