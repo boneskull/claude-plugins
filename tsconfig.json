@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2023"],
+    "module": "nodenext",
+    "moduleDetection": "force",
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "stripInternal": true,
+    "target": "esnext",
+    "types": ["node"],
+    "verbatimModuleSyntax": false
+  },
+  "exclude": ["plugins/example-plugin/**/*"],
+  "include": ["plugins/**/*"]
+}
