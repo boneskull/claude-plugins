@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.3.0...claude-plugins-v0.4.0) (2025-11-20)
+
+
+### Features
+
+* **tools:** add finish-worktree command ([71a9612](https://github.com/boneskull/claude-plugins/commit/71a9612755f478a60fa88d7f091f50c8bc61bfba))
+* **tools:** add worktree deletion with untracked file handling ([fbbf991](https://github.com/boneskull/claude-plugins/commit/fbbf9914eba4d15db23e05ebd04950023b82e02a))
+* **zod:** add Zod v4 validation guidance plugin ([af965a7](https://github.com/boneskull/claude-plugins/commit/af965a7e79319b4e43c4579203ee81d33bad3d2e))
+
+
+### Bug Fixes
+
+* **refactor:** use recommended agent format ([a510fe4](https://github.com/boneskull/claude-plugins/commit/a510fe4a475ac2bd68560878741010753704064e))
+* **tools:** add rebase-in-progress detection to finish-worktree ([a04b6ea](https://github.com/boneskull/claude-plugins/commit/a04b6ea4536e73cf3252a9b69f70bca7f63f32d2))
+* **tools:** fix order of operations in finish-worktree command ([83eff34](https://github.com/boneskull/claude-plugins/commit/83eff343bfdb94ac60e04a036398ce39aa5e59b7))
+
 ## [0.3.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.2.1...claude-plugins-v0.3.0) (2025-11-19)
 
 
