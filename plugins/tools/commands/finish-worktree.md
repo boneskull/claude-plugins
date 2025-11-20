@@ -168,7 +168,7 @@ Merge a completed feature branch from a git worktree into main using rebase and 
 2. **Handle fast-forward outcomes:**
 
    **Success (exit code 0):**
-   - Proceed to step 5
+   - Proceed to step 5 (Delete Feature Worktree)
 
    **Failure (non-zero exit code):**
    - Check if feature branch doesn't exist locally:
@@ -207,34 +207,7 @@ Merge a completed feature branch from a git worktree into main using rebase and 
    - Wait for user decision and follow their instruction
    - **Critical:** Do NOT attempt `git merge` without `--ff-only` flag
 
-### 5. Delete Feature Branch
-
-**Goal:** Clean up the feature branch after successful merge
-
-1. **Delete the local feature branch:**
-
-   ```bash
-   git branch -d <feature-branch-name>
-   ```
-
-2. **Handle deletion outcomes:**
-
-   **Success:**
-   - Branch deleted successfully, proceed to output
-
-   **Failure (branch not fully merged):**
-   - This shouldn't happen since we just fast-forwarded
-   - If it does, check if there's a remote tracking branch issue
-   - Offer force deletion only if user confirms:
-
-     ```text
-     ⚠️  Git reports the branch is not fully merged.
-     This is unexpected after a successful fast-forward.
-
-     Use `git branch -D <feature-branch-name>` to force delete? (y/n)
-     ```
-
-### 6. Delete Feature Worktree
+### 5. Delete Feature Worktree
 
 **Goal:** Clean up the feature worktree directory after successful merge
 
@@ -251,7 +224,7 @@ Merge a completed feature branch from a git worktree into main using rebase and 
 3. **Handle removal outcomes:**
 
    **Success (exit code 0):**
-   - Worktree removed successfully, proceed to step 7
+   - Worktree removed successfully, proceed to step 6
 
    **Failure - Untracked files (common):**
    - Git will refuse with error like: "fatal: '<path>' contains modified or untracked files, use --force to delete it"
@@ -288,8 +261,8 @@ Merge a completed feature branch from a git worktree into main using rebase and 
      # Now need to update main again with this commit
      cd <main-worktree-path>
      git merge --ff-only <feature-branch-name>
-     git branch -d <feature-branch-name>
      git worktree remove <feature-worktree-path>
+     git branch -d <feature-branch-name>
      ```
 
      **Option 2 - Amend last commit:**
@@ -303,8 +276,8 @@ Merge a completed feature branch from a git worktree into main using rebase and 
      # Use reset since history was rewritten
      FEATURE_SHA=$(cd <feature-worktree-path> && git rev-parse HEAD)
      git reset --hard $FEATURE_SHA
-     git branch -d <feature-branch-name>
      git worktree remove <feature-worktree-path>
+     git branch -d <feature-branch-name>
      ```
 
      **Option 3 - Force delete:**
@@ -335,6 +308,33 @@ Merge a completed feature branch from a git worktree into main using rebase and 
    - Ensure feature worktree no longer appears in list
    - If it still appears, run `git worktree prune`
 
+### 6. Delete Feature Branch
+
+**Goal:** Clean up the feature branch after successful merge
+
+1. **Delete the local feature branch:**
+
+   ```bash
+   git branch -d <feature-branch-name>
+   ```
+
+2. **Handle deletion outcomes:**
+
+   **Success:**
+   - Branch deleted successfully, proceed to step 7
+
+   **Failure (branch not fully merged):**
+   - This shouldn't happen since we just fast-forwarded
+   - If it does, check if there's a remote tracking branch issue
+   - Offer force deletion only if user confirms:
+
+     ```text
+     ⚠️  Git reports the branch is not fully merged.
+     This is unexpected after a successful fast-forward.
+
+     Use `git branch -D <feature-branch-name>` to force delete? (y/n)
+     ```
+
 ### 7. Output Format
 
 Provide clear summary of the completed operation:
@@ -345,8 +345,8 @@ Provide clear summary of the completed operation:
 Actions completed:
   1. ✅ Rebased <feature-branch-name> onto main
   2. ✅ Fast-forwarded main to <feature-branch-name>
-  3. ✅ Deleted local branch <feature-branch-name>
-  4. ✅ Removed feature worktree <feature-worktree-path>
+  3. ✅ Removed feature worktree <feature-worktree-path>
+  4. ✅ Deleted local branch <feature-branch-name>
 
 Current state:
   📍 Location: <main-worktree-path>
@@ -495,12 +495,12 @@ cd ~/projects/my-project-feature
   4. Abort and leave worktree for manual inspection
 - Wait for explicit user choice
 - Execute chosen option carefully
-- If option 1 or 2: Must update main branch again since new commits were added
+- If option 1 or 2: Must update main branch again since new commits were added, then delete the branch
 - If option 3: Warn about permanent deletion before executing
 - If option 4: Document worktree location in output for later cleanup
 - Never automatically force-delete without user permission
 
-**Important:** Options 1 and 2 require going back to update the main branch since new commits were created after the initial fast-forward merge. This maintains the guarantee of linear history.
+**Important:** Options 1 and 2 require going back to update the main branch since new commits were created after the initial fast-forward merge, then removing the worktree, then deleting the branch. This maintains the guarantee of linear history.
 
 ## Implementation Notes
 
