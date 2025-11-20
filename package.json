@@ -1,6 +1,6 @@
 {
   "name": "@boneskull/claude-plugins",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "World's greatest marketplace for Claude Code plugins",
   "repository": {
