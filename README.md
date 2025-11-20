@@ -91,6 +91,23 @@ Skills and documentation for various CLI, development, and language-specific too
 /plugin install tools@boneskull-plugins
 ```
 
+### zod
+
+**Category:** development
+
+Comprehensive guidance for using Zod v4 with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.
+
+**Contains:**
+
+- **Skills:**
+  - `zod-v4` - Expert guidance on Zod v4 validation library including breaking changes from v3, migration patterns, core API usage, and common validation patterns (127 lines main, 1,486 lines references)
+
+**Installation:**
+
+```bash
+/plugin install zod@boneskull-plugins
+```
+
 ---
 
 **Note:** The `example-plugin` is included in the repository as a comprehensive reference but is not published to the marketplace.

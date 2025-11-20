@@ -42,5 +42,13 @@
     "huskyrc",
     "commitlintrc"
   ],
-  "words": ["shankle", "picanha", "bupkis", "andouille"]
+  "words": [
+    "shankle",
+    "picanha",
+    "bupkis",
+    "andouille",
+    "signup",
+    "treeify",
+    "Luhn"
+  ]
 }

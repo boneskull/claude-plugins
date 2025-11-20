@@ -1,0 +1,14 @@
+{
+  "name": "zod-dev",
+  "owner": {
+    "name": "boneskull"
+  },
+  "plugins": [
+    {
+      "name": "zod",
+      "version": "1.0.0",
+      "description": "Comprehensive guidance for using Zod v4 with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.",
+      "source": "./"
+    }
+  ]
+}

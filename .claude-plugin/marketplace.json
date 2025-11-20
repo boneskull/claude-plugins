@@ -53,6 +53,18 @@
       "category": "development",
       "tags": ["tools", "cli", "documentation", "reference"],
       "strict": true
+    },
+    {
+      "name": "zod",
+      "source": "./plugins/zod",
+      "description": "Comprehensive guidance for using Zod v4 with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": ["zod", "validation", "typescript", "schema"],
+      "strict": true
     }
   ],
   "version": "1.0.0"
