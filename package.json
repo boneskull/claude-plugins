@@ -5,7 +5,7 @@
   "description": "World's greatest marketplace for Claude Code plugins",
   "repository": {
     "type": "git",
-    "url": "https://github.com/boneskull/claude-plugins.git"
+    "url": "git+https://github.com/boneskull/claude-plugins.git"
   },
   "author": "Christopher Hiller <boneskull@boneskull.com>",
   "license": "BlueOak-1.0.0",
