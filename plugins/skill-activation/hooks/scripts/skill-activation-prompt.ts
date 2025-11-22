@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { readFileSync, accessSync } from 'fs';
-import { join } from 'path';
+
+import { accessSync, readFileSync } from 'fs';
 import { homedir } from 'os';
+import { join } from 'path';
 
 interface HookInput {
   session_id: string;
@@ -82,7 +83,7 @@ function parseSkillRef(
   const [, pluginName, marketplace, skillName] = match;
   return {
     pluginId: `${pluginName}@${marketplace}`,
-    skillName,
+    skillName: skillName!,
   };
 }
 
@@ -164,7 +165,7 @@ function loadInstalledPlugins(): InstalledPlugins {
  * Create a display name for the skill For plugin skills:
  * "plugin-name:skill-name" For local skills: just "skill-name"
  */
-function getDisplayName(skillRef: string): string {
+const getDisplayName = (skillRef: string): string => {
   const parsed = parseSkillRef(skillRef);
   if (!parsed) {
     return skillRef; // Legacy format
@@ -174,7 +175,18 @@ function getDisplayName(skillRef: string): string {
   // Extract just the plugin name (before @)
   const pluginName = pluginId.split('@')[0];
   return `${pluginName}:${skillName}`;
-}
+};
+
+const loadSkillRules = (rulesPath: string): SkillRules | undefined => {
+  try {
+    accessSync(rulesPath);
+    const pluginRules: SkillRules = JSON.parse(
+      readFileSync(rulesPath, 'utf-8'),
+    );
+
+    return pluginRules;
+  } catch {}
+};
 
 /**
  * Load and merge skill rules from all sources in priority order:
@@ -185,10 +197,10 @@ function getDisplayName(skillRef: string): string {
  *
  * Higher priority rules override lower priority rules
  */
-function loadAllSkillRules(
+const loadAllSkillRules = (
   installedPlugins: InstalledPlugins,
   projectDir: string,
-): SkillRules {
+): SkillRules => {
   const mergedRules: SkillRules = {
     version: '1.0',
     skills: {},
@@ -196,55 +208,32 @@ function loadAllSkillRules(
 
   // 1. Load plugin-defined rules (lowest priority - defaults)
   let pluginRulesLoaded = 0;
-  for (const [pluginId, plugin] of Object.entries(installedPlugins.plugins)) {
+  for (const plugin of Object.values(installedPlugins.plugins)) {
     const rulesPath = join(plugin.installPath, 'skills', 'skill-rules.json');
 
-    try {
-      accessSync(rulesPath);
-      const pluginRules: SkillRules = JSON.parse(
-        readFileSync(rulesPath, 'utf-8'),
-      );
-
-      // Merge plugin rules
-      for (const [skillRef, config] of Object.entries(pluginRules.skills)) {
-        mergedRules.skills[skillRef] = config;
-      }
+    const pluginRules = loadSkillRules(rulesPath);
+    if (pluginRules) {
+      Object.assign(mergedRules.skills, pluginRules.skills);
       pluginRulesLoaded++;
-    } catch {
-      // No rules file in this plugin, skip gracefully
     }
   }
 
   // 2. Load global user rules (middle priority - overrides plugin defaults)
-  const globalRulesPath = join(homedir(), '.claude', 'skill-rules.json');
   let globalRulesLoaded = false;
-  try {
-    accessSync(globalRulesPath);
-    const globalRules: SkillRules = JSON.parse(
-      readFileSync(globalRulesPath, 'utf-8'),
-    );
-
-    // Global rules override plugin rules
+  const globalRulesPath = join(homedir(), '.claude', 'skill-rules.json');
+  const globalRules = loadSkillRules(globalRulesPath);
+  if (globalRules) {
     Object.assign(mergedRules.skills, globalRules.skills);
     globalRulesLoaded = true;
-  } catch {
-    // No global rules, that's fine
   }
 
   // 3. Load project rules (highest priority - overrides everything)
   const projectRulesPath = join(projectDir, '.claude', 'skill-rules.json');
   let projectRulesLoaded = false;
-  try {
-    accessSync(projectRulesPath);
-    const projectRules: SkillRules = JSON.parse(
-      readFileSync(projectRulesPath, 'utf-8'),
-    );
-
-    // Project rules override global and plugin rules
+  const projectRules = loadSkillRules(projectRulesPath);
+  if (projectRules) {
     Object.assign(mergedRules.skills, projectRules.skills);
     projectRulesLoaded = true;
-  } catch {
-    // No project rules, that's fine
   }
 
   // Debug info (only if no rules found at all)
@@ -255,143 +244,136 @@ function loadAllSkillRules(
   }
 
   return mergedRules;
-}
+};
 
-async function main() {
-  try {
-    // Read input from stdin
-    const input = readFileSync(0, 'utf-8');
-    const data: HookInput = JSON.parse(input);
-    const prompt = data.prompt.toLowerCase();
+const main = async () => {
+  // Read input from stdin
+  const input = readFileSync(0, 'utf-8');
+  const data: HookInput = JSON.parse(input);
+  const prompt = data.prompt.toLowerCase();
 
-    // Load installed plugins
-    const installedPlugins = loadInstalledPlugins();
+  // Load installed plugins
+  const installedPlugins = loadInstalledPlugins();
 
-    // Get project directory
-    const projectDir = process.env.CLAUDE_PROJECT_DIR || data.cwd;
+  // Get project directory
+  const projectDir = process.env.CLAUDE_PROJECT_DIR || data.cwd;
 
-    // Load and merge all skill rules
-    const rules = loadAllSkillRules(installedPlugins, projectDir);
+  // Load and merge all skill rules
+  const rules = loadAllSkillRules(installedPlugins, projectDir);
 
-    const matchedSkills: MatchedSkill[] = [];
+  const matchedSkills: MatchedSkill[] = [];
 
-    // Check each skill for matches
-    for (const [skillRef, config] of Object.entries(rules.skills)) {
-      const triggers = config.promptTriggers;
-      if (!triggers) {
-        continue;
-      }
+  // Check each skill for matches
+  for (const [skillRef, config] of Object.entries(rules.skills)) {
+    const triggers = config.promptTriggers;
+    if (!triggers) {
+      continue;
+    }
 
-      let matched = false;
-      let matchType: 'keyword' | 'intent' = 'keyword';
+    let matched = false;
+    let matchType: 'keyword' | 'intent' = 'keyword';
 
-      // Keyword matching
-      if (triggers.keywords) {
-        const keywordMatch = triggers.keywords.some((kw) =>
-          prompt.includes(kw.toLowerCase()),
-        );
-        if (keywordMatch) {
-          matched = true;
-          matchType = 'keyword';
-        }
-      }
-
-      // Intent pattern matching (only if not already matched by keyword)
-      if (!matched && triggers.intentPatterns) {
-        const intentMatch = triggers.intentPatterns.some((pattern) => {
-          const regex = new RegExp(pattern, 'i');
-          return regex.test(prompt);
-        });
-        if (intentMatch) {
-          matched = true;
-          matchType = 'intent';
-        }
-      }
-
-      if (matched) {
-        // Resolve skill path
-        const skillPath = resolveSkillPath(skillRef, installedPlugins);
-
-        // Only skip if skill doesn't exist
-        // Still show in output but mark as unavailable
-        matchedSkills.push({
-          name: skillRef,
-          displayName: getDisplayName(skillRef),
-          matchType,
-          config,
-          skillPath,
-        });
+    // Keyword matching
+    if (triggers.keywords) {
+      const keywordMatch = triggers.keywords.some((kw) =>
+        prompt.includes(kw.toLowerCase()),
+      );
+      if (keywordMatch) {
+        matched = true;
+        matchType = 'keyword';
       }
     }
 
-    // Generate output if matches found
-    if (matchedSkills.length > 0) {
-      let output = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-      output += '🎯 SKILL ACTIVATION CHECK\n';
-      output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-
-      // Group by priority
-      const critical = matchedSkills.filter(
-        (s) => s.config.priority === 'critical',
-      );
-      const high = matchedSkills.filter((s) => s.config.priority === 'high');
-      const medium = matchedSkills.filter(
-        (s) => s.config.priority === 'medium',
-      );
-      const low = matchedSkills.filter((s) => s.config.priority === 'low');
-
-      // Helper to format skill with availability status
-      const formatSkill = (s: MatchedSkill): string => {
-        if (s.skillPath === null) {
-          return `  → ${s.displayName} ⚠️ (plugin not installed)`;
-        }
-        return `  → ${s.displayName}`;
-      };
-
-      if (critical.length > 0) {
-        output += '⚠️ CRITICAL SKILLS (REQUIRED):\n';
-        critical.forEach((s) => (output += formatSkill(s) + '\n'));
-        output += '\n';
+    // Intent pattern matching (only if not already matched by keyword)
+    if (!matched && triggers.intentPatterns) {
+      const intentMatch = triggers.intentPatterns.some((pattern) => {
+        const regex = new RegExp(pattern, 'i');
+        return regex.test(prompt);
+      });
+      if (intentMatch) {
+        matched = true;
+        matchType = 'intent';
       }
-
-      if (high.length > 0) {
-        output += '📚 RECOMMENDED SKILLS:\n';
-        high.forEach((s) => (output += formatSkill(s) + '\n'));
-        output += '\n';
-      }
-
-      if (medium.length > 0) {
-        output += '💡 SUGGESTED SKILLS:\n';
-        medium.forEach((s) => (output += formatSkill(s) + '\n'));
-        output += '\n';
-      }
-
-      if (low.length > 0) {
-        output += '📌 OPTIONAL SKILLS:\n';
-        low.forEach((s) => (output += formatSkill(s) + '\n'));
-        output += '\n';
-      }
-
-      // Check if any skills are unavailable
-      const unavailable = matchedSkills.filter((s) => s.skillPath === null);
-      if (unavailable.length > 0) {
-        output += '💡 TIP: Some skills require installing additional plugins\n';
-      }
-
-      output += 'ACTION: Use Skill tool BEFORE responding\n';
-      output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-
-      console.log(output);
     }
 
-    process.exit(0);
-  } catch (err) {
-    console.error('Error in skill-activation-prompt hook:', err);
-    process.exit(1);
+    if (matched) {
+      // Resolve skill path
+      const skillPath = resolveSkillPath(skillRef, installedPlugins);
+
+      // Only skip if skill doesn't exist
+      // Still show in output but mark as unavailable
+      matchedSkills.push({
+        name: skillRef,
+        displayName: getDisplayName(skillRef),
+        matchType,
+        config,
+        skillPath,
+      });
+    }
   }
-}
+
+  // Generate output if matches found
+  if (matchedSkills.length > 0) {
+    let output = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    output += '🎯 SKILL ACTIVATION CHECK\n';
+    output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+
+    // Group by priority
+    const critical = matchedSkills.filter(
+      (s) => s.config.priority === 'critical',
+    );
+    const high = matchedSkills.filter((s) => s.config.priority === 'high');
+    const medium = matchedSkills.filter((s) => s.config.priority === 'medium');
+    const low = matchedSkills.filter((s) => s.config.priority === 'low');
+
+    // Helper to format skill with availability status
+    const formatSkill = (s: MatchedSkill): string => {
+      if (s.skillPath === null) {
+        return `  → ${s.displayName} ⚠️ (plugin not installed)`;
+      }
+      return `  → ${s.displayName}`;
+    };
+
+    if (critical.length > 0) {
+      output += '⚠️ CRITICAL SKILLS (REQUIRED):\n';
+      critical.forEach((s) => (output += formatSkill(s) + '\n'));
+      output += '\n';
+    }
+
+    if (high.length > 0) {
+      output += '📚 RECOMMENDED SKILLS:\n';
+      high.forEach((s) => (output += formatSkill(s) + '\n'));
+      output += '\n';
+    }
+
+    if (medium.length > 0) {
+      output += '💡 SUGGESTED SKILLS:\n';
+      medium.forEach((s) => (output += formatSkill(s) + '\n'));
+      output += '\n';
+    }
+
+    if (low.length > 0) {
+      output += '📌 OPTIONAL SKILLS:\n';
+      low.forEach((s) => (output += formatSkill(s) + '\n'));
+      output += '\n';
+    }
+
+    // Check if any skills are unavailable
+    const unavailable = matchedSkills.filter((s) => s.skillPath === null);
+    if (unavailable.length > 0) {
+      output += '💡 TIP: Some skills require installing additional plugins\n';
+    }
+
+    output += 'ACTION: Use Skill tool BEFORE responding\n';
+    output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+
+    console.log(output);
+  } else {
+    console.log('🤷 No skills matched the prompt');
+  }
+};
 
 main().catch((err) => {
   console.error('Uncaught error:', err);
-  process.exit(1);
+  process.exitCode = 1;
 });
