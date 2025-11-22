@@ -55,6 +55,18 @@
       "strict": true
     },
     {
+      "name": "skill-activation",
+      "source": "./plugins/skill-activation",
+      "description": "Centralized skill activation system that automatically suggests relevant skills from installed plugins based on user prompts and file context",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "workflow",
+      "tags": ["skills", "activation", "hooks", "automation", "workflow"],
+      "strict": true
+    },
+    {
       "name": "zod",
       "source": "./plugins/zod",
       "description": "Comprehensive guidance for using Zod v4 with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.",
