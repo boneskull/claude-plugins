@@ -1,0 +1,120 @@
+{
+  "description": "Example skill rules configuration for global (~/.claude/skill-rules.json) or project (.claude/skill-rules.json) use",
+  "notes": {
+    "usage": "Copy this to ~/.claude/skill-rules.json for global rules or .claude/skill-rules.json for project-specific rules",
+    "precedence": "PROJECT > GLOBAL > PLUGIN (project rules override global rules, which override plugin defaults)",
+    "partial_overrides": "You only need to specify properties you want to change - they merge with plugin defaults",
+    "third_party": "Use this to configure skills from marketplace plugins you don't control",
+    "extensibility": "Add any installed plugin's skills using the format: 'plugin@marketplace:skill-name'"
+  },
+  "skills": {
+    "_comment_third_party_plugins": "=== Rules for Third-Party Marketplace Plugins ===",
+
+    "superpowers@superpowers-marketplace:test-driven-development": {
+      "type": "guardrail",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "TDD workflow: write test first, watch it fail, then implement",
+      "promptTriggers": {
+        "keywords": [
+          "write test",
+          "add test",
+          "test for",
+          "create test",
+          "test coverage",
+          "unit test",
+          "integration test",
+          "TDD"
+        ],
+        "intentPatterns": [
+          "(create|write|add|implement).*test",
+          "test.*(feature|function|method|component)",
+          "(how to|how do I).*test"
+        ]
+      }
+    },
+
+    "superpowers@superpowers-marketplace:systematic-debugging": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Four-phase debugging: root cause investigation, pattern analysis, hypothesis testing, implementation",
+      "promptTriggers": {
+        "keywords": [
+          "bug",
+          "debug",
+          "error",
+          "not working",
+          "broken",
+          "failing",
+          "issue",
+          "problem"
+        ],
+        "intentPatterns": [
+          "(fix|debug|solve|investigate).*(bug|error|issue|problem)",
+          "(why|what).*(not working|broken|failing)",
+          "(figure out|find out).*why"
+        ]
+      }
+    },
+
+    "superpowers@superpowers-marketplace:brainstorming": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "description": "Interactive design refinement using Socratic method before implementation",
+      "promptTriggers": {
+        "keywords": [
+          "design",
+          "architecture",
+          "approach",
+          "plan",
+          "should I",
+          "what's the best way",
+          "how should I"
+        ],
+        "intentPatterns": [
+          "(design|architect|plan).*feature",
+          "(what|how).*should.*(design|implement|build)",
+          "(best way|approach).*to"
+        ]
+      }
+    },
+
+    "elements-of-style@superpowers-marketplace:writing-clearly-and-concisely": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "description": "Apply Elements of Style writing rules to documentation, commit messages, and error messages",
+      "promptTriggers": {
+        "keywords": [
+          "write documentation",
+          "README",
+          "improve writing",
+          "edit documentation",
+          "write guide",
+          "documentation",
+          "docs"
+        ],
+        "intentPatterns": [
+          "(write|create|update|improve).*(doc|documentation|readme|guide)",
+          "(improve|edit|refine).*(writing|prose|text)"
+        ]
+      }
+    },
+
+    "_comment_override_examples": "=== Examples of Overriding Plugin Defaults ===",
+
+    "tools@boneskull-plugins:git-commit-messages": {
+      "_comment": "Override to make git commit messages blocking instead of suggesting",
+      "priority": "critical",
+      "enforcement": "block"
+    },
+
+    "bupkis@boneskull-plugins:bupkis-assertion-patterns": {
+      "_comment": "Lower priority for projects that don't use bupkis heavily",
+      "priority": "low"
+    }
+  },
+  "version": "1.0"
+}

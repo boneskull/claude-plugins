@@ -1,0 +1,10 @@
+{
+  "author": {
+    "name": "boneskull"
+  },
+  "description": "Centralized skill activation system that automatically suggests relevant skills from installed plugins based on user prompts and file context",
+  "keywords": ["skills", "activation", "hooks", "automation", "workflow"],
+  "license": "BlueOak-1.0.0",
+  "name": "skill-activation",
+  "version": "1.0.0"
+}
