@@ -1,0 +1,48 @@
+{
+  "description": "Skill activation rules for tools plugin",
+  "skills": {
+    "tools@boneskull-plugins:git-commit-messages": {
+      "type": "guardrail",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Format git commit messages correctly using multiline strings instead of HEREDOC",
+      "promptTriggers": {
+        "keywords": [
+          "git commit",
+          "commit message",
+          "create commit",
+          "commit changes",
+          "commit with message"
+        ],
+        "intentPatterns": [
+          "(create|make|add|write).*commit",
+          "commit.*message",
+          "(how to|how do I).*commit"
+        ]
+      }
+    },
+    "tools@boneskull-plugins:git-directory-management": {
+      "type": "guardrail",
+      "enforcement": "block",
+      "priority": "critical",
+      "description": "Prevent unnecessary .gitkeep files in directories that will contain tracked files",
+      "promptTriggers": {
+        "keywords": [
+          ".gitkeep",
+          "git keep",
+          "track empty directory",
+          "keep directory in git",
+          "empty directory git"
+        ],
+        "intentPatterns": [
+          "create.*\\.gitkeep",
+          "add.*\\.gitkeep",
+          "(track|keep).*empty.*dir",
+          "git.*track.*directory"
+        ]
+      },
+      "blockMessage": "⚠️ BLOCKED - .gitkeep Anti-Pattern Detected\n\n📋 REQUIRED ACTION:\n1. Use Skill tool: 'tools@boneskull-plugins:git-directory-management'\n2. Review when .gitkeep is actually needed (rarely!)\n3. Add actual files instead of .gitkeep\n\nReason: .gitkeep is ONLY for truly empty directories.\nIf you're about to add files, just add them directly.\n\n💡 TIP: Git tracks directories automatically when they contain files"
+    }
+  },
+  "version": "1.0"
+}

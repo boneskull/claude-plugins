@@ -1,0 +1,48 @@
+{
+  "description": "Skill activation rules for bupkis plugin",
+  "skills": {
+    "bupkis@boneskull-plugins:bupkis-assertion-patterns": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Write idiomatic assertions using bupkis assertion library patterns",
+      "promptTriggers": {
+        "keywords": [
+          "bupkis",
+          "assertion",
+          "expect",
+          "test assertion",
+          "bupkis pattern",
+          "to satisfy",
+          "to have property",
+          "write test"
+        ],
+        "intentPatterns": [
+          "(write|create|add).*test",
+          "(write|use|add).*assertion",
+          "bupkis.*assertion",
+          "expect.*to.*satisfy",
+          "(how to|how do I).*bupkis"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/*.test.ts",
+          "**/*.test.js",
+          "**/*.spec.ts",
+          "**/*.spec.js",
+          "**/test/**/*.ts",
+          "**/test/**/*.js"
+        ],
+        "contentPatterns": [
+          "from 'bupkis'",
+          "from \"bupkis\"",
+          "require\\('bupkis'\\)",
+          "expect\\(.*'to satisfy'",
+          "expect\\(.*'to have property'"
+        ]
+      }
+    }
+  },
+  "version": "1.0"
+}

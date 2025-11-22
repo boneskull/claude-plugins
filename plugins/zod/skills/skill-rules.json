@@ -1,0 +1,49 @@
+{
+  "description": "Skill activation rules for zod plugin",
+  "skills": {
+    "zod@boneskull-plugins:zod-v4": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Expert guidance on Zod v4 validation library including breaking changes, migration, and patterns",
+      "promptTriggers": {
+        "keywords": [
+          "zod",
+          "zod v4",
+          "zod schema",
+          "validation",
+          "validate",
+          "z.object",
+          "z.string",
+          "schema validation",
+          "type inference",
+          "zod migration"
+        ],
+        "intentPatterns": [
+          "(create|write|define|add).*schema",
+          "(create|write|define|add).*validation",
+          "zod.*(validate|schema|parse)",
+          "(migrate|upgrade).*zod",
+          "(how to|how do I).*zod",
+          "(validate|validation).*with.*zod"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": ["**/*.ts", "**/*.js", "**/*.tsx", "**/*.jsx"],
+        "contentPatterns": [
+          "from 'zod'",
+          "from \"zod\"",
+          "from 'zod/v4'",
+          "from \"zod/v4\"",
+          "z\\.object\\(",
+          "z\\.string\\(",
+          "z\\.number\\(",
+          "z\\.array\\(",
+          "\\.parse\\(",
+          "\\.safeParse\\("
+        ]
+      }
+    }
+  },
+  "version": "1.0"
+}
