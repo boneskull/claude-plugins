@@ -1,0 +1,17 @@
+{
+  "author": {
+    "name": "boneskull"
+  },
+  "description": "XState v5 backend state management with comprehensive state machine patterns, actor testing, and server-side orchestration",
+  "keywords": [
+    "xstate",
+    "state-machine",
+    "statechart",
+    "fsm",
+    "actor-model",
+    "typescript"
+  ],
+  "license": "BlueOak-1.0.0",
+  "name": "xstate",
+  "version": "1.0.0"
+}

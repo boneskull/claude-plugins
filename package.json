@@ -29,7 +29,7 @@
     "fix:markdown": "markdownlint-cli2 --fix \"**/*.md\"",
     "fix:pkg": "npm pkg fix",
     "fix:prettier": "prettier --write .",
-    "lint": "npm run lint:prettier && npm run lint:markdown",
+    "lint": "run-p -sl --aggregate-output \"lint:*\"",
     "lint-staged": "lint-staged",
     "lint:eslint": "eslint .",
     "lint:knip": "knip",

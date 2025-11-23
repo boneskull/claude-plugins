@@ -55,6 +55,25 @@
       "strict": true
     },
     {
+      "name": "xstate",
+      "source": "./plugins/xstate",
+      "description": "XState v5 backend state management with comprehensive state machine patterns, actor testing, and server-side orchestration",
+      "version": "1.0.0",
+      "author": {
+        "name": "boneskull"
+      },
+      "category": "development",
+      "tags": [
+        "xstate",
+        "state-machine",
+        "statechart",
+        "fsm",
+        "actor-model",
+        "typescript"
+      ],
+      "strict": true
+    },
+    {
       "name": "skill-activation",
       "source": "./plugins/skill-activation",
       "description": "Centralized skill activation system that automatically suggests relevant skills from installed plugins based on user prompts and file context",

@@ -40,7 +40,8 @@
     "wscript",
     "bahmutov",
     "huskyrc",
-    "commitlintrc"
+    "commitlintrc",
+    "clune"
   ],
   "words": [
     "shankle",
@@ -49,6 +50,7 @@
     "andouille",
     "signup",
     "treeify",
-    "Luhn"
+    "Luhn",
+    "unpatch"
   ]
 }
