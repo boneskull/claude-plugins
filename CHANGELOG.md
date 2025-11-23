@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.4.0...claude-plugins-v0.5.0) (2025-11-23)
+
+
+### Features
+
+* **bupkis:** add /bupkis convenience command ([d63552c](https://github.com/boneskull/claude-plugins/commit/d63552c7a4eb367c917acc4c19a533e08b40d0a8))
+* **plugins:** add new xstate plugin ([f23123e](https://github.com/boneskull/claude-plugins/commit/f23123eae27f4e0b8530a5140e979954b0098eba))
+* **plugins:** add skill activation rules to tools, bupkis, and zod plugins ([f34deac](https://github.com/boneskull/claude-plugins/commit/f34deac73f3059f24ca86c155aea3f715893327b))
+* **skill-activation:** add centralized skill activation plugin ([6962e95](https://github.com/boneskull/claude-plugins/commit/6962e9549d2f751b933bd6b56a74aa3497490b90))
+* **xstate:** add /xstate and /audition convenience commands ([e38bec2](https://github.com/boneskull/claude-plugins/commit/e38bec280b6eab9d8551644af372b63917a1c3d2))
+* **zod:** add /zod convenience command ([c0f974b](https://github.com/boneskull/claude-plugins/commit/c0f974bb6a0df9f4315127cd2000e529a8c86911))
+
+
+### Bug Fixes
+
+* **skill-activation:** display skill activation status directly to user ([8b2c290](https://github.com/boneskull/claude-plugins/commit/8b2c2903c3df2dfca536ad7a0d7a2aa4b4f46afa))
+
 ## [0.4.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.3.0...claude-plugins-v0.4.0) (2025-11-20)
 
 
