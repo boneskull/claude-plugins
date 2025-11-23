@@ -36,7 +36,25 @@ Expert guidance for implementing and analyzing XState v5 state machines with Typ
 
 ### Commands
 
-(None yet)
+- **`/xstate [what-you-need]`**: Get expert guidance on XState v5 state machines, actors, and implementation
+  - Triggered manually when you want on-demand XState help
+  - Provides guidance on:
+    - State machine creation with `setup()` and `createMachine()`
+    - Actor model and lifecycle management
+    - TypeScript integration and type safety
+    - Backend patterns and best practices
+    - Performance optimization
+    - Common patterns (loading, auth, forms, etc.)
+
+- **`/audition [what-to-test]`**: Get expert guidance on testing XState actors with xstate-audition
+  - Triggered manually when you need testing help
+  - Provides guidance on:
+    - Testing state transitions and actor behavior
+    - Testing promise actors and async operations
+    - Testing event emissions and communication
+    - Testing hierarchical actors and spawning
+    - Timeout and error handling in tests
+    - Best practices and common patterns
 
 ### Agents
 
@@ -52,7 +70,35 @@ Expert guidance for implementing and analyzing XState v5 state machines with Typ
 
 ## Usage
 
-The XState skill automatically activates when you're working with XState code or discussing state machine implementations. It provides:
+### Commands
+
+You can explicitly invoke XState guidance using slash commands:
+
+#### `/xstate [what-you-need]`
+
+Get expert guidance on XState v5 implementation. Optionally provide context about what you're trying to implement.
+
+**Examples:**
+
+- `/xstate` - Get general help with XState v5
+- `/xstate implement loading pattern with retry` - Get specific pattern guidance
+- `/xstate add TypeScript types` - Get help with TypeScript integration
+- `/xstate debug context not updating` - Get help troubleshooting
+
+#### `/audition [what-to-test]`
+
+Get expert guidance on testing with xstate-audition. Optionally provide context about what you're testing.
+
+**Examples:**
+
+- `/audition` - Get general help with xstate-audition
+- `/audition test state transitions` - Get guidance on transition testing
+- `/audition test promise actor` - Get help testing async actors
+- `/audition test parent-child communication` - Get help with hierarchical actors
+
+### Automatic Skill Activation
+
+The XState skills also automatically activate when you're working with XState code or discussing state machine implementations. They provide:
 
 ### Automatic Activation
 
