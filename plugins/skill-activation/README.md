@@ -15,21 +15,31 @@ This plugin solves the #1 problem with Claude Code skills: **they don't activate
 
 ## Installation
 
-```bash
-# From your plugin development directory
-cd claude-plugins
-npm install
+### From Marketplace
 
-# The plugin will be available locally for testing
+```bash
+# Add the boneskull-plugins marketplace
+/plugin marketplace add boneskull-plugins
+
+# Install the skill-activation plugin
+/plugin install skill-activation@boneskull-plugins
 ```
 
-Or install from the boneskull-plugins marketplace (once published).
+### For Local Development
+
+```bash
+# Add your local development directory as a marketplace
+/plugin marketplace add /path/to/claude-plugins
+
+# Install the plugin
+/plugin install skill-activation@boneskull-plugins
+```
 
 ## Quick Start
 
 ### 1. Install the Plugin
 
-This plugin provides the hook infrastructure. Install it once globally.
+This plugin provides the hook infrastructure. Install it once using the commands above.
 
 ### 2. Plugin Auto-Discovery Works Automatically
 
@@ -421,6 +431,10 @@ If skills aren't activating as expected, please include:
 - Your prompt that should trigger the skill
 - Contents of the plugin's `skill-rules.json`
 - Output of testing the hook manually
+
+## Acknowledgments
+
+- [claude-code-infrastructure-showcase](https://github.com/diet103/claude-code-infrastructure-showcase)
 
 ## License
 
