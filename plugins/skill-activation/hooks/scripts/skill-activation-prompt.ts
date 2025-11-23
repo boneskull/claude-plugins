@@ -367,10 +367,18 @@ const main = async () => {
     output += 'ACTION: Use Skill tool BEFORE responding\n';
     output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
 
-    console.log(output);
-  } else {
-    console.log('🤷 No skills matched the prompt');
+    // Output JSON for UserPromptSubmit hook
+    const hookOutput = {
+      systemMessage: output, // Displayed directly to the user
+      hookSpecificOutput: {
+        hookEventName: 'UserPromptSubmit',
+        additionalContext: output, // Added to Claude's context
+      },
+    };
+
+    console.log(JSON.stringify(hookOutput, null, 2));
   }
+  // No output when no skills match (allow prompt to proceed normally)
 };
 
 main().catch((err) => {
