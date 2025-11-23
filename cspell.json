@@ -26,8 +26,9 @@
     "dist",
     "docs",
     "node_modules",
-    "worktrees",
-    ".git"
+    ".worktrees",
+    ".git",
+    ".husky"
   ],
   "ignoreRandomStrings": true,
   "ignoreWords": [
