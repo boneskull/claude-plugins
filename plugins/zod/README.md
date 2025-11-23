@@ -47,6 +47,19 @@ Or if distributing as a standalone plugin:
 
 ## Usage
 
+### Commands
+
+#### `/zod [what-you-need]`
+
+Get expert guidance on Zod v4 validation, schemas, and migrations. Optionally provide context about what you're trying to do for targeted advice.
+
+**Examples:**
+
+- `/zod` - Get general help with Zod v4
+- `/zod validate user registration form` - Get specific schema examples
+- `/zod migrate from v3` - Get migration guidance
+- `/zod debugging validation errors` - Get help troubleshooting
+
 ### Automatic Skill Activation
 
 The `zod-v4` skill automatically activates when you:
@@ -56,9 +69,9 @@ The `zod-v4` skill automatically activates when you:
 - Ask about type inference or validation patterns
 - Need help migrating from Zod v3
 
-### Manual Skill Invocation
+### Example Requests
 
-You can explicitly invoke the skill for guidance:
+You can ask for help in natural language:
 
 ```text
 Can you help me create a Zod schema for user registration?
