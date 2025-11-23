@@ -22,9 +22,21 @@ From marketplace:
 
 ## Usage
 
+### Commands
+
+#### `/bupkis [what-to-assert]`
+
+Get guidance on writing idiomatic bupkis assertions. Optionally provide context about what you're trying to test for targeted advice.
+
+**Examples:**
+
+- `/bupkis` - Get general help with assertions
+- `/bupkis checking multiple properties` - Get specific guidance for property checks
+- `/bupkis testing promise rejections` - Get advice on async assertions
+
 ### Using the Skill
 
-The skill is automatically invoked when Claude detects you're working with Bupkis tests. You can also explicitly request help with Bupkis assertions.
+The skill is automatically invoked when Claude detects you're working with Bupkis tests. You can also use the `/bupkis` command for on-demand guidance.
 
 ### Key Patterns Covered
 
