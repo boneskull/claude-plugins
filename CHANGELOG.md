@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.4.0...claude-plugins-v0.5.0) (2025-11-23)
+
+
+### Features
+
+* **plugins:** add skill activation rules to tools, bupkis, and zod plugins ([f34deac](https://github.com/boneskull/claude-plugins/commit/f34deac73f3059f24ca86c155aea3f715893327b))
+* **skill-activation:** add centralized skill activation plugin ([6962e95](https://github.com/boneskull/claude-plugins/commit/6962e9549d2f751b933bd6b56a74aa3497490b90))
+
 ## [0.4.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.3.0...claude-plugins-v0.4.0) (2025-11-20)
 
 
