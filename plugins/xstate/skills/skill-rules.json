@@ -1,0 +1,97 @@
+{
+  "description": "Skill activation rules for xstate plugin",
+  "skills": {
+    "xstate@boneskull-plugins:xstate-v5": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Expert guidance for implementing and analyzing XState v5 state machines with TypeScript support and best practices",
+      "promptTriggers": {
+        "keywords": [
+          "xstate",
+          "state machine",
+          "statechart",
+          "createMachine",
+          "createActor",
+          "fsm",
+          "finite state machine",
+          "actor model",
+          "state management",
+          "xstate v5"
+        ],
+        "intentPatterns": [
+          "(create|write|define|add|implement).*state machine",
+          "(create|write|define|add|implement).*statechart",
+          "xstate.*(machine|actor|state)",
+          "(how to|how do I).*xstate",
+          "(setup|configure).*xstate",
+          "(model|implement).*state.*transition"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": ["**/*.ts", "**/*.js", "**/*.tsx", "**/*.jsx"],
+        "contentPatterns": [
+          "from 'xstate'",
+          "from \"xstate\"",
+          "createMachine\\(",
+          "createActor\\(",
+          "setup\\(\\{",
+          "\\.send\\(",
+          "\\.start\\(",
+          "assign\\(",
+          "fromPromise\\(",
+          "fromCallback\\("
+        ]
+      }
+    },
+    "xstate@boneskull-plugins:xstate-audition": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Expert guidance on testing XState v5 Actors using xstate-audition library for comprehensive state machine and actor testing",
+      "promptTriggers": {
+        "keywords": [
+          "xstate-audition",
+          "xstate audition",
+          "test state machine",
+          "test actor",
+          "actor testing",
+          "state machine testing",
+          "xstate test",
+          "runUntilDone",
+          "waitForSnapshot",
+          "waitForEmission"
+        ],
+        "intentPatterns": [
+          "(test|testing).*state machine",
+          "(test|testing).*actor",
+          "(test|testing).*xstate",
+          "(how to|how do I).*test.*xstate",
+          "(write|create|add).*test.*machine",
+          "xstate-audition.*test"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/*.test.ts",
+          "**/*.test.js",
+          "**/*.spec.ts",
+          "**/*.spec.js",
+          "**/test/**/*.ts",
+          "**/test/**/*.js"
+        ],
+        "contentPatterns": [
+          "from 'xstate-audition'",
+          "from \"xstate-audition\"",
+          "runUntilDone\\(",
+          "runUntilEmission\\(",
+          "runUntilTransition\\(",
+          "waitForSnapshot\\(",
+          "waitForEmission\\(",
+          "waitForTransition\\("
+        ]
+      }
+    }
+  },
+  "version": "1.0"
+}
