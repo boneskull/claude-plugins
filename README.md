@@ -18,6 +18,8 @@ Add this marketplace to Claude Code:
 
 ### bupkis
 
+[📖 Plugin README](plugins/bupkis/README.md)
+
 **Category:** development
 
 Idiomatic assertion patterns for the Bupkis testing library.
@@ -35,6 +37,8 @@ Idiomatic assertion patterns for the Bupkis testing library.
 
 ### github
 
+[📖 Plugin README](plugins/github/README.md)
+
 **Category:** development
 
 Commands for interacting with GitHub issues and pull requests (PRs).
@@ -51,6 +55,8 @@ Commands for interacting with GitHub issues and pull requests (PRs).
 ```
 
 ### refactor
+
+[📖 Plugin README](plugins/refactor/README.md)
 
 **Category:** development
 
@@ -70,6 +76,8 @@ General-purpose software development refactoring and reorganization.
 ```
 
 ### tools
+
+[📖 Plugin README](plugins/tools/README.md)
 
 **Category:** development
 
@@ -91,7 +99,51 @@ Skills and documentation for various CLI, development, and language-specific too
 /plugin install tools@boneskull-plugins
 ```
 
+### xstate
+
+[📖 Plugin README](plugins/xstate/README.md)
+
+**Category:** development
+
+XState v5 backend state management with comprehensive state machine patterns, actor testing, and server-side orchestration.
+
+**Contains:**
+
+- **Skills:**
+  - `xstate-v5` - Expert guidance for implementing and analyzing XState v5 state machines with TypeScript support and best practices (160 lines main, 3,182 lines references)
+  - `xstate-audition` - Expert guidance on testing XState v5 Actors using xstate-audition library for comprehensive state machine and actor testing (386 lines main, 2,146 lines references)
+- **Commands:**
+  - `/xstate:xstate` - Get expert guidance on XState v5 state machines and actor model implementation
+  - `/xstate:audition` - Get expert guidance on testing XState v5 actors with xstate-audition
+
+**Installation:**
+
+```bash
+/plugin install xstate@boneskull-plugins
+```
+
+### skill-activation
+
+[📖 Plugin README](plugins/skill-activation/README.md)
+
+**Category:** workflow
+
+Centralized skill activation system that automatically suggests relevant skills from installed plugins based on user prompts and file context.
+
+**Contains:**
+
+- **Hooks:**
+  - UserPromptSubmit hooks configured (automatic skill suggestion system)
+
+**Installation:**
+
+```bash
+/plugin install skill-activation@boneskull-plugins
+```
+
 ### zod
+
+[📖 Plugin README](plugins/zod/README.md)
 
 **Category:** development
 
@@ -129,6 +181,7 @@ npm run format
 ## Acknowledgements
 
 - [Nick Nisi's claude-plugins](https://github.com/nicknisi/claude-plugins) - I stole some code and ideas from his repo. Thanks, Nick!
+- [Claude Code Infrastructure Showcase](https://github.com/diet103/claude-code-infrastructure-showcase) - Provided the groundwork for the [skill-activation](plugins/skill-activation/README.md) plugin.
 
 ## License
 
