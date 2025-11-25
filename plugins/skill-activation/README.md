@@ -4,14 +4,14 @@
 
 ## Overview
 
-This plugin solves the #1 problem with Claude Code skills: **they don't activate automatically**. Install this plugin once, and all your plugin skills will activate when you need them.
+This plugin solves the #1 problem with Claude Code skills: **they don't activate automatically**. Install this plugin, configure it to your liking, and all your skills will activate when you need them via the magic of _hooks_.
 
-### How It Works
+This plugin is based on the [Claude Code Infrastructure Showcase's](https://github.com/diet103/claude-code-infrastructure-showcase) [skill-activation-prompt hook](https://github.com/diet103/claude-code-infrastructure-showcase/tree/main/.claude/hooks#skill-activation-prompt-userpromptsubmit). It improves upon the original by adding:
 
-1. **Hybrid Rule Discovery**: Scans all installed plugins for `skills/skill-rules.json` files
-2. **Central Override**: Applies central rules from this plugin for third-party marketplace plugins
-3. **Smart Matching**: Analyzes your prompts and file context against trigger patterns
-4. **Graceful Degradation**: Missing plugins don't break anything - they're just marked as unavailable
+- Support for third-party Claude Code Plugins
+- Support for plugins to supply their own `skill-rules.json` configuration
+- Cascading global and project-specific configurations
+- Noisy activation so you can be sure it's working 😁
 
 ## Installation
 
@@ -48,12 +48,15 @@ Any plugin with a `skills/skill-rules.json` file will automatically have its ski
 **Example plugins that work out of the box:**
 
 - `tools@boneskull-plugins` - Git commit and directory management
-- `bupkis@boneskull-plugins` - Bupkis assertion patterns
-- `zod@boneskull-plugins` - Zod v4 validation guidance
+- `bupkis@boneskull-plugins` - [Bupkis](https://bupkis.zip) assertion patterns
+- `zod@boneskull-plugins` - [Zod v4](https://zod.dev/) validation guidance
+- `xstate@boneskull-plugins` - [XState v5](https://stately.ai/docs/xstate) & [xstate-audition](https://boneskull.github.io/xstate-audition/) patterns
 
 ### 3. Configure Global or Project Rules (Optional)
 
 **Global configuration** (`~/.claude/skill-rules.json`) - applies to all projects:
+
+This example configures a skill in the [obra/superpowers](https://github.com/obra/superpowers) plugin to suggest test-driven development skills when you write code.
 
 ```bash
 # Create your global skill rules
