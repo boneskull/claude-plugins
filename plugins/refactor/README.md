@@ -111,4 +111,5 @@ See [DEVELOPMENT.md](../../docs/DEVELOPMENT.md) for development guidelines.
 
 ## License
 
-[Blue Oak Model License 1.0.0](../../LICENSE)
+Copyright © 2025 Christopher Hiller. Licensed Blue Oak Model License 1.0.0
+Copyright © 2025 Nick Nisi. Licensed MIT

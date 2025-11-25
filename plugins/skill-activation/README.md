@@ -441,7 +441,8 @@ If skills aren't activating as expected, please include:
 
 ## License
 
-BlueOak-1.0.0
+Copyright © 2025 Christopher Hiller. Licensed BlueOak-1.0.0
+Copyright © 2025 Claude Code Infrastructure Contributors. Licensed MIT
 
 ## See Also
 
