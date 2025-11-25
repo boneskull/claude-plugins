@@ -1,6 +1,6 @@
 # XState Plugin
 
-Expert guidance for implementing and analyzing XState v5 state machines with TypeScript support and best practices for **backend applications**.
+Expert guidance for implementing and analyzing [XState v5](https://stately.ai/docs/xstate) state machines with TypeScript support and best practices for **backend applications**.
 
 > **Note:** This plugin is tailored for using XState to manage state in application backends (Node.js, Deno, Bun) rather than frontend frameworks. Focus is on server-side state management, workflow orchestration, and backend service coordination.
 

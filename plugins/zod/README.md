@@ -1,6 +1,6 @@
 # Zod v4 Plugin for Claude Code
 
-Expert guidance for using Zod v4, TypeScript's leading validation library. This plugin provides comprehensive documentation on breaking changes from v3, migration patterns, core API usage, and real-world validation patterns.
+Expert guidance for using [Zod v4](https://zod.dev/), TypeScript's leading validation library. This plugin provides comprehensive documentation on breaking changes from v3, migration patterns, core API usage, and real-world validation patterns.
 
 ## What's Included
 

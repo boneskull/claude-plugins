@@ -22,7 +22,7 @@ Add this marketplace to Claude Code:
 
 **Category:** development
 
-Idiomatic assertion patterns for the Bupkis testing library.
+Idiomatic assertion patterns for the [Bupkis](https://bupkis.zip) assertion library.
 
 **Contains:**
 
@@ -105,7 +105,7 @@ Skills and documentation for various CLI, development, and language-specific too
 
 **Category:** development
 
-XState v5 backend state management with comprehensive state machine patterns, actor testing, and server-side orchestration.
+[XState v5](https://stately.ai/docs/xstate) backend state management with comprehensive state machine patterns, actor testing, and server-side orchestration.
 
 **Contains:**
 
@@ -147,7 +147,7 @@ Centralized skill activation system that automatically suggests relevant skills 
 
 **Category:** development
 
-Comprehensive guidance for using Zod v4 with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.
+Comprehensive guidance for using the [Zod v4](https://zod.dev/) validation library with breaking changes from v3. Provides migration patterns, API reference, and common validation patterns.
 
 **Contains:**
 

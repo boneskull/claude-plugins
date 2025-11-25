@@ -1,6 +1,6 @@
 # Bupkis Plugin
 
-Idiomatic assertion patterns for the Bupkis testing library.
+Idiomatic assertion patterns for the [Bupkis](https://bupkis.zip) assertion library.
 
 ## Features
 
