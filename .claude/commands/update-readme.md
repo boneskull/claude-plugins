@@ -17,6 +17,7 @@ Update the README.md file to reflect the current state of published plugins in t
    - MCP servers in `plugins/<name>/.mcp.json`
 3. Update the "Available Plugins" section in README.md with:
    - Plugin name (h3 heading)
+   - Link to plugin's README (format: `[📖 Plugin README](plugins/<name>/README.md)`)
    - Category from marketplace.json
    - Brief description from marketplace.json
    - "Contains:" section listing all components found
@@ -31,6 +32,8 @@ For each plugin:
 
 ```markdown
 ### plugin-name
+
+[📖 Plugin README](plugins/plugin-name/README.md)
 
 **Category:** Category Name
 
