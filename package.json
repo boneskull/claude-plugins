@@ -73,6 +73,9 @@
     ],
     "tags": [
       "-knipignore"
+    ],
+    "ignoreFiles": [
+      "plugins/**/scripts/*"
     ]
   },
   "lint-staged": {
