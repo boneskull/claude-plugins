@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.5.0...claude-plugins-v0.6.0) (2025-12-16)
+
+
+### Features
+
+* **xstate:** add a skill-rules.json ([f486eb4](https://github.com/boneskull/claude-plugins/commit/f486eb420c624388451a5e2bf57003a2e67b5db9))
+
 ## [0.5.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.4.0...claude-plugins-v0.5.0) (2025-11-23)
 
 
