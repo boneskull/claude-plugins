@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.6.0...claude-plugins-v0.6.1) (2025-12-22)
+
+
+### Bug Fixes
+
+* **skill-activation:** support the new plugin schema ([853a993](https://github.com/boneskull/claude-plugins/commit/853a99317845d67a047380dda5ce984d30e735c4))
+* **tools:** fix finish-worktree command ([4d1857b](https://github.com/boneskull/claude-plugins/commit/4d1857b4a184bf49e8949e1d86d41fdd8d16ebd6))
+
 ## [0.6.0](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.5.0...claude-plugins-v0.6.0) (2025-12-16)
 
 
