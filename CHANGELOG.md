@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.6.1...claude-plugins-v0.6.2) (2025-12-22)
+
+
+### Bug Fixes
+
+* **skill-activation:** always install tsx ([c5db2fa](https://github.com/boneskull/claude-plugins/commit/c5db2fa1e34323340f27aaba5c06bd2abf3c8fef))
+
 ## [0.6.1](https://github.com/boneskull/claude-plugins/compare/claude-plugins-v0.6.0...claude-plugins-v0.6.1) (2025-12-22)
 
 
