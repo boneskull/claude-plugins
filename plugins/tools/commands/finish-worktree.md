@@ -32,7 +32,9 @@ Merge a completed feature branch from a git worktree into main using rebase and 
 
 ### 2. Rebase Feature Branch onto Main
 
-**Goal:** Replay feature branch commits on top of latest main
+**Goal:** Replay feature branch commits on top of the local `main` branch (as checked out in the main worktree)
+
+**Critical:** We rebase onto the local `main` branch, NOT `origin/main`. This preserves any local commits in main that haven't been pushed yet and respects the user's intended state of their main branch.
 
 1. **Detect if rebase is already in progress:**
 
@@ -45,21 +47,17 @@ Merge a completed feature branch from a git worktree into main using rebase and 
    - Do NOT attempt to start a new rebase
 
    **If rebase is NOT in progress:**
-   - Continue to step 2 (fetch and start rebase)
+   - Continue to step 2 (start rebase)
 
-2. **Fetch latest main (only if no rebase in progress):**
-
-   ```bash
-   git fetch origin main:main
-   ```
-
-3. **Start rebase (only if no rebase in progress):**
+2. **Start rebase onto local main (only if no rebase in progress):**
 
    ```bash
    git rebase main
    ```
 
-4. **Handle rebase conflicts:**
+   **Important:** Do NOT run `git fetch origin main:main` or `git rebase origin/main`. The goal is to integrate with the local `main` branch exactly as it exists in the main worktree.
+
+3. **Handle rebase conflicts:**
 
    **If rebase completed successfully:**
    - Proceed to step 3 (Navigate to Main Worktree)
@@ -96,13 +94,13 @@ Merge a completed feature branch from a git worktree into main using rebase and 
 
    - Exit and wait for user to continue rebase
 
-5. **Repeat conflict resolution:**
+4. **Repeat conflict resolution:**
    - After user runs `git rebase --continue`, conflicts may occur again
-   - Repeat step 4 until rebase completes
+   - Repeat step 3 until rebase completes
    - **Critical:** Never use `git rebase --skip` — every commit must be preserved
    - **Critical:** Never alter commit messages unless user explicitly requests it
 
-6. **Verify rebase completion:**
+5. **Verify rebase completion:**
 
    ```bash
    git status
@@ -410,8 +408,8 @@ cd ~/projects/my-project-feature
 **Handling:**
 
 - Detect rebase in progress by checking for `.git/rebase-merge` or `.git/rebase-apply`
-- Skip fetch and rebase initiation steps
-- Jump directly to conflict handling (Step 2.4)
+- Skip rebase initiation step
+- Jump directly to conflict handling (Step 2.3)
 - Check current rebase state:
   - If conflicts still exist → show conflict resolution instructions
   - If conflicts resolved but not continued → instruct to run `git rebase --continue`
@@ -559,7 +557,7 @@ git branch -D <branch>
 
 **Cause:** Main has commits not in feature branch (history diverged)
 
-**Fix:** Return to feature worktree, pull latest main, rebase again
+**Fix:** Return to feature worktree and rebase onto main again. Do NOT fetch from origin — rebase onto local main as checked out in the main worktree.
 
 ### "error: Cannot delete branch (not fully merged)"
 
