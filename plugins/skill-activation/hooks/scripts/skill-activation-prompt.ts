@@ -48,6 +48,7 @@ interface SkillRules {
 }
 
 interface InstalledPlugin {
+  scope: 'user' | 'project';
   version: string;
   installedAt: string;
   lastUpdated: string;
@@ -58,7 +59,21 @@ interface InstalledPlugin {
 
 interface InstalledPlugins {
   version: number;
-  plugins: Record<string, InstalledPlugin>;
+  plugins: Record<string, InstalledPlugin[]>; // Array per plugin (multiple scopes)
+}
+
+/**
+ * Get the best plugin installation for a given plugin ID. Prefers "user" scope,
+ * falls back to first available.
+ */
+function getPluginInstall(
+  pluginInstalls: InstalledPlugin[] | undefined,
+): InstalledPlugin | undefined {
+  if (!pluginInstalls || pluginInstalls.length === 0) {
+    return undefined;
+  }
+  // Prefer user-scoped installation
+  return pluginInstalls.find((p) => p.scope === 'user') ?? pluginInstalls[0];
 }
 
 interface MatchedSkill {
@@ -122,10 +137,10 @@ function resolveSkillPath(
 
   const { pluginId, skillName } = parsed;
 
-  // Check if plugin is installed
-  const plugin = installedPlugins.plugins[pluginId];
-  if (!plugin) {
-    return null; // Plugin not installed - gracefully skip
+  // Check if plugin is installed and has valid installPath
+  const plugin = getPluginInstall(installedPlugins.plugins[pluginId]);
+  if (!plugin?.installPath) {
+    return null; // Plugin not installed or malformed - gracefully skip
   }
 
   // Construct skill path
@@ -208,7 +223,11 @@ const loadAllSkillRules = (
 
   // 1. Load plugin-defined rules (lowest priority - defaults)
   let pluginRulesLoaded = 0;
-  for (const plugin of Object.values(installedPlugins.plugins)) {
+  for (const pluginInstalls of Object.values(installedPlugins.plugins)) {
+    const plugin = getPluginInstall(pluginInstalls);
+    if (!plugin?.installPath) {
+      continue;
+    }
     const rulesPath = join(plugin.installPath, 'skills', 'skill-rules.json');
 
     const pluginRules = loadSkillRules(rulesPath);
