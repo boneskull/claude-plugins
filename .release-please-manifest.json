@@ -1,5 +1,5 @@
 {
-  "plugins/bupkis": "1.0.0",
+  "plugins/bupkis": "1.1.0",
   "plugins/github": "1.1.0",
   "plugins/refactor": "1.0.0",
   "plugins/skill-activation": "1.1.0",
