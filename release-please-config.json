@@ -1,9 +1,84 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-  "initial-version": "0.1.0",
+  "include-component-in-tag": true,
   "packages": {
-    ".": {
-      "release-type": "node"
+    "plugins/bupkis": {
+      "release-type": "simple",
+      "component": "bupkis",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/github": {
+      "release-type": "simple",
+      "component": "github",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/refactor": {
+      "release-type": "simple",
+      "component": "refactor",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/skill-activation": {
+      "release-type": "simple",
+      "component": "skill-activation",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/tools": {
+      "release-type": "simple",
+      "component": "tools",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/xstate": {
+      "release-type": "simple",
+      "component": "xstate",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/zod": {
+      "release-type": "simple",
+      "component": "zod",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
-  }
+  },
+  "separate-pull-requests": true
 }

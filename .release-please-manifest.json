@@ -1,3 +1,9 @@
 {
-  ".": "0.6.1"
+  "plugins/bupkis": "1.0.0",
+  "plugins/github": "1.0.0",
+  "plugins/refactor": "1.0.0",
+  "plugins/skill-activation": "1.0.0",
+  "plugins/tools": "1.0.0",
+  "plugins/xstate": "1.0.0",
+  "plugins/zod": "1.0.0"
 }
