@@ -7,11 +7,9 @@
   "scripts": {
     "test": "echo '{ \"prompt\": \"help me write a test\", \"cwd\": \".\", \"session_id\": \"test\", \"transcript_path\": \"/tmp/test\", \"permission_mode\": \"auto\" }' | npx tsx scripts/skill-activation-prompt.ts"
   },
-  "dependencies": {
-    "tsx": "^4.19.2"
-  },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
