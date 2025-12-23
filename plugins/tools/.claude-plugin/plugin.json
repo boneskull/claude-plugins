@@ -3,8 +3,14 @@
     "name": "boneskull"
   },
   "description": "Skills and documentation for various CLI, development, and language-specific tools",
-  "keywords": ["tools", "cli", "documentation", "reference", "best-practices"],
+  "keywords": [
+    "tools",
+    "cli",
+    "documentation",
+    "reference",
+    "best-practices"
+  ],
   "license": "BlueOak-1.0.0",
   "name": "tools",
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
