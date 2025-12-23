@@ -3,8 +3,14 @@
     "name": "boneskull"
   },
   "description": "Idiomatic assertion patterns for the Bupkis testing library",
-  "keywords": ["testing", "assertions", "bupkis", "typescript", "javascript"],
+  "keywords": [
+    "testing",
+    "assertions",
+    "bupkis",
+    "typescript",
+    "javascript"
+  ],
   "license": "BlueOak-1.0.0",
   "name": "bupkis",
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
