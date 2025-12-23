@@ -3,82 +3,81 @@
   "include-component-in-tag": true,
   "packages": {
     "plugins/bupkis": {
-      "release-type": "simple",
       "component": "bupkis",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/github": {
-      "release-type": "simple",
       "component": "github",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/refactor": {
-      "release-type": "simple",
       "component": "refactor",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/skill-activation": {
-      "release-type": "simple",
       "component": "skill-activation",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/tools": {
-      "release-type": "simple",
       "component": "tools",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/xstate": {
-      "release-type": "simple",
       "component": "xstate",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     },
     "plugins/zod": {
-      "release-type": "simple",
       "component": "zod",
       "extra-files": [
         {
-          "type": "json",
+          "jsonpath": "$.version",
           "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
+          "type": "json"
         }
-      ]
+      ],
+      "release-type": "simple"
     }
-  },
-  "separate-pull-requests": true
+  }
 }
