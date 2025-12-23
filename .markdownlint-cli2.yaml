@@ -18,7 +18,7 @@ config:
   code-block-style: false
 ignores:
   - '**/node_modules/**'
-  - 'CHANGELOG.md' # generated
+  - '**/CHANGELOG.md' # generated
   - 'docs/**/*.md'
   - '.worktrees/**/*.md'
   - '.claude/**/*.md'
