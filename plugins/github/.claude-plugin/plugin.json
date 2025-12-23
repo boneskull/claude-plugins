@@ -3,8 +3,13 @@
     "name": "boneskull"
   },
   "description": "Commands for interacting with GitHub issues and pull requests (PRs)",
-  "keywords": ["github", "issues", "pull-requests", "prs"],
+  "keywords": [
+    "github",
+    "issues",
+    "pull-requests",
+    "prs"
+  ],
   "license": "BlueOak-1.0.0",
   "name": "github",
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
