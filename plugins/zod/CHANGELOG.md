@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/boneskull/claude-plugins/compare/zod-v1.1.0...zod-v1.1.1) (2025-12-24)
+
+
+### Bug Fixes
+
+* **zod:** fix broken plugin.json ([f5a0335](https://github.com/boneskull/claude-plugins/commit/f5a0335eaaaa6bfaa84fa07c9544026297c95f73))
+
 ## [1.1.0](https://github.com/boneskull/claude-plugins/compare/zod-v1.0.0...zod-v1.1.0) (2025-12-23)
 
 
