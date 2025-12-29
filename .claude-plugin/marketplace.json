@@ -1,10 +1,13 @@
 {
-  "description": "Boneskull's personal collection of Claude Code plugins",
+  "metadata": {
+    "description": "Boneskull's personal collection of Claude Code plugins",
+    "version": "1.0.1"
+  },
   "name": "boneskull-plugins",
   "owner": {
-    "name": "boneskull"
+    "email": "boneskull@boneskullcom",
+    "name": "Christopher Hiller"
   },
-  "pluginRoot": "./plugins",
   "plugins": [
     {
       "name": "bupkis",
@@ -34,6 +37,5 @@
       "name": "zod",
       "source": "./plugins/zod"
     }
-  ],
-  "version": "1.0.0"
+  ]
 }
