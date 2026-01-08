@@ -35,6 +35,36 @@ Idiomatic assertion patterns for the [Bupkis](https://bupkis.zip) assertion libr
 /plugin install bupkis@boneskull-plugins
 ```
 
+### claude-watcher
+
+[📖 claude-watcher Plugin README](plugins/claude-watcher/README.md)
+
+**Category:** automation
+
+Event-driven automation daemon for Claude Code. Polls for conditions and executes Claude prompts when triggers fire.
+
+**Contains:**
+
+- **MCP Tools:**
+  - `register_watch` - Register a watch with trigger, action prompt, TTL, and polling interval
+  - `list_watches` - List all registered watches, optionally filtered by status
+  - `watch_status` - Get detailed status of a specific watch by ID
+  - `cancel_watch` - Cancel an active watch
+  - `list_triggers` - List available trigger executables with their metadata
+- **Commands:**
+  - `/claude-watcher:watch` - Interactive watch registration helper
+- **Bundled Triggers:**
+  - `npm-publish` - Check if an npm package version is published
+  - `gh-pr-merged` - Check if a GitHub PR has been merged
+- **Hooks:**
+  - Stop hooks configured (watch results notification on session end)
+
+**Installation:**
+
+```bash
+/plugin install claude-watcher@boneskull-plugins
+```
+
 ### github
 
 [📖 github Plugin README](plugins/github/README.md)
