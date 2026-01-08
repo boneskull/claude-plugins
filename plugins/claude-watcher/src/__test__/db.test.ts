@@ -2,32 +2,31 @@
  * Tests for db.ts
  */
 
+import { expect } from 'bupkis';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { expect } from 'bupkis';
-
 import { WatchDatabase } from '../db.js';
-import { Watch } from '../types.js';
+import { type Watch } from '../types.js';
 
 /** Create a test watch with sensible defaults */
-function createTestWatch(overrides: Partial<Watch> = {}): Watch {
+const createTestWatch = (overrides: Partial<Watch> = {}): Watch => {
   return {
-    id: `w_${Math.random().toString(16).slice(2, 10)}`,
-    trigger: 'test-trigger',
-    params: ['arg1', 'arg2'],
-    action: { prompt: 'Test prompt', cwd: '/tmp' },
-    status: 'active',
+    action: { cwd: '/tmp', prompt: 'Test prompt' },
     createdAt: new Date().toISOString(),
     expiresAt: new Date(Date.now() + 86400000).toISOString(), // +24h
+    firedAt: null,
+    id: `w_${Math.random().toString(16).slice(2, 10)}`,
     interval: '30s',
     lastCheck: null,
-    firedAt: null,
+    params: ['arg1', 'arg2'],
+    status: 'active',
+    trigger: 'test-trigger',
     ...overrides,
   };
-}
+};
 
 describe('WatchDatabase', () => {
   let db: WatchDatabase;
@@ -42,7 +41,7 @@ describe('WatchDatabase', () => {
 
   afterEach(() => {
     db.close();
-    rmSync(tempDir, { recursive: true, force: true });
+    rmSync(tempDir, { force: true, recursive: true });
   });
 
   describe('insert and getById', () => {
@@ -53,14 +52,14 @@ describe('WatchDatabase', () => {
       const retrieved = db.getById('w_test1234');
 
       expect(retrieved, 'to satisfy', {
+        action: { cwd: '/tmp', prompt: 'Test prompt' },
+        firedAt: null,
         id: 'w_test1234',
-        trigger: 'test-trigger',
-        params: ['arg1', 'arg2'],
-        action: { prompt: 'Test prompt', cwd: '/tmp' },
-        status: 'active',
         interval: '30s',
         lastCheck: null,
-        firedAt: null,
+        params: ['arg1', 'arg2'],
+        status: 'active',
+        trigger: 'test-trigger',
       });
     });
 
@@ -153,7 +152,7 @@ describe('WatchDatabase', () => {
   describe('markFired', () => {
     it('sets status to fired and firedAt timestamp', () => {
       db.insert(
-        createTestWatch({ id: 'w_1', status: 'active', firedAt: null }),
+        createTestWatch({ firedAt: null, id: 'w_1', status: 'active' }),
       );
       const firedAt = '2025-01-08T15:30:00.000Z';
 
@@ -161,8 +160,8 @@ describe('WatchDatabase', () => {
 
       const watch = db.getById('w_1');
       expect(watch, 'to satisfy', {
+        firedAt,
         status: 'fired',
-        firedAt: firedAt,
       });
     });
   });
@@ -174,16 +173,16 @@ describe('WatchDatabase', () => {
 
       db.insert(
         createTestWatch({
+          expiresAt: pastExpiry,
           id: 'w_expired',
           status: 'active',
-          expiresAt: pastExpiry,
         }),
       );
       db.insert(
         createTestWatch({
+          expiresAt: futureExpiry,
           id: 'w_valid',
           status: 'active',
-          expiresAt: futureExpiry,
         }),
       );
 
@@ -202,13 +201,13 @@ describe('WatchDatabase', () => {
       const pastExpiry = new Date(Date.now() - 3600000).toISOString();
 
       db.insert(
-        createTestWatch({ id: 'w_1', status: 'active', expiresAt: pastExpiry }),
+        createTestWatch({ expiresAt: pastExpiry, id: 'w_1', status: 'active' }),
       );
       db.insert(
-        createTestWatch({ id: 'w_2', status: 'active', expiresAt: pastExpiry }),
+        createTestWatch({ expiresAt: pastExpiry, id: 'w_2', status: 'active' }),
       );
       db.insert(
-        createTestWatch({ id: 'w_3', status: 'fired', expiresAt: pastExpiry }),
+        createTestWatch({ expiresAt: pastExpiry, id: 'w_3', status: 'fired' }),
       ); // already fired, not active
 
       const count = db.expireOldWatches();
@@ -220,9 +219,9 @@ describe('WatchDatabase', () => {
       const futureExpiry = new Date(Date.now() + 86400000).toISOString();
       db.insert(
         createTestWatch({
+          expiresAt: futureExpiry,
           id: 'w_1',
           status: 'active',
-          expiresAt: futureExpiry,
         }),
       );
 

@@ -104,17 +104,42 @@ export default defineConfig(
       semi: 'error',
     },
   },
+  // Test file relaxations
   {
-    files: ['**/*.test.ts', '**/*.test.js'],
+    files: ['**/*.test.ts', '**/*.test.js', '**/*.manual-test.ts'],
     rules: {
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/unbound-method': 'off',
     },
   },
+  // Root-level JS config files - disable type-checked rules (not in tsconfig)
   {
-    files: ['*.js', 'scripts/**/*.js'],
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['*.js', '*.cjs', 'scripts/**/*.js', '**/scripts/**/*.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  // CommonJS files
+  {
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['**/*.cjs'],
+    languageOptions: {
+      globals: globals.node,
+      sourceType: 'commonjs',
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  // Hook scripts - disable type-checked rules (not always in tsconfig)
+  {
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['**/hooks/scripts/**/*.ts', '**/hooks/scripts/**/*.js'],
     languageOptions: {
       globals: globals.node,
     },

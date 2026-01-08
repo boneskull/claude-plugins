@@ -7,30 +7,29 @@ import { constants } from 'node:fs';
 import { access, readdir, readFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { promisify } from 'node:util';
-
 import { parse as parseYaml } from 'yaml';
 
-import { TriggerMetadata, TriggerOutput } from './types.js';
+import { type TriggerMetadata, type TriggerOutput } from './types.js';
 import { getTriggersDir } from './utils.js';
 
 const execFileAsync = promisify(execFile);
 
 /** Result of executing a trigger */
-interface TriggerResult {
+export interface TriggerResult {
+  /** Error message if execution failed */
+  error?: string;
   /** Whether condition was met (exit code 0) */
   fired: boolean;
   /** Parsed JSON output if fired */
-  output: TriggerOutput | null;
-  /** Error message if execution failed */
-  error?: string;
+  output: null | TriggerOutput;
 }
 
 /** Execute a trigger executable with params */
-export async function executeTrigger(
+export const executeTrigger = async (
   triggerName: string,
   params: string[],
   triggersDir?: string,
-): Promise<TriggerResult> {
+): Promise<TriggerResult> => {
   const triggerPath = join(triggersDir ?? getTriggersDir(), triggerName);
 
   // Check trigger exists and is executable
@@ -38,14 +37,14 @@ export async function executeTrigger(
     await access(triggerPath, constants.X_OK);
   } catch {
     return {
+      error: `Trigger not found or not executable: ${triggerName}`,
       fired: false,
       output: null,
-      error: `Trigger not found or not executable: ${triggerName}`,
     };
   }
 
   try {
-    const { stdout, stderr } = await execFileAsync(triggerPath, params, {
+    const { stderr, stdout } = await execFileAsync(triggerPath, params, {
       timeout: 30000, // 30 second timeout
     });
 
@@ -61,9 +60,9 @@ export async function executeTrigger(
     } catch {
       // Still fired, but no valid JSON output
       return {
+        error: `Trigger fired but output was not valid JSON: ${stdout}`,
         fired: true,
         output: {},
-        error: `Trigger fired but output was not valid JSON: ${stdout}`,
       };
     }
   } catch (err) {
@@ -85,17 +84,17 @@ export async function executeTrigger(
 
     // Actual execution error (not found, permission denied, timeout, etc.)
     return {
+      error: `Failed to execute trigger: ${execErr.message}`,
       fired: false,
       output: null,
-      error: `Failed to execute trigger: ${execErr.message}`,
     };
   }
-}
+};
 
 /** List available triggers with their metadata */
-export async function listTriggers(
+export const listTriggers = async (
   triggersDirOverride?: string,
-): Promise<TriggerMetadata[]> {
+): Promise<TriggerMetadata[]> => {
   const triggersDir = triggersDirOverride ?? getTriggersDir();
   const triggers: TriggerMetadata[] = [];
 
@@ -145,13 +144,13 @@ export async function listTriggers(
   }
 
   return triggers;
-}
+};
 
 /** Check if a trigger exists */
-export async function triggerExists(
+export const triggerExists = async (
   triggerName: string,
   triggersDir?: string,
-): Promise<boolean> {
+): Promise<boolean> => {
   const triggerPath = join(triggersDir ?? getTriggersDir(), triggerName);
   try {
     await access(triggerPath, constants.X_OK);
@@ -159,4 +158,4 @@ export async function triggerExists(
   } catch {
     return false;
   }
-}
+};

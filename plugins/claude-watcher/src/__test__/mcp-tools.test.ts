@@ -2,6 +2,7 @@
  * Tests for MCP tool handlers
  */
 
+import { expect } from 'bupkis';
 import {
   chmodSync,
   mkdirSync,
@@ -14,8 +15,6 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, afterEach, before, describe, it } from 'node:test';
-
-import { expect } from 'bupkis';
 
 import { WatchDatabase } from '../db.js';
 import {
@@ -48,7 +47,7 @@ describe('MCP tool handlers', () => {
     if (db) {
       db.close();
     }
-    rmSync(tempDir, { recursive: true, force: true });
+    rmSync(tempDir, { force: true, recursive: true });
   });
 
   afterEach(() => {
@@ -70,11 +69,11 @@ describe('MCP tool handlers', () => {
   });
 
   /** Helper to create an executable trigger */
-  function createTrigger(name: string): void {
+  const createTrigger = (name: string): void => {
     const triggerPath = join(triggersDir, name);
     writeFileSync(triggerPath, '#!/bin/bash\nexit 0', 'utf-8');
     chmodSync(triggerPath, 0o755);
-  }
+  };
 
   describe('handleRegisterWatch', () => {
     it('creates watch with valid trigger', async () => {
@@ -82,9 +81,9 @@ describe('MCP tool handlers', () => {
 
       const result = await handleRegisterWatch(
         {
-          trigger: 'test-trigger',
-          params: ['arg1', 'arg2'],
           action: { prompt: 'Do something' },
+          params: ['arg1', 'arg2'],
+          trigger: 'test-trigger',
         },
         { db, triggersDir },
       );
@@ -103,9 +102,9 @@ describe('MCP tool handlers', () => {
     it('returns error for invalid trigger', async () => {
       const result = await handleRegisterWatch(
         {
-          trigger: 'nonexistent-trigger',
-          params: [],
           action: { prompt: 'Test' },
+          params: [],
+          trigger: 'nonexistent-trigger',
         },
         { db, triggersDir },
       );
@@ -120,9 +119,9 @@ describe('MCP tool handlers', () => {
       const beforeTime = Date.now();
       await handleRegisterWatch(
         {
-          trigger: 'ttl-trigger',
-          params: [],
           action: { prompt: 'Test' },
+          params: [],
+          trigger: 'ttl-trigger',
           ttl: '1h',
         },
         { db, triggersDir },
@@ -151,10 +150,10 @@ describe('MCP tool handlers', () => {
 
       await handleRegisterWatch(
         {
-          trigger: 'interval-trigger',
-          params: [],
           action: { prompt: 'Test' },
           interval: '5m',
+          params: [],
+          trigger: 'interval-trigger',
         },
         { db, triggersDir },
       );
@@ -176,9 +175,9 @@ describe('MCP tool handlers', () => {
 
       await handleRegisterWatch(
         {
-          trigger: 'list-trigger',
-          params: ['pkg', '1.0.0'],
           action: { prompt: 'Test' },
+          params: ['pkg', '1.0.0'],
+          trigger: 'list-trigger',
         },
         { db, triggersDir },
       );
@@ -197,9 +196,9 @@ describe('MCP tool handlers', () => {
       // Create an active watch
       await handleRegisterWatch(
         {
-          trigger: 'filter-trigger',
-          params: [],
           action: { prompt: 'Active' },
+          params: [],
+          trigger: 'filter-trigger',
         },
         { db, triggersDir },
       );
@@ -207,9 +206,9 @@ describe('MCP tool handlers', () => {
       // Create and cancel another watch
       await handleRegisterWatch(
         {
-          trigger: 'filter-trigger',
-          params: [],
           action: { prompt: 'Cancelled' },
+          params: [],
+          trigger: 'filter-trigger',
         },
         { db, triggersDir },
       );
@@ -239,9 +238,9 @@ describe('MCP tool handlers', () => {
 
       await handleRegisterWatch(
         {
-          trigger: 'status-trigger',
+          action: { cwd: '/test/dir', prompt: 'Status test' },
           params: ['x', 'y'],
-          action: { prompt: 'Status test', cwd: '/test/dir' },
+          trigger: 'status-trigger',
         },
         { db, triggersDir },
       );
@@ -254,10 +253,10 @@ describe('MCP tool handlers', () => {
 
       const watch = JSON.parse(result.content[0].text);
       expect(watch, 'to satisfy', {
-        trigger: 'status-trigger',
+        action: { cwd: '/test/dir', prompt: 'Status test' },
         params: ['x', 'y'],
-        action: { prompt: 'Status test', cwd: '/test/dir' },
         status: 'active',
+        trigger: 'status-trigger',
       });
     });
 
@@ -278,9 +277,9 @@ describe('MCP tool handlers', () => {
 
       await handleRegisterWatch(
         {
-          trigger: 'cancel-trigger',
-          params: [],
           action: { prompt: 'Cancel me' },
+          params: [],
+          trigger: 'cancel-trigger',
         },
         { db, triggersDir },
       );
@@ -304,9 +303,9 @@ describe('MCP tool handlers', () => {
 
       await handleRegisterWatch(
         {
-          trigger: 'already-cancelled',
-          params: [],
           action: { prompt: 'Test' },
+          params: [],
+          trigger: 'already-cancelled',
         },
         { db, triggersDir },
       );

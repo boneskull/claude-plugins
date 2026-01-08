@@ -10,27 +10,11 @@ import { join } from 'node:path';
 import {
   CONFIG_DIR,
   DB_FILE,
-  Watch,
-  WatchAction,
-  WatchRow,
-  WatchStatus,
+  type Watch,
+  type WatchAction,
+  type WatchRow,
+  type WatchStatus,
 } from './types.js';
-
-/** Convert database row to Watch object */
-function rowToWatch(row: WatchRow): Watch {
-  return {
-    id: row.id,
-    trigger: row.trigger,
-    params: JSON.parse(row.params) as string[],
-    action: JSON.parse(row.action) as WatchAction,
-    status: row.status,
-    createdAt: row.created_at,
-    expiresAt: row.expires_at,
-    interval: row.interval,
-    lastCheck: row.last_check,
-    firedAt: row.fired_at,
-  };
-}
 
 /** Database connection manager */
 export class WatchDatabase {
@@ -48,6 +32,118 @@ export class WatchDatabase {
     this.db = new Database(actualPath);
     this.db.pragma('journal_mode = WAL');
     this.initSchema();
+  }
+
+  /** Close database connection */
+  close(): void {
+    this.db.close();
+  }
+
+  /** Delete a watch */
+  delete(id: string): boolean {
+    const stmt = this.db.prepare<[string]>('DELETE FROM watches WHERE id = ?');
+    const result = stmt.run(id);
+    return result.changes > 0;
+  }
+
+  /** Mark expired watches */
+  expireOldWatches(): number {
+    const now = new Date().toISOString();
+    const stmt = this.db.prepare<[string]>(`
+      UPDATE watches
+      SET status = 'expired'
+      WHERE status = 'active' AND expires_at < ?
+    `);
+    const result = stmt.run(now);
+    return result.changes;
+  }
+
+  /** Get all active watches that need polling */
+  getActiveWatches(): Watch[] {
+    const stmt = this.db.prepare<[], WatchRow>(
+      "SELECT * FROM watches WHERE status = 'active'",
+    );
+    return stmt.all().map(rowToWatch);
+  }
+
+  /** Get a watch by ID */
+  getById(id: string): null | Watch {
+    const stmt = this.db.prepare<[string], WatchRow>(
+      'SELECT * FROM watches WHERE id = ?',
+    );
+    const row = stmt.get(id);
+    return row ? rowToWatch(row) : null;
+  }
+
+  /** Insert a new watch */
+  insert(watch: Watch): void {
+    const stmt = this.db.prepare<
+      [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        null | string,
+        null | string,
+      ]
+    >(`
+      INSERT INTO watches (id, trigger, params, action, status, created_at, expires_at, interval, last_check, fired_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    stmt.run(
+      watch.id,
+      watch.trigger,
+      JSON.stringify(watch.params),
+      JSON.stringify(watch.action),
+      watch.status,
+      watch.createdAt,
+      watch.expiresAt,
+      watch.interval,
+      watch.lastCheck,
+      watch.firedAt,
+    );
+  }
+
+  /** List watches, optionally filtered by status */
+  list(status?: 'all' | WatchStatus): Watch[] {
+    if (!status || status === 'all') {
+      const stmt = this.db.prepare<[], WatchRow>(
+        'SELECT * FROM watches ORDER BY created_at DESC',
+      );
+      return stmt.all().map(rowToWatch);
+    }
+    const stmt = this.db.prepare<[string], WatchRow>(
+      'SELECT * FROM watches WHERE status = ? ORDER BY created_at DESC',
+    );
+    return stmt.all(status).map(rowToWatch);
+  }
+
+  /** Mark watch as fired */
+  markFired(id: string, firedAt: string): void {
+    const stmt = this.db.prepare<[string, string]>(
+      "UPDATE watches SET status = 'fired', fired_at = ? WHERE id = ?",
+    );
+    stmt.run(firedAt, id);
+  }
+
+  /** Update last check timestamp */
+  updateLastCheck(id: string, timestamp: string): void {
+    const stmt = this.db.prepare<[string, string]>(
+      'UPDATE watches SET last_check = ? WHERE id = ?',
+    );
+    stmt.run(timestamp, id);
+  }
+
+  /** Update watch status */
+  updateStatus(id: string, status: WatchStatus): void {
+    const stmt = this.db.prepare<[string, string]>(
+      'UPDATE watches SET status = ? WHERE id = ?',
+    );
+    stmt.run(status, id);
   }
 
   /** Initialize database schema */
@@ -70,133 +166,37 @@ export class WatchDatabase {
       CREATE INDEX IF NOT EXISTS idx_watches_expires_at ON watches(expires_at);
     `);
   }
-
-  /** Insert a new watch */
-  insert(watch: Watch): void {
-    const stmt = this.db.prepare<
-      [
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string | null,
-        string | null,
-      ]
-    >(`
-      INSERT INTO watches (id, trigger, params, action, status, created_at, expires_at, interval, last_check, fired_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-    stmt.run(
-      watch.id,
-      watch.trigger,
-      JSON.stringify(watch.params),
-      JSON.stringify(watch.action),
-      watch.status,
-      watch.createdAt,
-      watch.expiresAt,
-      watch.interval,
-      watch.lastCheck,
-      watch.firedAt,
-    );
-  }
-
-  /** Get a watch by ID */
-  getById(id: string): Watch | null {
-    const stmt = this.db.prepare<[string], WatchRow>(
-      'SELECT * FROM watches WHERE id = ?',
-    );
-    const row = stmt.get(id);
-    return row ? rowToWatch(row) : null;
-  }
-
-  /** List watches, optionally filtered by status */
-  list(status?: WatchStatus | 'all'): Watch[] {
-    if (!status || status === 'all') {
-      const stmt = this.db.prepare<[], WatchRow>(
-        'SELECT * FROM watches ORDER BY created_at DESC',
-      );
-      return stmt.all().map(rowToWatch);
-    }
-    const stmt = this.db.prepare<[string], WatchRow>(
-      'SELECT * FROM watches WHERE status = ? ORDER BY created_at DESC',
-    );
-    return stmt.all(status).map(rowToWatch);
-  }
-
-  /** Get all active watches that need polling */
-  getActiveWatches(): Watch[] {
-    const stmt = this.db.prepare<[], WatchRow>(
-      "SELECT * FROM watches WHERE status = 'active'",
-    );
-    return stmt.all().map(rowToWatch);
-  }
-
-  /** Update watch status */
-  updateStatus(id: string, status: WatchStatus): void {
-    const stmt = this.db.prepare<[string, string]>(
-      'UPDATE watches SET status = ? WHERE id = ?',
-    );
-    stmt.run(status, id);
-  }
-
-  /** Update last check timestamp */
-  updateLastCheck(id: string, timestamp: string): void {
-    const stmt = this.db.prepare<[string, string]>(
-      'UPDATE watches SET last_check = ? WHERE id = ?',
-    );
-    stmt.run(timestamp, id);
-  }
-
-  /** Mark watch as fired */
-  markFired(id: string, firedAt: string): void {
-    const stmt = this.db.prepare<[string, string]>(
-      "UPDATE watches SET status = 'fired', fired_at = ? WHERE id = ?",
-    );
-    stmt.run(firedAt, id);
-  }
-
-  /** Mark expired watches */
-  expireOldWatches(): number {
-    const now = new Date().toISOString();
-    const stmt = this.db.prepare<[string]>(`
-      UPDATE watches
-      SET status = 'expired'
-      WHERE status = 'active' AND expires_at < ?
-    `);
-    const result = stmt.run(now);
-    return result.changes;
-  }
-
-  /** Delete a watch */
-  delete(id: string): boolean {
-    const stmt = this.db.prepare<[string]>('DELETE FROM watches WHERE id = ?');
-    const result = stmt.run(id);
-    return result.changes > 0;
-  }
-
-  /** Close database connection */
-  close(): void {
-    this.db.close();
-  }
 }
+
+/** Convert database row to Watch object */
+const rowToWatch = (row: WatchRow): Watch => {
+  return {
+    action: JSON.parse(row.action) as WatchAction,
+    createdAt: row.created_at,
+    expiresAt: row.expires_at,
+    firedAt: row.fired_at,
+    id: row.id,
+    interval: row.interval,
+    lastCheck: row.last_check,
+    params: JSON.parse(row.params) as string[],
+    status: row.status,
+    trigger: row.trigger,
+  };
+};
 
 /** Singleton instance for shared use */
-let instance: WatchDatabase | null = null;
+let instance: null | WatchDatabase = null;
 
-export function getDatabase(dbPath?: string): WatchDatabase {
-  if (!instance) {
-    instance = new WatchDatabase(dbPath);
-  }
-  return instance;
-}
-
-export function closeDatabase(): void {
+export const closeDatabase = (): void => {
   if (instance) {
     instance.close();
     instance = null;
   }
-}
+};
+
+export const getDatabase = (dbPath?: string): WatchDatabase => {
+  if (!instance) {
+    instance = new WatchDatabase(dbPath);
+  }
+  return instance;
+};

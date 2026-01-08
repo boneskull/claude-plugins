@@ -4,93 +4,114 @@ import { accessSync, readFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
+interface FileTriggers {
+  contentPatterns?: string[];
+  pathExclusions?: string[];
+  pathPatterns?: string[];
+}
+
 interface HookInput {
-  session_id: string;
-  transcript_path: string;
   cwd: string;
   permission_mode: string;
   prompt: string;
-}
-
-interface PromptTriggers {
-  keywords?: string[];
-  intentPatterns?: string[];
-}
-
-interface FileTriggers {
-  pathPatterns?: string[];
-  pathExclusions?: string[];
-  contentPatterns?: string[];
-}
-
-interface SkipConditions {
-  sessionSkillUsed?: boolean;
-  fileMarkers?: string[];
-  envOverride?: string;
-}
-
-interface SkillRule {
-  type: 'guardrail' | 'domain';
-  enforcement: 'block' | 'suggest' | 'warn';
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  description?: string;
-  promptTriggers?: PromptTriggers;
-  fileTriggers?: FileTriggers;
-  blockMessage?: string;
-  skipConditions?: SkipConditions;
-}
-
-interface SkillRules {
-  version: string;
-  description?: string;
-  skills: Record<string, SkillRule>;
-  notes?: Record<string, any>;
+  session_id: string;
+  transcript_path: string;
 }
 
 interface InstalledPlugin {
-  scope: 'user' | 'project';
-  version: string;
-  installedAt: string;
-  lastUpdated: string;
-  installPath: string;
   gitCommitSha?: string;
+  installedAt: string;
+  installPath: string;
   isLocal?: boolean;
+  lastUpdated: string;
+  scope: 'project' | 'user';
+  version: string;
 }
 
 interface InstalledPlugins {
-  version: number;
   plugins: Record<string, InstalledPlugin[]>; // Array per plugin (multiple scopes)
+  version: number;
+}
+
+interface MatchedSkill {
+  config: SkillRule;
+  displayName: string;
+  matchType: 'intent' | 'keyword';
+  name: string;
+  skillPath: null | string;
+}
+
+interface PromptTriggers {
+  intentPatterns?: string[];
+  keywords?: string[];
+}
+
+interface SkillRule {
+  blockMessage?: string;
+  description?: string;
+  enforcement: 'block' | 'suggest' | 'warn';
+  fileTriggers?: FileTriggers;
+  priority: 'critical' | 'high' | 'low' | 'medium';
+  promptTriggers?: PromptTriggers;
+  skipConditions?: SkipConditions;
+  type: 'domain' | 'guardrail';
+}
+
+interface SkillRules {
+  description?: string;
+  notes?: Record<string, any>;
+  skills: Record<string, SkillRule>;
+  version: string;
+}
+
+interface SkipConditions {
+  envOverride?: string;
+  fileMarkers?: string[];
+  sessionSkillUsed?: boolean;
 }
 
 /**
  * Get the best plugin installation for a given plugin ID. Prefers "user" scope,
  * falls back to first available.
  */
-function getPluginInstall(
+const getPluginInstall = (
   pluginInstalls: InstalledPlugin[] | undefined,
-): InstalledPlugin | undefined {
+): InstalledPlugin | undefined => {
   if (!pluginInstalls || pluginInstalls.length === 0) {
     return undefined;
   }
   // Prefer user-scoped installation
   return pluginInstalls.find((p) => p.scope === 'user') ?? pluginInstalls[0];
-}
+};
 
-interface MatchedSkill {
-  name: string;
-  displayName: string;
-  matchType: 'keyword' | 'intent';
-  config: SkillRule;
-  skillPath: string | null;
-}
+/**
+ * Load installed plugins metadata from Claude's global config
+ */
+const loadInstalledPlugins = (): InstalledPlugins => {
+  const pluginsPath = join(
+    homedir(),
+    '.claude',
+    'plugins',
+    'installed_plugins.json',
+  );
+
+  try {
+    const content = readFileSync(pluginsPath, 'utf-8');
+    return JSON.parse(content);
+  } catch (err) {
+    // If we can't read installed plugins, return empty structure
+    console.error('Warning: Could not load installed plugins:', err);
+    return { plugins: {}, version: 1 };
+  }
+};
 
 /**
  * Parse a skill reference in format "plugin@marketplace:skill-name" Returns
  * null if the reference is in legacy format (no plugin qualifier)
  */
-function parseSkillRef(
+const parseSkillRef = (
   skillRef: string,
-): { pluginId: string; skillName: string } | null {
+): null | { pluginId: string; skillName: string } => {
   const match = skillRef.match(/^(.+?)@(.+?):(.+)$/);
   if (!match) {
     return null; // Legacy format (local project skill)
@@ -100,7 +121,7 @@ function parseSkillRef(
     pluginId: `${pluginName}@${marketplace}`,
     skillName: skillName!,
   };
-}
+};
 
 /**
  * Resolve a skill reference to an absolute file path Returns null if:
@@ -110,10 +131,10 @@ function parseSkillRef(
  *
  * For legacy format (no plugin qualifier), looks in project .claude/skills/
  */
-function resolveSkillPath(
+const resolveSkillPath = (
   skillRef: string,
   installedPlugins: InstalledPlugins,
-): string | null {
+): null | string => {
   const parsed = parseSkillRef(skillRef);
 
   if (!parsed) {
@@ -153,28 +174,7 @@ function resolveSkillPath(
   } catch {
     return null; // Skill doesn't exist - gracefully skip
   }
-}
-
-/**
- * Load installed plugins metadata from Claude's global config
- */
-function loadInstalledPlugins(): InstalledPlugins {
-  const pluginsPath = join(
-    homedir(),
-    '.claude',
-    'plugins',
-    'installed_plugins.json',
-  );
-
-  try {
-    const content = readFileSync(pluginsPath, 'utf-8');
-    return JSON.parse(content);
-  } catch (err) {
-    // If we can't read installed plugins, return empty structure
-    console.error('Warning: Could not load installed plugins:', err);
-    return { version: 1, plugins: {} };
-  }
-}
+};
 
 /**
  * Create a display name for the skill For plugin skills:
@@ -217,8 +217,8 @@ const loadAllSkillRules = (
   projectDir: string,
 ): SkillRules => {
   const mergedRules: SkillRules = {
-    version: '1.0',
     skills: {},
+    version: '1.0',
   };
 
   // 1. Load plugin-defined rules (lowest priority - defaults)
@@ -290,7 +290,7 @@ const main = async () => {
     }
 
     let matched = false;
-    let matchType: 'keyword' | 'intent' = 'keyword';
+    let matchType: 'intent' | 'keyword' = 'keyword';
 
     // Keyword matching
     if (triggers.keywords) {
@@ -322,10 +322,10 @@ const main = async () => {
       // Only skip if skill doesn't exist
       // Still show in output but mark as unavailable
       matchedSkills.push({
-        name: skillRef,
+        config,
         displayName: getDisplayName(skillRef),
         matchType,
-        config,
+        name: skillRef,
         skillPath,
       });
     }
@@ -388,11 +388,11 @@ const main = async () => {
 
     // Output JSON for UserPromptSubmit hook
     const hookOutput = {
-      systemMessage: output, // Displayed directly to the user
       hookSpecificOutput: {
-        hookEventName: 'UserPromptSubmit',
         additionalContext: output, // Added to Claude's context
+        hookEventName: 'UserPromptSubmit',
       },
+      systemMessage: output, // Displayed directly to the user
     };
 
     console.log(JSON.stringify(hookOutput, null, 2));
