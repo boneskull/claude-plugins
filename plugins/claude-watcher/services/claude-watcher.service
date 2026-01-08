@@ -1,0 +1,43 @@
+# systemd user service for claude-watcher daemon (Linux)
+#
+# Prerequisites:
+#   - Node.js >= 20.19.0 (check with: node --version)
+#   - Find your node path with: which node
+#   - Update ExecStart below if node is not at /usr/bin/node
+#
+# Installation:
+#   1. Copy this file to ~/.config/systemd/user/
+#   2. Edit the file and update the node path in ExecStart if needed
+#   3. Reload systemd: systemctl --user daemon-reload
+#   4. Enable the service: systemctl --user enable claude-watcher
+#   5. Start the service: systemctl --user start claude-watcher
+#
+# Management:
+#   - Status:  systemctl --user status claude-watcher
+#   - Logs:    journalctl --user -u claude-watcher -f
+#   - Stop:    systemctl --user stop claude-watcher
+#   - Disable: systemctl --user disable claude-watcher
+#
+# Note: For the service to run at boot without logging in, enable lingering:
+#   sudo loginctl enable-linger $USER
+
+[Unit]
+Description=claude-watcher daemon
+Documentation=https://github.com/boneskull/claude-plugins
+After=network.target
+
+[Service]
+Type=simple
+# Update the node path if your node is installed elsewhere (e.g., /usr/local/bin/node, ~/.nvm/...)
+ExecStart=/usr/bin/node %h/.claude/plugins/claude-watcher/dist/bin/claude-watcher.js daemon
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Environment
+Environment=NODE_ENV=production
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,8 @@
+name: npm-publish
+description: Fires when a specific npm package version is published to the registry
+args:
+  - name: package
+    description: Package name (e.g., "foo" or "@scope/foo")
+  - name: version
+    description: Exact version to watch for (e.g., "1.2.3")
+defaultInterval: 30s

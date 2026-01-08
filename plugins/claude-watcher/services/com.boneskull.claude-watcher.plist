@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  launchd service manifest for claude-watcher daemon (macOS)
+
+  Prerequisites:
+  - Node.js >= 20.19.0 (check with: node -v)
+  - Find your node path with: which node
+
+  Installation:
+  1. Copy this file to ~/Library/LaunchAgents/
+  2. Edit the file:
+     - Replace YOUR_USERNAME with your actual username (appears 4 times)
+     - Update the node path if not at /usr/local/bin/node (check with: which node)
+  3. Ensure the logs directory exists: mkdir -p ~/.config/claude-watcher/logs
+  4. Load the service: launchctl load ~/Library/LaunchAgents/com.boneskull.claude-watcher.plist
+
+  Management:
+  - Start:   launchctl start com.boneskull.claude-watcher
+  - Stop:    launchctl stop com.boneskull.claude-watcher
+  - Unload:  launchctl unload ~/Library/LaunchAgents/com.boneskull.claude-watcher.plist
+  - Status:  launchctl list | grep claude-watcher
+  - Logs:    tail -f ~/.config/claude-watcher/logs/daemon.log
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.boneskull.claude-watcher</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- Update this path if node is installed elsewhere (check with: which node) -->
+        <string>/usr/local/bin/node</string>
+        <string>/Users/YOUR_USERNAME/.claude/plugins/claude-watcher/dist/bin/claude-watcher.js</string>
+        <string>daemon</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/YOUR_USERNAME/.config/claude-watcher/logs/daemon.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/YOUR_USERNAME/.config/claude-watcher/logs/daemon.err</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/YOUR_USERNAME</string>
+</dict>
+</plist>

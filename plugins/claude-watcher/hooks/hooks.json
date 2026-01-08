@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "npx -y tsx ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/watch-results-hook.ts",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  }
+}

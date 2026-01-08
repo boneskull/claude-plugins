@@ -1,0 +1,18 @@
+#!/bin/bash
+# Check if a specific npm package version is published
+# Usage: npm-publish <package> <version>
+
+PACKAGE="$1"
+VERSION="$2"
+
+if [[ -z "$PACKAGE" || -z "$VERSION" ]]; then
+  echo "Usage: npm-publish <package> <version>" >&2
+  exit 1
+fi
+
+if curl -sf "https://registry.npmjs.org/${PACKAGE}/${VERSION}" > /dev/null 2>&1; then
+  echo "{\"package\": \"${PACKAGE}\", \"version\": \"${VERSION}\", \"slug\": \"${PACKAGE}@${VERSION}\"}"
+  exit 0
+else
+  exit 1
+fi

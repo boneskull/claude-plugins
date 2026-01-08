@@ -1,0 +1,8 @@
+name: gh-pr-merged
+description: Fires when a GitHub pull request is merged
+args:
+  - name: repo
+    description: Repository in owner/repo format (e.g., "facebook/react")
+  - name: pr-number
+    description: Pull request number
+defaultInterval: 60s

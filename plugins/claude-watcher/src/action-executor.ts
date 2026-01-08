@@ -16,15 +16,35 @@ import { getLogPath, getResultPath, interpolatePrompt } from './utils.js';
 
 const execFileAsync = promisify(execFile);
 
+/** Options for action execution (for testing) */
+export interface ExecuteActionOptions {
+  /** Custom executor function (defaults to execFileAsync) */
+  executor?: (
+    file: string,
+    args: string[],
+    options: { cwd: string; env: NodeJS.ProcessEnv },
+  ) => Promise<{ stdout: string; stderr: string }>;
+  /** Custom log path (defaults to getLogPath(watchId)) */
+  logPath?: string;
+}
+
+/** Options for writeResult (for testing) */
+export interface WriteResultOptions {
+  /** Custom result path (defaults to getResultPath(watchId)) */
+  resultPath?: string;
+}
+
 /** Execute an action and return the result */
 export async function executeAction(
   watchId: string,
   action: WatchAction,
   triggerOutput: TriggerOutput,
+  options: ExecuteActionOptions = {},
 ): Promise<ActionResult> {
   const interpolatedPrompt = interpolatePrompt(action.prompt, triggerOutput);
   const cwd = action.cwd ?? process.cwd();
-  const logPath = getLogPath(watchId);
+  const logPath = options.logPath ?? getLogPath(watchId);
+  const executor = options.executor ?? execFileAsync;
 
   // Log the action start
   await appendFile(
@@ -35,7 +55,7 @@ export async function executeAction(
   );
 
   try {
-    const { stdout, stderr } = await execFileAsync(
+    const { stdout, stderr } = await executor(
       'claude',
       ['-p', interpolatedPrompt],
       { cwd, env: process.env },
@@ -90,10 +110,17 @@ export async function executeAction(
 }
 
 /** Write a watch result to the results directory */
-export async function writeResult(result: WatchResult): Promise<void> {
-  const resultPath = getResultPath(result.watchId);
+export async function writeResult(
+  result: WatchResult,
+  options: WriteResultOptions = {},
+): Promise<void> {
+  const resultPath = options.resultPath ?? getResultPath(result.watchId);
   await writeFile(resultPath, JSON.stringify(result, null, 2), 'utf-8');
 }
+
+/** Options for executeAndWriteResult (for testing) */
+export interface ExecuteAndWriteResultOptions
+  extends ExecuteActionOptions, WriteResultOptions {}
 
 /** Full action execution: run action and write result */
 export async function executeAndWriteResult(
@@ -103,8 +130,12 @@ export async function executeAndWriteResult(
   action: WatchAction,
   triggerOutput: TriggerOutput,
   firedAt: string,
+  options: ExecuteAndWriteResultOptions = {},
 ): Promise<WatchResult> {
-  const actionResult = await executeAction(watchId, action, triggerOutput);
+  const actionResult = await executeAction(watchId, action, triggerOutput, {
+    executor: options.executor,
+    logPath: options.logPath,
+  });
 
   const result: WatchResult = {
     watchId,
@@ -115,6 +146,6 @@ export async function executeAndWriteResult(
     firedAt,
   };
 
-  await writeResult(result);
+  await writeResult(result, { resultPath: options.resultPath });
   return result;
 }

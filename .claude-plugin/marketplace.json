@@ -36,6 +36,10 @@
     {
       "name": "zod",
       "source": "./plugins/zod"
+    },
+    {
+      "name": "claude-watcher",
+      "source": "./plugins/claude-watcher"
     }
   ]
 }

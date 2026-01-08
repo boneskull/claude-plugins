@@ -29,8 +29,9 @@ export interface TriggerResult {
 export async function executeTrigger(
   triggerName: string,
   params: string[],
+  triggersDir?: string,
 ): Promise<TriggerResult> {
-  const triggerPath = join(getTriggersDir(), triggerName);
+  const triggerPath = join(triggersDir ?? getTriggersDir(), triggerName);
 
   // Check trigger exists and is executable
   try {
@@ -44,9 +45,14 @@ export async function executeTrigger(
   }
 
   try {
-    const { stdout } = await execFileAsync(triggerPath, params, {
+    const { stdout, stderr } = await execFileAsync(triggerPath, params, {
       timeout: 30000, // 30 second timeout
     });
+
+    // Log stderr if present
+    if (stderr.trim()) {
+      console.error(`[trigger:${triggerName}] ${stderr.trim()}`);
+    }
 
     // Exit code 0 - trigger fired, parse JSON output
     try {
@@ -61,7 +67,16 @@ export async function executeTrigger(
       };
     }
   } catch (err) {
-    const execErr = err as { code?: number | string; message: string };
+    const execErr = err as {
+      code?: number | string;
+      message: string;
+      stderr?: string;
+    };
+
+    // Log stderr if present
+    if (execErr.stderr?.trim()) {
+      console.error(`[trigger:${triggerName}] ${execErr.stderr.trim()}`);
+    }
 
     // Non-zero exit means condition not met
     if (typeof execErr.code === 'number' && execErr.code !== 0) {
@@ -78,8 +93,10 @@ export async function executeTrigger(
 }
 
 /** List available triggers with their metadata */
-export async function listTriggers(): Promise<TriggerMetadata[]> {
-  const triggersDir = getTriggersDir();
+export async function listTriggers(
+  triggersDirOverride?: string,
+): Promise<TriggerMetadata[]> {
+  const triggersDir = triggersDirOverride ?? getTriggersDir();
   const triggers: TriggerMetadata[] = [];
 
   try {
@@ -131,8 +148,11 @@ export async function listTriggers(): Promise<TriggerMetadata[]> {
 }
 
 /** Check if a trigger exists */
-export async function triggerExists(triggerName: string): Promise<boolean> {
-  const triggerPath = join(getTriggersDir(), triggerName);
+export async function triggerExists(
+  triggerName: string,
+  triggersDir?: string,
+): Promise<boolean> {
+  const triggerPath = join(triggersDir ?? getTriggersDir(), triggerName);
   try {
     await access(triggerPath, constants.X_OK);
     return true;

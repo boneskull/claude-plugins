@@ -37,8 +37,8 @@
     "lint:prettier": "prettier --check .",
     "lint:spelling": "cspell . \"./.*/**\"",
     "lint:types": "tsc --noEmit",
-    "prepare": "husky",
-    "test": "exit 0"
+    "prepare": "husky; npm run prepare --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
     "@commitlint/cli": "20.2.0",

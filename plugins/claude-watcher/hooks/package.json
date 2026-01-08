@@ -1,0 +1,15 @@
+{
+  "name": "@claude-watcher/hooks",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Hook scripts for claude-watcher plugin",
+  "private": true,
+  "scripts": {
+    "test": "echo '{\"prompt\": \"test\", \"cwd\": \".\", \"session_id\": \"test\", \"transcript_path\": \"/tmp\", \"permission_mode\": \"auto\"}' | npx tsx scripts/watch-results-hook.ts"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.21",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

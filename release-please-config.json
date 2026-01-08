@@ -13,6 +13,18 @@
       ],
       "release-type": "simple"
     },
+    "plugins/claude-watcher": {
+      "component": "claude-watcher",
+      "extra-files": [
+        {
+          "jsonpath": "$.version",
+          "path": ".claude-plugin/plugin.json",
+          "type": "json"
+        }
+      ],
+      "initial-version": "0.1.0",
+      "release-type": "simple"
+    },
     "plugins/github": {
       "component": "github",
       "extra-files": [

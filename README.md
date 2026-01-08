@@ -1,6 +1,6 @@
-# Boneskull's Claude Plugins
+# Claude Plugins _a la_ boneskull
 
-Personal marketplace for Claude Code plugins.
+I HAVE PLUGINS HERE. THEY ARE THE BEST PLUGINS OF ALL TIME. I AM LETTING YOU USE THEM.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Add this marketplace to Claude Code:
 
 ### bupkis
 
-[📖 Plugin README](plugins/bupkis/README.md)
+[📖 bupkis Plugin README](plugins/bupkis/README.md)
 
 **Category:** development
 
@@ -37,7 +37,7 @@ Idiomatic assertion patterns for the [Bupkis](https://bupkis.zip) assertion libr
 
 ### github
 
-[📖 Plugin README](plugins/github/README.md)
+[📖 github Plugin README](plugins/github/README.md)
 
 **Category:** development
 
@@ -56,7 +56,7 @@ Commands for interacting with GitHub issues and pull requests (PRs).
 
 ### refactor
 
-[📖 Plugin README](plugins/refactor/README.md)
+[📖 refactor Plugin README](plugins/refactor/README.md)
 
 **Category:** development
 
@@ -77,7 +77,7 @@ General-purpose software development refactoring and reorganization.
 
 ### tools
 
-[📖 Plugin README](plugins/tools/README.md)
+[📖 tools Plugin README](plugins/tools/README.md)
 
 **Category:** development
 
@@ -101,7 +101,7 @@ Skills and documentation for various CLI, development, and language-specific too
 
 ### xstate
 
-[📖 Plugin README](plugins/xstate/README.md)
+[📖 xstate Plugin README](plugins/xstate/README.md)
 
 **Category:** development
 
@@ -124,7 +124,7 @@ Skills and documentation for various CLI, development, and language-specific too
 
 ### skill-activation
 
-[📖 Plugin README](plugins/skill-activation/README.md)
+[📖 skill-activation Plugin README](plugins/skill-activation/README.md)
 
 **Category:** workflow
 
@@ -143,7 +143,7 @@ Centralized skill activation system that automatically suggests relevant skills 
 
 ### zod
 
-[📖 Plugin README](plugins/zod/README.md)
+[📖 zod Plugin README](plugins/zod/README.md)
 
 **Category:** development
 
@@ -166,16 +166,18 @@ Comprehensive guidance for using the [Zod v4](https://zod.dev/) validation libra
 
 ## Development
 
-See [Development Guide](docs/DEVELOPMENT.md) for details on creating new plugins.
+This is a monorepo containing multiple plugins. Each plugin is a separate npm package in the `plugins/` directory.
 
 ### Quick Start
 
+Clone this repository and run the following commands to get started:
+
 ```bash
-# Install dependencies
+# install dependencies, run prepare scripts
 npm install
 
-# Format code
-npm run format
+# run tests for all plugins
+npm test
 ```
 
 ## Acknowledgements
@@ -183,8 +185,10 @@ npm run format
 - [Nick Nisi's claude-plugins](https://github.com/nicknisi/claude-plugins) - I stole some code and ideas from his repo. Thanks, Nick!
 - [Claude Code Infrastructure Showcase](https://github.com/diet103/claude-code-infrastructure-showcase) - Provided the groundwork for the [skill-activation](plugins/skill-activation/README.md) plugin.
 
+## Resources
+
+- [How to Automate Claude Plugin Versioning with Release Please](https://gist.github.com/boneskull/5028e07534c87d33bdb4431360605fa6) - A guide to automating version bumps and releases of your Claude plugins with [Release Please](https://github.com/googleapis/release-please).
+
 ## License
 
-[Blue Oak Model License 1.0.0](LICENSE)
-
-All plugins in this repository are licensed under the Blue Oak Model License 1.0.0, a modern permissive open source license.
+Copyright © 2025 [Christopher "boneskull" Hiller](https://github.com/boneskull). Licensed under the [Blue Oak Model License 1.0.0](LICENSE)

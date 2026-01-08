@@ -2,7 +2,7 @@
   "mcpServers": {
     "claude-watcher": {
       "command": "node",
-      "args": ["dist/mcp-server.js"],
+      "args": ["${CLAUDE_PLUGIN_ROOT}/dist/mcp-server.js"],
       "env": {}
     }
   }

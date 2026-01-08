@@ -54,6 +54,7 @@
     "signup",
     "treeify",
     "Luhn",
-    "unpatch"
+    "unpatch",
+    "journalctl"
   ]
 }
