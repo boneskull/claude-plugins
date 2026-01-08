@@ -20,12 +20,7 @@ import {
 
 /** Generate a unique watch ID */
 export function generateWatchId(): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let id = 'w_';
-  for (let i = 0; i < 8; i++) {
-    id += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return id;
+  return `w_${crypto.randomUUID().slice(0, 8)}`;
 }
 
 /** Parse a duration string to milliseconds */
