@@ -20,8 +20,8 @@
     "dev": "tsc --watch",
     "prepare": "npm run clean && npm run build",
     "pretest": "npm run build",
-    "test": "node --test --test-reporter spec dist/__test__/*.test.js",
-    "test:triggers": "node --test --test-reporter spec dist/__test__/*.manual-test.js"
+    "test": "node --test --test-reporter=spec dist/__test__/*.test.js",
+    "test:triggers": "node --test --test-reporter=spec dist/__test__/*.manual-test.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.25.2",
