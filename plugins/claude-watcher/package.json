@@ -1,0 +1,30 @@
+{
+  "name": "claude-watcher-plugin",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Event-driven automation daemon for Claude Code",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "bin": {
+    "claude-watcher": "dist/bin/claude-watcher.js"
+  },
+  "main": "dist/mcp-server.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "better-sqlite3": "^11.8.1",
+    "ms": "^2.1.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/ms": "^2.1.0",
+    "@types/node": "^22.15.21",
+    "typescript": "^5.9.3"
+  }
+}
