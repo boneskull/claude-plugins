@@ -46,22 +46,22 @@ export function getIntervalMs(interval?: string): number {
 }
 
 /** Get config directory path */
-export function getConfigDir(): string {
+function getConfigDir(): string {
   return join(homedir(), CONFIG_DIR);
 }
 
 /** Get results directory path */
-export function getResultsDir(): string {
+function getResultsDir(): string {
   return join(getConfigDir(), RESULTS_DIR);
 }
 
 /** Get archive directory path */
-export function getArchiveDir(): string {
+function getArchiveDir(): string {
   return join(getConfigDir(), ARCHIVE_DIR);
 }
 
 /** Get logs directory path */
-export function getLogsDir(): string {
+function getLogsDir(): string {
   return join(getConfigDir(), LOGS_DIR);
 }
 

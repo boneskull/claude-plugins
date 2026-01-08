@@ -16,7 +16,7 @@ import { getTriggersDir } from './utils.js';
 const execFileAsync = promisify(execFile);
 
 /** Result of executing a trigger */
-export interface TriggerResult {
+interface TriggerResult {
   /** Whether condition was met (exit code 0) */
   fired: boolean;
   /** Parsed JSON output if fired */

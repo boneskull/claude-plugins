@@ -8,13 +8,13 @@ import { DEFAULT_INTERVAL, Watch } from './types.js';
 import { calculateExpiry, formatWatch, generateWatchId } from './utils.js';
 
 /** Tool result content type */
-export interface ToolResult {
+interface ToolResult {
   content: Array<{ type: 'text'; text: string }>;
   isError?: boolean;
 }
 
 /** Options for tool handlers (for testing) */
-export interface ToolHandlerOptions {
+interface ToolHandlerOptions {
   /** Database instance */
   db: WatchDatabase;
   /** Triggers directory override */

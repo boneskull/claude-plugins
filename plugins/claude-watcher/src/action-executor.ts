@@ -17,7 +17,7 @@ import { getLogPath, getResultPath, interpolatePrompt } from './utils.js';
 const execFileAsync = promisify(execFile);
 
 /** Options for action execution (for testing) */
-export interface ExecuteActionOptions {
+interface ExecuteActionOptions {
   /** Custom executor function (defaults to execFileAsync) */
   executor?: (
     file: string,
@@ -29,7 +29,7 @@ export interface ExecuteActionOptions {
 }
 
 /** Options for writeResult (for testing) */
-export interface WriteResultOptions {
+interface WriteResultOptions {
   /** Custom result path (defaults to getResultPath(watchId)) */
   resultPath?: string;
 }
@@ -119,7 +119,7 @@ export async function writeResult(
 }
 
 /** Options for executeAndWriteResult (for testing) */
-export interface ExecuteAndWriteResultOptions
+interface ExecuteAndWriteResultOptions
   extends ExecuteActionOptions, WriteResultOptions {}
 
 /** Full action execution: run action and write result */

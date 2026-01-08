@@ -105,7 +105,7 @@ export interface TriggerMetadata {
 }
 
 /** Input to register_watch MCP tool */
-export interface RegisterWatchInput {
+interface RegisterWatchInput {
   /** Trigger name */
   trigger: string;
   /** Trigger params */
@@ -122,25 +122,25 @@ export interface RegisterWatchInput {
 }
 
 /** Input to list_watches MCP tool */
-export interface ListWatchesInput {
+interface ListWatchesInput {
   /** Filter by status */
   status?: WatchStatus | 'all';
 }
 
 /** Input to cancel_watch MCP tool */
-export interface CancelWatchInput {
+interface CancelWatchInput {
   /** Watch ID to cancel */
   watchId: string;
 }
 
 /** Input to watch_status MCP tool */
-export interface WatchStatusInput {
+interface WatchStatusInput {
   /** Watch ID to query */
   watchId: string;
 }
 
 /** Hook input from Claude Code */
-export interface HookInput {
+interface HookInput {
   session_id: string;
   transcript_path: string;
   cwd: string;
@@ -149,7 +149,7 @@ export interface HookInput {
 }
 
 /** Hook output to Claude Code */
-export interface HookOutput {
+interface HookOutput {
   continue: boolean;
   systemMessage?: string;
   hookSpecificOutput?: {
