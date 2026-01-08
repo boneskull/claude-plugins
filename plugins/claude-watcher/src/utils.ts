@@ -2,7 +2,7 @@
  * Utility functions for claude-watcher
  */
 
-import { existsSync, mkdirSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
@@ -72,17 +72,14 @@ export function getTriggersDir(): string {
 
 /** Ensure all config directories exist */
 export function ensureConfigDirs(): void {
-  const dirs = [
+  for (const dir of [
     getConfigDir(),
     getResultsDir(),
     getArchiveDir(),
     getLogsDir(),
     getTriggersDir(),
-  ];
-  for (const dir of dirs) {
-    if (!existsSync(dir)) {
-      mkdirSync(dir, { recursive: true });
-    }
+  ]) {
+    mkdirSync(dir, { recursive: true });
   }
 }
 

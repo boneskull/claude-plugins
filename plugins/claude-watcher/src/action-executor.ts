@@ -2,8 +2,9 @@
  * Executes actions by spawning claude -p
  */
 
-import { spawn } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { appendFile, writeFile } from 'node:fs/promises';
+import { promisify } from 'node:util';
 
 import {
   ActionResult,
@@ -12,6 +13,8 @@ import {
   WatchResult,
 } from './types.js';
 import { getLogPath, getResultPath, interpolatePrompt } from './utils.js';
+
+const execFileAsync = promisify(execFile);
 
 /** Execute an action and return the result */
 export async function executeAction(
@@ -31,60 +34,59 @@ export async function executeAction(
       `CWD: ${cwd}\n\n`,
   );
 
-  return new Promise((resolve) => {
-    const proc = spawn('claude', ['-p', interpolatedPrompt], {
+  try {
+    const { stdout, stderr } = await execFileAsync(
+      'claude',
+      ['-p', interpolatedPrompt],
+      { cwd, env: process.env },
+    );
+
+    // Log output after completion
+    await appendFile(logPath, stdout);
+    if (stderr) {
+      await appendFile(logPath, `[stderr] ${stderr}`);
+    }
+    await appendFile(logPath, `\n=== Action completed with exit code 0 ===\n`);
+
+    return {
+      prompt: interpolatedPrompt,
       cwd,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env },
-    });
+      exitCode: 0,
+      stdout,
+      stderr,
+      completedAt: new Date().toISOString(),
+    };
+  } catch (err) {
+    // execFile rejects on non-zero exit or execution error
+    const execErr = err as {
+      code?: number;
+      stdout?: string;
+      stderr?: string;
+      message: string;
+    };
 
-    let stdout = '';
-    let stderr = '';
+    const stdout = execErr.stdout ?? '';
+    const stderr = execErr.stderr ?? execErr.message;
+    const exitCode = execErr.code ?? 1;
 
-    proc.stdout.on('data', (data: Buffer) => {
-      const chunk = data.toString();
-      stdout += chunk;
-      // Stream to log file
-      appendFile(logPath, chunk).catch(() => {});
-    });
+    await appendFile(logPath, stdout);
+    if (stderr) {
+      await appendFile(logPath, `[stderr] ${stderr}`);
+    }
+    await appendFile(
+      logPath,
+      `\n=== Action completed with exit code ${exitCode} ===\n`,
+    );
 
-    proc.stderr.on('data', (data: Buffer) => {
-      const chunk = data.toString();
-      stderr += chunk;
-      appendFile(logPath, `[stderr] ${chunk}`).catch(() => {});
-    });
-
-    proc.on('error', (err) => {
-      const result: ActionResult = {
-        prompt: interpolatedPrompt,
-        cwd,
-        exitCode: 1,
-        stdout: '',
-        stderr: err.message,
-        completedAt: new Date().toISOString(),
-      };
-      appendFile(logPath, `\n=== Action failed: ${err.message} ===\n`).catch(
-        () => {},
-      );
-      resolve(result);
-    });
-
-    proc.on('close', (code) => {
-      const result: ActionResult = {
-        prompt: interpolatedPrompt,
-        cwd,
-        exitCode: code ?? 1,
-        stdout,
-        stderr,
-        completedAt: new Date().toISOString(),
-      };
-      appendFile(
-        logPath,
-        `\n=== Action completed with exit code ${code} ===\n`,
-      ).catch(() => {});
-      resolve(result);
-    });
-  });
+    return {
+      prompt: interpolatedPrompt,
+      cwd,
+      exitCode,
+      stdout,
+      stderr,
+      completedAt: new Date().toISOString(),
+    };
+  }
 }
 
 /** Write a watch result to the results directory */
