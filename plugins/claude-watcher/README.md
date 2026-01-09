@@ -67,6 +67,9 @@ claude-watcher daemon
 
 ### macOS (`launchd`)
 
+> [!IMPORTANT]
+> The Node.js version used in the plist **must be the same major version** as the node in your PATH when you ran `npm install`. Native modules (like better-sqlite3) are compiled against a specific Node ABI version and will fail with cryptic errors if there's a mismatch. If you switch Node versions, re-run `npm install` to rebuild native modules.
+
 ```bash
 # Copy and configure the plist
 cp ~/.claude/plugins/claude-watcher/services/com.boneskull.claude-watcher.plist \
