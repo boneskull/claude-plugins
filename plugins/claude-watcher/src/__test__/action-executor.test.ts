@@ -48,13 +48,12 @@ describe('action-executor', () => {
 
   describe('executeAction', () => {
     it('interpolates prompt with trigger output', async () => {
-      let capturedArgs: string[] = [];
+      let capturedCommand = '';
 
       const mockExecutor = async (
-        file: string,
-        args: string[],
+        command: string,
       ): Promise<{ stderr: string; stdout: string }> => {
-        capturedArgs = args;
+        capturedCommand = command;
         return { stderr: '', stdout: 'success' };
       };
 
@@ -68,22 +67,20 @@ describe('action-executor', () => {
         logPath,
       });
 
-      expect(capturedArgs, 'to satisfy', [
-        '-p',
-        'Package lodash version 4.18.0 is ready',
-      ]);
+      expect(
+        capturedCommand,
+        'to equal',
+        "claude -p 'Package lodash version 4.18.0 is ready' --permission-mode=dontAsk",
+      );
     });
 
-    it('executes claude -p with correct args', async () => {
-      let capturedFile = '';
-      let capturedArgs: string[] = [];
+    it('executes claude -p with correct command format', async () => {
+      let capturedCommand = '';
 
       const mockExecutor = async (
-        file: string,
-        args: string[],
+        command: string,
       ): Promise<{ stderr: string; stdout: string }> => {
-        capturedFile = file;
-        capturedArgs = args;
+        capturedCommand = command;
         return { stderr: '', stdout: 'result' };
       };
 
@@ -99,8 +96,8 @@ describe('action-executor', () => {
         },
       );
 
-      expect(capturedFile, 'to equal', 'claude');
-      expect(capturedArgs[0], 'to equal', '-p');
+      expect(capturedCommand, 'to match', /^claude -p '/);
+      expect(capturedCommand, 'to contain', '--permission-mode=dontAsk');
     });
 
     it('returns ActionResult with stdout/stderr/exitCode on success', async () => {
@@ -198,8 +195,7 @@ describe('action-executor', () => {
       let capturedCwd = '';
 
       const mockExecutor = async (
-        _file: string,
-        _args: string[],
+        _command: string,
         options: { cwd: string },
       ): Promise<{ stderr: string; stdout: string }> => {
         capturedCwd = options.cwd;

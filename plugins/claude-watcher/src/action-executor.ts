@@ -2,9 +2,8 @@
  * Executes actions by spawning claude -p
  */
 
-import { execFile } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { appendFile, writeFile } from 'node:fs/promises';
-import { promisify } from 'node:util';
 
 import {
   type ActionResult,
@@ -14,14 +13,64 @@ import {
 } from './types.js';
 import { getLogPath, getResultPath, interpolatePrompt } from './utils.js';
 
-const execFileAsync = promisify(execFile);
+/**
+ * Execute a command through a full login shell. This is necessary for Keychain
+ * access on macOS - processes spawned without a login shell can't access
+ * credentials stored in the Keychain.
+ */
+const execLoginShell = (
+  command: string,
+  options: { cwd: string; env: NodeJS.ProcessEnv },
+): Promise<{ stderr: string; stdout: string }> => {
+  return new Promise((resolve, reject) => {
+    // Use login shell (-l) with interactive (-i) to get full environment
+    const shell = process.env.SHELL ?? '/bin/zsh';
+    const child = spawn(shell, ['-l', '-i', '-c', command], {
+      cwd: options.cwd,
+      env: options.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data: Buffer) => {
+      stdout += data.toString();
+    });
+
+    child.stderr.on('data', (data: Buffer) => {
+      stderr += data.toString();
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve({ stderr, stdout });
+      } else {
+        const err = new Error(
+          `Command failed with exit code ${code}`,
+        ) as Error & {
+          code: number;
+          stderr: string;
+          stdout: string;
+        };
+        err.code = code ?? 1;
+        err.stdout = stdout;
+        err.stderr = stderr;
+        reject(err);
+      }
+    });
+
+    child.on('error', (err) => {
+      reject(err);
+    });
+  });
+};
 
 /** Options for action execution (for testing) */
 export interface ExecuteActionOptions {
-  /** Custom executor function (defaults to execFileAsync) */
+  /** Custom executor function (defaults to execLoginShell) */
   executor?: (
-    file: string,
-    args: string[],
+    command: string,
     options: { cwd: string; env: NodeJS.ProcessEnv },
   ) => Promise<{ stderr: string; stdout: string }>;
   /** Custom log path (defaults to getLogPath(watchId)) */
@@ -48,7 +97,11 @@ export const executeAction = async (
   const interpolatedPrompt = interpolatePrompt(action.prompt, triggerOutput);
   const cwd = action.cwd ?? process.cwd();
   const logPath = options.logPath ?? getLogPath(watchId);
-  const executor = options.executor ?? execFileAsync;
+  const executor = options.executor ?? execLoginShell;
+
+  // Escape single quotes in prompt for shell safety
+  const escapedPrompt = interpolatedPrompt.replace(/'/g, "'\\''");
+  const command = `claude -p '${escapedPrompt}' --permission-mode=dontAsk`;
 
   // Log the action start
   await appendFile(
@@ -59,11 +112,10 @@ export const executeAction = async (
   );
 
   try {
-    const { stderr, stdout } = await executor(
-      'claude',
-      ['-p', interpolatedPrompt],
-      { cwd, env: process.env },
-    );
+    const { stderr, stdout } = await executor(command, {
+      cwd,
+      env: process.env,
+    });
 
     // Log output after completion
     await appendFile(logPath, stdout);
