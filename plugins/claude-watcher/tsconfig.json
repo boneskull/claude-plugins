@@ -1,11 +1,28 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "isolatedModules": true,
+    "lib": ["ES2023"],
+    "module": "nodenext",
+    "moduleDetection": "force",
     "noEmit": false,
-    "resolveJsonModule": true
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "stripInternal": true,
+    "target": "esnext",
+    "types": ["node"],
+    "verbatimModuleSyntax": false
   },
   "exclude": ["node_modules", "dist"],
-  "extends": "../../tsconfig.json",
   "include": ["src/**/*"]
 }
