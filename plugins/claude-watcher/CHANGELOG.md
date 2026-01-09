@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/boneskull/claude-plugins/compare/claude-watcher-v0.1.1...claude-watcher-v0.1.2) (2026-01-09)
+
+
+### Bug Fixes
+
+* **claude-watcher:** use login shell for Keychain access on macOS ([167aa8b](https://github.com/boneskull/claude-plugins/commit/167aa8b384b06bbff4761906955a7f1421b44ed4))
+
 ## [0.1.1](https://github.com/boneskull/claude-plugins/compare/claude-watcher-v0.1.0...claude-watcher-v0.1.1) (2026-01-09)
 
 
