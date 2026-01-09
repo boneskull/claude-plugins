@@ -55,6 +55,7 @@
     "treeify",
     "Luhn",
     "unpatch",
-    "journalctl"
+    "journalctl",
+    "stringifying"
   ]
 }
