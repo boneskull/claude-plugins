@@ -61,7 +61,8 @@
     "prettier-plugin-jsdoc": "1.8.0",
     "prettier-plugin-pkg": "0.21.2",
     "prettier-plugin-sort-json": "4.1.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.52.0"
   },
   "knip": {
     "ignoreDependencies": [
@@ -76,7 +77,13 @@
     ],
     "ignoreFiles": [
       "plugins/**/scripts/*"
-    ]
+    ],
+    "node": {
+      "entry": [
+        "plugins/claude-watcher/src/bin/claude-watcher.ts",
+        "plugins/claude-watcher/src/mcp-server.ts"
+      ]
+    }
   },
   "lint-staged": {
     "*.{ts,js,yml,json5}": [

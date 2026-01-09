@@ -10,11 +10,10 @@
  * - Gh auth login (authenticated)
  */
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { describe, it } from 'node:test';
-
 import { expect } from 'bupkis';
+import { dirname, join } from 'node:path';
+import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { executeTrigger } from '../trigger-executor.js';
 
@@ -38,9 +37,9 @@ describe('gh-pr-merged trigger (manual)', () => {
 
     expect(result.fired, 'to be true');
     expect(result.output, 'to satisfy', {
-      repo: MERGED_PR_REPO,
       pr: parseInt(MERGED_PR_NUMBER, 10),
       prUrl: `https://github.com/${MERGED_PR_REPO}/pull/${MERGED_PR_NUMBER}`,
+      repo: MERGED_PR_REPO,
     });
     expect(result.error, 'to be undefined');
   });

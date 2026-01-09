@@ -2,9 +2,8 @@
  * Tests for utils.ts
  */
 
-import { describe, it } from 'node:test';
-
 import { expect } from 'bupkis';
+import { describe, it } from 'node:test';
 
 import {
   calculateExpiry,
@@ -130,8 +129,8 @@ describe('interpolatePrompt', () => {
 
   it('converts non-string values to strings', () => {
     const result = interpolatePrompt('Count: {{count}}, Active: {{active}}', {
-      count: 42,
       active: true,
+      count: 42,
     });
     expect(result, 'to equal', 'Count: 42, Active: true');
   });
@@ -145,11 +144,11 @@ describe('interpolatePrompt', () => {
 describe('formatWatch', () => {
   it('returns expected string format', () => {
     const watch = {
+      expiresAt: '2025-01-10T00:00:00.000Z',
       id: 'w_abc12345',
-      trigger: 'npm-publish',
       params: ['lodash', '4.18.0'],
       status: 'active',
-      expiresAt: '2025-01-10T00:00:00.000Z',
+      trigger: 'npm-publish',
     };
 
     const result = formatWatch(watch);
@@ -163,11 +162,11 @@ describe('formatWatch', () => {
 
   it('handles empty params', () => {
     const watch = {
+      expiresAt: '2025-01-09T12:00:00.000Z',
       id: 'w_xyz98765',
-      trigger: 'my-trigger',
       params: [],
       status: 'fired',
-      expiresAt: '2025-01-09T12:00:00.000Z',
+      trigger: 'my-trigger',
     };
 
     const result = formatWatch(watch);

@@ -7,51 +7,51 @@
 import {
   existsSync,
   mkdirSync,
-  readFileSync,
   readdirSync,
+  readFileSync,
   renameSync,
 } from 'node:fs';
 import { homedir } from 'node:os';
 import { basename, join } from 'node:path';
 
 interface HookInput {
-  session_id: string;
-  transcript_path: string;
   cwd: string;
   permission_mode: string;
   prompt: string;
+  session_id: string;
+  transcript_path: string;
 }
 
 interface HookOutput {
   continue: boolean;
-  systemMessage?: string;
   hookSpecificOutput?: {
-    hookEventName: string;
     additionalContext?: string;
+    hookEventName: string;
   };
+  systemMessage?: string;
 }
 
 interface WatchResult {
-  watchId: string;
-  trigger: string;
-  params: string[];
-  triggerOutput: Record<string, unknown>;
   action: {
-    prompt: string;
+    completedAt: string;
     cwd: string;
     exitCode: number;
-    stdout: string;
+    prompt: string;
     stderr: string;
-    completedAt: string;
+    stdout: string;
   };
   firedAt: string;
+  params: string[];
+  trigger: string;
+  triggerOutput: Record<string, unknown>;
+  watchId: string;
 }
 
 const CONFIG_DIR = join(homedir(), '.config', 'claude-watcher');
 const RESULTS_DIR = join(CONFIG_DIR, 'results');
 const ARCHIVE_DIR = join(CONFIG_DIR, 'results', 'archive');
 
-function main(): void {
+const main = (): void => {
   // Read input from stdin
   let inputJson = '';
   try {
@@ -144,14 +144,14 @@ function main(): void {
   outputResult({
     continue: true,
     hookSpecificOutput: {
-      hookEventName: 'UserPromptSubmit',
       additionalContext: message,
+      hookEventName: 'UserPromptSubmit',
     },
   });
-}
+};
 
-function outputResult(result: HookOutput): void {
+const outputResult = (result: HookOutput): void => {
   console.log(JSON.stringify(result));
-}
+};
 
 main();

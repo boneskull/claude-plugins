@@ -4,12 +4,18 @@
  * These tests create actual executable scripts in a temp directory.
  */
 
+import { expect } from 'bupkis';
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { after, afterEach, before, describe, it, TestContext } from 'node:test';
-
-import { expect } from 'bupkis';
+import {
+  after,
+  afterEach,
+  before,
+  describe,
+  it,
+  type TestContext,
+} from 'node:test';
 
 import {
   executeTrigger,
@@ -26,15 +32,15 @@ describe('trigger-executor', () => {
   });
 
   after(() => {
-    rmSync(tempDir, { recursive: true, force: true });
+    rmSync(tempDir, { force: true, recursive: true });
   });
 
   /** Helper to create an executable trigger script */
-  function createTrigger(
+  const createTrigger = (
     name: string,
     script: string,
-    options: { yaml?: string; executable?: boolean } = {},
-  ): void {
+    options: { executable?: boolean; yaml?: string } = {},
+  ): void => {
     const triggerPath = join(tempDir, name);
     writeFileSync(triggerPath, script, 'utf-8');
     if (options.executable !== false) {
@@ -43,10 +49,10 @@ describe('trigger-executor', () => {
     if (options.yaml) {
       writeFileSync(join(tempDir, `${name}.yaml`), options.yaml, 'utf-8');
     }
-  }
+  };
 
   /** Helper to remove a trigger */
-  function removeTrigger(name: string): void {
+  const removeTrigger = (name: string): void => {
     try {
       rmSync(join(tempDir, name));
     } catch {
@@ -57,7 +63,7 @@ describe('trigger-executor', () => {
     } catch {
       // Ignore if doesn't exist
     }
-  }
+  };
 
   describe('executeTrigger', () => {
     afterEach(() => {
@@ -81,7 +87,7 @@ exit 0`,
 
       expect(result, 'to satisfy', {
         fired: true,
-        output: { status: 'ready', count: 42 },
+        output: { count: 42, status: 'ready' },
       });
       expect(result.error, 'to be undefined');
     });
@@ -97,9 +103,9 @@ exit 0`,
       const result = await executeTrigger('invalid-json-trigger', [], tempDir);
 
       expect(result, 'to satisfy', {
+        error: expect.it('to match', /not valid JSON/),
         fired: true,
         output: {},
-        error: expect.it('to match', /not valid JSON/),
       });
     });
 
@@ -123,9 +129,9 @@ exit 1`,
       const result = await executeTrigger('nonexistent-trigger', [], tempDir);
 
       expect(result, 'to satisfy', {
+        error: expect.it('to match', /not found or not executable/),
         fired: false,
         output: null,
-        error: expect.it('to match', /not found or not executable/),
       });
     });
 
@@ -209,11 +215,11 @@ defaultInterval: 60s`,
 
       const triggers = await listTriggers(tempDir);
 
-      expect(triggers[0], 'to satisfy', {
-        name: 'trigger-a',
-        description: 'A test trigger',
-        args: [{ name: 'pkg', description: 'Package name' }],
+      expect(triggers[0]!, 'to satisfy', {
+        args: [{ description: 'Package name', name: 'pkg' }],
         defaultInterval: '60s',
+        description: 'A test trigger',
+        name: 'trigger-a',
       });
     });
 
@@ -224,7 +230,7 @@ defaultInterval: 60s`,
       const triggers = await listTriggers(tempDir);
 
       expect(triggers, 'to have length', 1);
-      expect(triggers[0].name, 'to equal', 'trigger-a');
+      expect(triggers[0]!.name, 'to equal', 'trigger-a');
     });
 
     it('skips hidden files', async () => {
@@ -234,7 +240,7 @@ defaultInterval: 60s`,
       const triggers = await listTriggers(tempDir);
 
       expect(triggers, 'to have length', 1);
-      expect(triggers[0].name, 'to equal', 'trigger-a');
+      expect(triggers[0]!.name, 'to equal', 'trigger-a');
     });
 
     it('returns empty array when triggers dir is empty', async () => {

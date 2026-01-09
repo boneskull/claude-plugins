@@ -2,53 +2,35 @@
  * Shared types for claude-watcher plugin
  */
 
-/** Status of a watch */
-export type WatchStatus = 'active' | 'fired' | 'expired' | 'cancelled';
-
-/** Action to execute when trigger fires */
-export interface WatchAction {
-  /** Prompt to send to claude -p */
+/** Result of an action execution */
+export interface ActionResult {
+  /** ISO timestamp when action completed */
+  completedAt: string;
+  /** Working directory used */
+  cwd: string;
+  /** Exit code from claude -p */
+  exitCode: number;
+  /** The interpolated prompt that was executed */
   prompt: string;
-  /** Working directory for claude execution */
-  cwd?: string;
+  /** Stderr from claude -p */
+  stderr: string;
+  /** Stdout from claude -p */
+  stdout: string;
 }
 
-/** A registered watch */
-export interface Watch {
-  /** Unique watch ID (w_<nanoid>) */
-  id: string;
-  /** Name of the trigger executable */
-  trigger: string;
-  /** Arguments passed to trigger */
-  params: string[];
-  /** Action to execute when trigger fires */
-  action: WatchAction;
-  /** Current status */
-  status: WatchStatus;
-  /** ISO timestamp of creation */
-  createdAt: string;
-  /** ISO timestamp when watch expires */
-  expiresAt: string;
-  /** Polling interval (e.g., "30s", "5m") */
-  interval: string;
-  /** ISO timestamp of last check, null if never checked */
-  lastCheck: string | null;
-  /** ISO timestamp when trigger fired, null if not fired */
-  firedAt: string | null;
-}
-
-/** Database row representation of a watch */
-export interface WatchRow {
-  id: string;
-  trigger: string;
-  params: string; // JSON string
-  action: string; // JSON string
-  status: WatchStatus;
-  created_at: string;
-  expires_at: string;
-  interval: string;
-  last_check: string | null;
-  fired_at: string | null;
+/** Trigger metadata from YAML sidecar */
+export interface TriggerMetadata {
+  /** Argument definitions */
+  args?: Array<{
+    description: string;
+    name: string;
+  }>;
+  /** Default polling interval */
+  defaultInterval?: string;
+  /** Human-readable description */
+  description?: string;
+  /** Trigger name (matches executable name) */
+  name: string;
 }
 
 /** Output from a trigger execution */
@@ -57,106 +39,70 @@ export interface TriggerOutput {
   [key: string]: unknown;
 }
 
-/** Result of an action execution */
-export interface ActionResult {
-  /** The interpolated prompt that was executed */
+/** A registered watch */
+export interface Watch {
+  /** Action to execute when trigger fires */
+  action: WatchAction;
+  /** ISO timestamp of creation */
+  createdAt: string;
+  /** ISO timestamp when watch expires */
+  expiresAt: string;
+  /** ISO timestamp when trigger fired, null if not fired */
+  firedAt: null | string;
+  /** Unique watch ID (w_<nanoid>) */
+  id: string;
+  /** Polling interval (e.g., "30s", "5m") */
+  interval: string;
+  /** ISO timestamp of last check, null if never checked */
+  lastCheck: null | string;
+  /** Arguments passed to trigger */
+  params: string[];
+  /** Current status */
+  status: WatchStatus;
+  /** Name of the trigger executable */
+  trigger: string;
+}
+
+/** Action to execute when trigger fires */
+export interface WatchAction {
+  /** Working directory for claude execution */
+  cwd?: string;
+  /** Prompt to send to claude -p */
   prompt: string;
-  /** Working directory used */
-  cwd: string;
-  /** Exit code from claude -p */
-  exitCode: number;
-  /** Stdout from claude -p */
-  stdout: string;
-  /** Stderr from claude -p */
-  stderr: string;
-  /** ISO timestamp when action completed */
-  completedAt: string;
 }
 
 /** Result file written when a watch fires */
 export interface WatchResult {
-  /** Watch ID */
-  watchId: string;
-  /** Trigger name */
-  trigger: string;
-  /** Trigger params */
-  params: string[];
-  /** Output from trigger */
-  triggerOutput: TriggerOutput;
   /** Action execution result */
   action: ActionResult;
   /** ISO timestamp when trigger fired */
   firedAt: string;
-}
-
-/** Trigger metadata from YAML sidecar */
-export interface TriggerMetadata {
-  /** Trigger name (matches executable name) */
-  name: string;
-  /** Human-readable description */
-  description?: string;
-  /** Argument definitions */
-  args?: Array<{
-    name: string;
-    description: string;
-  }>;
-  /** Default polling interval */
-  defaultInterval?: string;
-}
-
-/** Input to register_watch MCP tool */
-interface RegisterWatchInput {
-  /** Trigger name */
-  trigger: string;
   /** Trigger params */
   params: string[];
-  /** Action configuration */
-  action: {
-    prompt: string;
-    cwd?: string;
-  };
-  /** Time-to-live (e.g., "48h", "7d") */
-  ttl?: string;
-  /** Polling interval override */
-  interval?: string;
-}
-
-/** Input to list_watches MCP tool */
-interface ListWatchesInput {
-  /** Filter by status */
-  status?: WatchStatus | 'all';
-}
-
-/** Input to cancel_watch MCP tool */
-interface CancelWatchInput {
-  /** Watch ID to cancel */
+  /** Trigger name */
+  trigger: string;
+  /** Output from trigger */
+  triggerOutput: TriggerOutput;
+  /** Watch ID */
   watchId: string;
 }
 
-/** Input to watch_status MCP tool */
-interface WatchStatusInput {
-  /** Watch ID to query */
-  watchId: string;
+/** Database row representation of a watch */
+export interface WatchRow {
+  action: string; // JSON string
+  created_at: string;
+  expires_at: string;
+  fired_at: null | string;
+  id: string;
+  interval: string;
+  last_check: null | string;
+  params: string; // JSON string
+  status: WatchStatus;
+  trigger: string;
 }
 
-/** Hook input from Claude Code */
-interface HookInput {
-  session_id: string;
-  transcript_path: string;
-  cwd: string;
-  permission_mode: string;
-  prompt: string;
-}
-
-/** Hook output to Claude Code */
-interface HookOutput {
-  continue: boolean;
-  systemMessage?: string;
-  hookSpecificOutput?: {
-    hookEventName: string;
-    additionalContext?: string;
-  };
-}
+/** Status of a watch */
+export type WatchStatus = 'active' | 'cancelled' | 'expired' | 'fired';
 
 /** Configuration paths */
 export const CONFIG_DIR = '.config/claude-watcher';

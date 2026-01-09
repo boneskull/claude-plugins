@@ -5,22 +5,23 @@ import eslintPluginJsonc from 'eslint-plugin-jsonc';
 import perfectionist from 'eslint-plugin-perfectionist';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   jsPlugin.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   perfectionist.configs['recommended-natural'],
   {
     languageOptions: {
       parserOptions: {
         extraFileExtensions: ['.json5', '.jsonc'],
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
   {
-    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
-    languageOptions: {
-      globals: globals.node,
-    },
+    files: ['**/*.ts', '**/*.js'],
     plugins: {
       '@perfectionist': perfectionist,
       '@stylistic': stylistic,
@@ -41,6 +42,57 @@ export default defineConfig(
       ],
       '@stylistic/lines-between-class-members': ['error', 'always'],
       '@stylistic/semi': 'error',
+
+      '@typescript-eslint/consistent-type-exports': [
+        'error',
+        { fixMixedExportsWithInlineTypeSpecifier: true },
+      ],
+
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          disallowTypeAnnotations: true,
+          fixStyle: 'inline-type-imports',
+          prefer: 'type-imports',
+        },
+      ],
+
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-invalid-void-type': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': [
+        'error',
+        {
+          allowComparingNullableBooleansToFalse: true,
+          allowComparingNullableBooleansToTrue: true,
+        },
+      ],
+
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
+        },
+      ],
+
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+
+      '@typescript-eslint/unified-signatures': [
+        'error',
+        {
+          ignoreDifferentlyNamedParameters: true,
+        },
+      ],
+
       curly: 'error',
       'func-style': ['error', 'expression'],
       'new-cap': ['error', { capIsNew: true, newIsCap: true }],
@@ -52,14 +104,59 @@ export default defineConfig(
       semi: 'error',
     },
   },
-  eslintPluginJsonc.configs['flat/prettier'],
+  // Test file relaxations
+  {
+    files: ['**/*.test.ts', '**/*.test.js', '**/*.manual-test.ts'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
+  // Root-level JS config files - disable type-checked rules (not in tsconfig)
+  {
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['*.js', '*.cjs', 'scripts/**/*.js', '**/scripts/**/*.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  // CommonJS files
+  {
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['**/*.cjs'],
+    languageOptions: {
+      globals: globals.node,
+      sourceType: 'commonjs',
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  // Hook scripts - disable type-checked rules (not always in tsconfig)
+  {
+    extends: [tseslint.configs.disableTypeChecked],
+    files: ['**/hooks/scripts/**/*.ts', '**/hooks/scripts/**/*.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  /** @type {any} */ (eslintPluginJsonc.configs['flat/prettier'][0]),
+  /** @type {any} */ ({
+    ...eslintPluginJsonc.configs['flat/prettier'][1],
+    extends: [tseslint.configs.disableTypeChecked],
+  }),
+  /** @type {any} */ (eslintPluginJsonc.configs['flat/prettier'][2]),
   {
     ignores: [
-      'docs',
+      '**/docs/**',
       '**/dist/**',
       'coverage',
-      '*.snapshot',
-      '.tmp/**/*',
+      '**/*.snapshot',
+      '**/.tmp/**/*',
       '.worktrees/**/*',
     ],
   },

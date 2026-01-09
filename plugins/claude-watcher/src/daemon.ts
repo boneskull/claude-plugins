@@ -5,32 +5,32 @@
 import { executeAndWriteResult } from './action-executor.js';
 import { closeDatabase, getDatabase } from './db.js';
 import { executeTrigger } from './trigger-executor.js';
-import { Watch } from './types.js';
+import { type Watch } from './types.js';
 import { ensureConfigDirs, getIntervalMs } from './utils.js';
 
 /** Daemon configuration */
 interface DaemonConfig {
-  /** Minimum interval between checking any single watch (ms) */
-  minPollInterval: number;
   /** How often to check for expired watches (ms) */
   expiryCheckInterval: number;
+  /** Minimum interval between checking any single watch (ms) */
+  minPollInterval: number;
 }
 
 const DEFAULT_CONFIG: DaemonConfig = {
-  minPollInterval: 5000, // 5 seconds
   expiryCheckInterval: 60000, // 1 minute
+  minPollInterval: 5000, // 5 seconds
 };
 
 /** Daemon state */
 interface DaemonState {
-  running: boolean;
   lastPollTimes: Map<string, number>;
+  running: boolean;
 }
 
 /** Start the daemon */
-export async function startDaemon(
+export const startDaemon = async (
   config: DaemonConfig = DEFAULT_CONFIG,
-): Promise<void> {
+): Promise<void> => {
   console.log('Starting claude-watcher daemon...');
 
   // Ensure directories exist
@@ -38,8 +38,8 @@ export async function startDaemon(
 
   const db = getDatabase();
   const state: DaemonState = {
-    running: true,
     lastPollTimes: new Map(),
+    running: true,
   };
 
   // Handle shutdown
@@ -69,7 +69,9 @@ export async function startDaemon(
       const watches = db.getActiveWatches();
 
       for (const watch of watches) {
-        if (!state.running) break;
+        if (!state.running) {
+          break;
+        }
 
         // Check if enough time has passed since last poll
         const lastPoll = state.lastPollTimes.get(watch.id) ?? 0;
@@ -97,14 +99,14 @@ export async function startDaemon(
   }
 
   clearInterval(expiryLoop);
-}
+};
 
 /** Poll a single watch */
-async function pollWatch(
+const pollWatch = async (
   watch: Watch,
   db: ReturnType<typeof getDatabase>,
-): Promise<void> {
-  const { id, trigger, params, action } = watch;
+): Promise<void> => {
+  const { action, id, params, trigger } = watch;
 
   console.log(`Polling ${trigger} ${params.join(' ')} (${id})`);
 
@@ -140,12 +142,12 @@ async function pollWatch(
   } catch (error) {
     console.error(`Error polling ${id}:`, error);
   }
-}
+};
 
 /** Sleep utility */
-function sleep(ms: number): Promise<void> {
+const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
 
 // Run if executed directly
 const isMainModule =

@@ -3,7 +3,7 @@
  * CLI entry point for claude-watcher
  */
 
-import { copyFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
+import { copyFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,26 +18,8 @@ const VERSION = pkg.version;
 /** Path to bundled triggers in the plugin directory */
 const BUNDLED_TRIGGERS_DIR = join(__dirname, '..', '..', 'triggers');
 
-function printUsage(): void {
-  console.log(`
-claude-watcher v${VERSION}
-
-Usage:
-  claude-watcher init      Initialize config and copy example triggers
-  claude-watcher daemon    Start the daemon process
-  claude-watcher version   Print version
-  claude-watcher help      Show this help
-
-The daemon polls registered watches and executes actions when triggers fire.
-Configure it to run at startup with launchd (macOS) or systemd (Linux).
-
-For more information, see:
-  ~/.config/claude-watcher/README.md
-`);
-}
-
 /** Initialize config directories and copy bundled triggers */
-function init(): void {
+const init = (): void => {
   console.log('Initializing claude-watcher...');
 
   // Ensure all config directories exist
@@ -77,31 +59,31 @@ function init(): void {
 
   console.log('\nInitialization complete!');
   console.log('Run "claude-watcher daemon" to start polling.');
-}
+};
 
-async function main(): Promise<void> {
+const main = async (): Promise<void> => {
   const command = process.argv[2];
 
   switch (command) {
-    case 'init':
-      init();
+    case '--help':
+    // falls through
+    case '-h':
+    // falls through
+    case 'help':
+    case undefined:
+      printUsage();
       break;
-
+    case '--version':
+    // falls through
+    case '-v':
+    case 'version':
+      console.log(VERSION);
+      break;
     case 'daemon':
       await startDaemon();
       break;
-
-    case 'version':
-    case '-v':
-    case '--version':
-      console.log(VERSION);
-      break;
-
-    case 'help':
-    case '-h':
-    case '--help':
-    case undefined:
-      printUsage();
+    case 'init':
+      init();
       break;
 
     default:
@@ -109,7 +91,25 @@ async function main(): Promise<void> {
       printUsage();
       process.exit(1);
   }
-}
+};
+
+const printUsage = (): void => {
+  console.log(`
+claude-watcher v${VERSION}
+
+Usage:
+  claude-watcher init      Initialize config and copy example triggers
+  claude-watcher daemon    Start the daemon process
+  claude-watcher version   Print version
+  claude-watcher help      Show this help
+
+The daemon polls registered watches and executes actions when triggers fire.
+Configure it to run at startup with launchd (macOS) or systemd (Linux).
+
+For more information, see:
+  ~/.config/claude-watcher/README.md
+`);
+};
 
 main().catch((error) => {
   console.error('Error:', error);

@@ -7,11 +7,10 @@
  * Prerequisites: curl must be available
  */
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { describe, it } from 'node:test';
-
 import { expect } from 'bupkis';
+import { dirname, join } from 'node:path';
+import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { executeTrigger } from '../trigger-executor.js';
 
@@ -30,8 +29,8 @@ describe('npm-publish trigger (manual)', () => {
     expect(result.fired, 'to be true');
     expect(result.output, 'to satisfy', {
       package: 'lodash',
-      version: '4.17.21',
       slug: 'lodash@4.17.21',
+      version: '4.17.21',
     });
     expect(result.error, 'to be undefined');
   });

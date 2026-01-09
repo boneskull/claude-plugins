@@ -4,19 +4,18 @@
  * Uses mock executor to avoid actually calling claude CLI.
  */
 
+import { expect } from 'bupkis';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, afterEach, before, describe, it } from 'node:test';
-
-import { expect } from 'bupkis';
 
 import {
   executeAction,
   executeAndWriteResult,
   writeResult,
 } from '../action-executor.js';
-import { WatchAction, WatchResult } from '../types.js';
+import { type WatchAction, type WatchResult } from '../types.js';
 
 describe('action-executor', () => {
   let tempDir: string;
@@ -30,7 +29,7 @@ describe('action-executor', () => {
   });
 
   after(() => {
-    rmSync(tempDir, { recursive: true, force: true });
+    rmSync(tempDir, { force: true, recursive: true });
   });
 
   afterEach(() => {
@@ -54,9 +53,9 @@ describe('action-executor', () => {
       const mockExecutor = async (
         file: string,
         args: string[],
-      ): Promise<{ stdout: string; stderr: string }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedArgs = args;
-        return { stdout: 'success', stderr: '' };
+        return { stderr: '', stdout: 'success' };
       };
 
       const action: WatchAction = {
@@ -82,10 +81,10 @@ describe('action-executor', () => {
       const mockExecutor = async (
         file: string,
         args: string[],
-      ): Promise<{ stdout: string; stderr: string }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedFile = file;
         capturedArgs = args;
-        return { stdout: 'result', stderr: '' };
+        return { stderr: '', stdout: 'result' };
       };
 
       const action: WatchAction = { prompt: 'Do something' };
@@ -106,10 +105,10 @@ describe('action-executor', () => {
 
     it('returns ActionResult with stdout/stderr/exitCode on success', async () => {
       const mockExecutor = async (): Promise<{
-        stdout: string;
         stderr: string;
+        stdout: string;
       }> => {
-        return { stdout: 'output from claude', stderr: 'warning' };
+        return { stderr: 'warning', stdout: 'output from claude' };
       };
 
       const action: WatchAction = { prompt: 'Test prompt' };
@@ -125,20 +124,20 @@ describe('action-executor', () => {
       );
 
       expect(result, 'to satisfy', {
-        prompt: 'Test prompt',
         exitCode: 0,
-        stdout: 'output from claude',
+        prompt: 'Test prompt',
         stderr: 'warning',
+        stdout: 'output from claude',
       });
       expect(result.completedAt, 'to match', /^\d{4}-\d{2}-\d{2}T/);
     });
 
     it('appends to log file', async () => {
       const mockExecutor = async (): Promise<{
-        stdout: string;
         stderr: string;
+        stdout: string;
       }> => {
-        return { stdout: 'claude output here', stderr: '' };
+        return { stderr: '', stdout: 'claude output here' };
       };
 
       const action: WatchAction = { prompt: 'Log test' };
@@ -164,8 +163,8 @@ describe('action-executor', () => {
       const mockExecutor = async (): Promise<never> => {
         const err = new Error('Command failed') as Error & {
           code: number;
-          stdout: string;
           stderr: string;
+          stdout: string;
         };
         err.code = 1;
         err.stdout = 'partial output';
@@ -187,8 +186,8 @@ describe('action-executor', () => {
 
       expect(result, 'to satisfy', {
         exitCode: 1,
-        stdout: 'partial output',
         stderr: 'error message',
+        stdout: 'partial output',
       });
 
       const logContent = readFileSync(logPath, 'utf-8');
@@ -202,14 +201,14 @@ describe('action-executor', () => {
         _file: string,
         _args: string[],
         options: { cwd: string },
-      ): Promise<{ stdout: string; stderr: string }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedCwd = options.cwd;
-        return { stdout: '', stderr: '' };
+        return { stderr: '', stdout: '' };
       };
 
       const action: WatchAction = {
-        prompt: 'Test',
         cwd: '/custom/path',
+        prompt: 'Test',
       };
 
       await executeAction(
@@ -229,28 +228,28 @@ describe('action-executor', () => {
   describe('writeResult', () => {
     it('writes JSON to correct path', async () => {
       const result: WatchResult = {
-        watchId: 'w_test1234',
-        trigger: 'npm-publish',
-        params: ['lodash', '4.18.0'],
-        triggerOutput: { package: 'lodash', version: '4.18.0' },
         action: {
-          prompt: 'Test prompt',
+          completedAt: '2025-01-08T00:00:00.000Z',
           cwd: '/test',
           exitCode: 0,
-          stdout: 'success',
+          prompt: 'Test prompt',
           stderr: '',
-          completedAt: '2025-01-08T00:00:00.000Z',
+          stdout: 'success',
         },
         firedAt: '2025-01-08T00:00:00.000Z',
+        params: ['lodash', '4.18.0'],
+        trigger: 'npm-publish',
+        triggerOutput: { package: 'lodash', version: '4.18.0' },
+        watchId: 'w_test1234',
       };
 
       await writeResult(result, { resultPath });
 
       const written = JSON.parse(readFileSync(resultPath, 'utf-8'));
       expect(written, 'to satisfy', {
-        watchId: 'w_test1234',
-        trigger: 'npm-publish',
         params: ['lodash', '4.18.0'],
+        trigger: 'npm-publish',
+        watchId: 'w_test1234',
       });
     });
   });
@@ -258,10 +257,10 @@ describe('action-executor', () => {
   describe('executeAndWriteResult', () => {
     it('combines execution and writing', async () => {
       const mockExecutor = async (): Promise<{
-        stdout: string;
         stderr: string;
+        stdout: string;
       }> => {
-        return { stdout: 'combined output', stderr: '' };
+        return { stderr: '', stdout: 'combined output' };
       };
 
       const action: WatchAction = { prompt: 'Combined {{pkg}}' };
@@ -283,15 +282,15 @@ describe('action-executor', () => {
 
       // Check return value
       expect(result, 'to satisfy', {
-        watchId: 'w_combined',
-        trigger: 'npm-publish',
-        params: ['react', '18.0.0'],
-        triggerOutput: { pkg: 'react' },
         firedAt: '2025-01-08T12:00:00.000Z',
+        params: ['react', '18.0.0'],
+        trigger: 'npm-publish',
+        triggerOutput: { pkg: 'react' },
+        watchId: 'w_combined',
       });
       expect(result.action, 'to satisfy', {
-        prompt: 'Combined react',
         exitCode: 0,
+        prompt: 'Combined react',
         stdout: 'combined output',
       });
 

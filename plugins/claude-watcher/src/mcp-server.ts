@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 import { closeDatabase, getDatabase } from './db.js';
 import { listTriggers, triggerExists } from './trigger-executor.js';
-import { DEFAULT_INTERVAL, Watch } from './types.js';
+import { DEFAULT_INTERVAL, type Watch } from './types.js';
 import {
   calculateExpiry,
   ensureConfigDirs,
@@ -31,39 +31,39 @@ server.registerTool(
       'Register a new watch that polls a trigger and executes an action when it fires. ' +
       'The action prompt can use {{variable}} syntax to interpolate trigger output.',
     inputSchema: {
-      trigger: z
-        .string()
-        .describe('Name of the trigger executable (e.g., "npm-publish")'),
-      params: z.array(z.string()).describe('Arguments to pass to the trigger'),
       action: z.object({
+        cwd: z
+          .string()
+          .optional()
+          .describe('Working directory for action execution'),
         prompt: z
           .string()
           .describe(
             'Prompt to execute when trigger fires. Use {{var}} for interpolation.',
           ),
-        cwd: z
-          .string()
-          .optional()
-          .describe('Working directory for action execution'),
       }),
-      ttl: z
-        .string()
-        .optional()
-        .describe('Time-to-live (e.g., "48h", "7d"). Default: 48h'),
       interval: z
         .string()
         .optional()
         .describe('Polling interval (e.g., "30s", "5m"). Default: 30s'),
+      params: z.array(z.string()).describe('Arguments to pass to the trigger'),
+      trigger: z
+        .string()
+        .describe('Name of the trigger executable (e.g., "npm-publish")'),
+      ttl: z
+        .string()
+        .optional()
+        .describe('Time-to-live (e.g., "48h", "7d"). Default: 48h'),
     },
   },
-  async ({ trigger, params, action, ttl, interval }) => {
+  async ({ action, interval, params, trigger, ttl }) => {
     // Validate trigger exists
     if (!(await triggerExists(trigger))) {
       return {
         content: [
           {
-            type: 'text' as const,
             text: `Error: Trigger "${trigger}" not found. Use list_triggers to see available triggers.`,
+            type: 'text' as const,
           },
         ],
         isError: true,
@@ -72,19 +72,19 @@ server.registerTool(
 
     const db = getDatabase();
     const watch: Watch = {
-      id: generateWatchId(),
-      trigger,
-      params,
       action: {
-        prompt: action.prompt,
         cwd: action.cwd,
+        prompt: action.prompt,
       },
-      status: 'active',
       createdAt: new Date().toISOString(),
       expiresAt: calculateExpiry(ttl),
+      firedAt: null,
+      id: generateWatchId(),
       interval: interval ?? DEFAULT_INTERVAL,
       lastCheck: null,
-      firedAt: null,
+      params,
+      status: 'active',
+      trigger,
     };
 
     db.insert(watch);
@@ -92,16 +92,16 @@ server.registerTool(
     return {
       content: [
         {
-          type: 'text' as const,
           text: JSON.stringify(
             {
-              watchId: watch.id,
               expiresAt: watch.expiresAt,
               message: `Watch registered. The daemon will poll "${trigger}" every ${watch.interval}.`,
+              watchId: watch.id,
             },
             null,
             2,
           ),
+          type: 'text' as const,
         },
       ],
     };
@@ -126,7 +126,7 @@ server.registerTool(
 
     if (watches.length === 0) {
       return {
-        content: [{ type: 'text' as const, text: 'No watches found.' }],
+        content: [{ text: 'No watches found.', type: 'text' as const }],
       };
     }
 
@@ -134,8 +134,8 @@ server.registerTool(
     return {
       content: [
         {
-          type: 'text' as const,
           text: `Found ${watches.length} watch(es):\n\n${formatted}`,
+          type: 'text' as const,
         },
       ],
     };
@@ -158,7 +158,7 @@ server.registerTool(
     if (!watch) {
       return {
         content: [
-          { type: 'text' as const, text: `Error: Watch not found: ${watchId}` },
+          { text: `Error: Watch not found: ${watchId}`, type: 'text' as const },
         ],
         isError: true,
       };
@@ -166,7 +166,7 @@ server.registerTool(
 
     return {
       content: [
-        { type: 'text' as const, text: JSON.stringify(watch, null, 2) },
+        { text: JSON.stringify(watch, null, 2), type: 'text' as const },
       ],
     };
   },
@@ -188,7 +188,7 @@ server.registerTool(
     if (!watch) {
       return {
         content: [
-          { type: 'text' as const, text: `Error: Watch not found: ${watchId}` },
+          { text: `Error: Watch not found: ${watchId}`, type: 'text' as const },
         ],
         isError: true,
       };
@@ -198,8 +198,8 @@ server.registerTool(
       return {
         content: [
           {
-            type: 'text' as const,
             text: `Error: Cannot cancel watch with status "${watch.status}". Only active watches can be cancelled.`,
+            type: 'text' as const,
           },
         ],
         isError: true,
@@ -208,7 +208,7 @@ server.registerTool(
 
     db.updateStatus(watchId, 'cancelled');
     return {
-      content: [{ type: 'text' as const, text: `Watch ${watchId} cancelled.` }],
+      content: [{ text: `Watch ${watchId} cancelled.`, type: 'text' as const }],
     };
   },
 );
@@ -227,8 +227,8 @@ server.registerTool(
       return {
         content: [
           {
-            type: 'text' as const,
             text: 'No triggers found. Add executables to ~/.config/claude-watcher/triggers/',
+            type: 'text' as const,
           },
         ],
       };
@@ -253,7 +253,7 @@ server.registerTool(
 
     return {
       content: [
-        { type: 'text' as const, text: `Available triggers:\n\n${formatted}` },
+        { text: `Available triggers:\n\n${formatted}`, type: 'text' as const },
       ],
     };
   },
@@ -271,11 +271,11 @@ process.on('SIGTERM', () => {
 });
 
 // Start server
-async function main() {
+const main = async () => {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error('claude-watcher MCP server running on stdio');
-}
+};
 
 main().catch((error) => {
   console.error('Fatal error:', error);
