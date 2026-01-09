@@ -89,14 +89,14 @@ describe('MCP tool handlers', () => {
       );
 
       expect(result.isError, 'to be undefined');
-      const response = JSON.parse(result.content[0].text);
+      const response = JSON.parse(result.content[0]!.text);
       expect(response.watchId, 'to match', /^w_[a-f0-9]{8}$/);
       expect(response.message, 'to contain', 'Watch registered');
 
       // Verify watch is in database
       const watches = db.list('all');
       expect(watches, 'to have length', 1);
-      expect(watches[0].trigger, 'to equal', 'test-trigger');
+      expect(watches[0]!.trigger, 'to equal', 'test-trigger');
     });
 
     it('returns error for invalid trigger', async () => {
@@ -110,7 +110,7 @@ describe('MCP tool handlers', () => {
       );
 
       expect(result.isError, 'to be true');
-      expect(result.content[0].text, 'to contain', 'not found');
+      expect(result.content[0]!.text, 'to contain', 'not found');
     });
 
     it('respects TTL param', async () => {
@@ -129,7 +129,7 @@ describe('MCP tool handlers', () => {
       const afterTime = Date.now();
 
       const watches = db.list('all');
-      const expiryTime = new Date(watches[0].expiresAt).getTime();
+      const expiryTime = new Date(watches[0]!.expiresAt).getTime();
       const oneHour = 60 * 60 * 1000;
 
       // Expiry should be within ~1 hour from now
@@ -159,7 +159,7 @@ describe('MCP tool handlers', () => {
       );
 
       const watches = db.list('all');
-      expect(watches[0].interval, 'to equal', '5m');
+      expect(watches[0]!.interval, 'to equal', '5m');
     });
   });
 
@@ -167,7 +167,7 @@ describe('MCP tool handlers', () => {
     it('returns empty message when no watches', async () => {
       const result = await handleListWatches({}, { db, triggersDir });
 
-      expect(result.content[0].text, 'to equal', 'No watches found.');
+      expect(result.content[0]!.text, 'to equal', 'No watches found.');
     });
 
     it('lists watches with correct formatting', async () => {
@@ -184,10 +184,10 @@ describe('MCP tool handlers', () => {
 
       const result = await handleListWatches({}, { db, triggersDir });
 
-      expect(result.content[0].text, 'to contain', 'Found 1 watch');
-      expect(result.content[0].text, 'to contain', 'list-trigger');
-      expect(result.content[0].text, 'to contain', 'pkg 1.0.0');
-      expect(result.content[0].text, 'to contain', '[active]');
+      expect(result.content[0]!.text, 'to contain', 'Found 1 watch');
+      expect(result.content[0]!.text, 'to contain', 'list-trigger');
+      expect(result.content[0]!.text, 'to contain', 'pkg 1.0.0');
+      expect(result.content[0]!.text, 'to contain', '[active]');
     });
 
     it('filters by status', async () => {
@@ -213,22 +213,22 @@ describe('MCP tool handlers', () => {
         { db, triggersDir },
       );
       const watches = db.list('all');
-      db.updateStatus(watches[1].id, 'cancelled');
+      db.updateStatus(watches[1]!.id, 'cancelled');
 
       // Filter by active only
       const activeResult = await handleListWatches(
         { status: 'active' },
         { db, triggersDir },
       );
-      expect(activeResult.content[0].text, 'to contain', 'Found 1 watch');
+      expect(activeResult.content[0]!.text, 'to contain', 'Found 1 watch');
 
       // Filter by cancelled
       const cancelledResult = await handleListWatches(
         { status: 'cancelled' },
         { db, triggersDir },
       );
-      expect(cancelledResult.content[0].text, 'to contain', 'Found 1 watch');
-      expect(cancelledResult.content[0].text, 'to contain', '[cancelled]');
+      expect(cancelledResult.content[0]!.text, 'to contain', 'Found 1 watch');
+      expect(cancelledResult.content[0]!.text, 'to contain', '[cancelled]');
     });
   });
 
@@ -247,11 +247,11 @@ describe('MCP tool handlers', () => {
 
       const watches = db.list('all');
       const result = await handleWatchStatus(
-        { watchId: watches[0].id },
+        { watchId: watches[0]!.id },
         { db, triggersDir },
       );
 
-      const watch = JSON.parse(result.content[0].text);
+      const watch = JSON.parse(result.content[0]!.text);
       expect(watch, 'to satisfy', {
         action: { cwd: '/test/dir', prompt: 'Status test' },
         params: ['x', 'y'],
@@ -267,7 +267,7 @@ describe('MCP tool handlers', () => {
       );
 
       expect(result.isError, 'to be true');
-      expect(result.content[0].text, 'to contain', 'not found');
+      expect(result.content[0]!.text, 'to contain', 'not found');
     });
   });
 
@@ -286,15 +286,15 @@ describe('MCP tool handlers', () => {
 
       const watches = db.list('all');
       const result = await handleCancelWatch(
-        { watchId: watches[0].id },
+        { watchId: watches[0]!.id },
         { db, triggersDir },
       );
 
       expect(result.isError, 'to be undefined');
-      expect(result.content[0].text, 'to contain', 'cancelled');
+      expect(result.content[0]!.text, 'to contain', 'cancelled');
 
       // Verify status changed
-      const updated = db.getById(watches[0].id);
+      const updated = db.getById(watches[0]!.id);
       expect(updated?.status, 'to equal', 'cancelled');
     });
 
@@ -311,16 +311,16 @@ describe('MCP tool handlers', () => {
       );
 
       const watches = db.list('all');
-      db.updateStatus(watches[0].id, 'fired');
+      db.updateStatus(watches[0]!.id, 'fired');
 
       const result = await handleCancelWatch(
-        { watchId: watches[0].id },
+        { watchId: watches[0]!.id },
         { db, triggersDir },
       );
 
       expect(result.isError, 'to be true');
-      expect(result.content[0].text, 'to contain', 'Cannot cancel');
-      expect(result.content[0].text, 'to contain', 'fired');
+      expect(result.content[0]!.text, 'to contain', 'Cannot cancel');
+      expect(result.content[0]!.text, 'to contain', 'fired');
     });
 
     it('returns error for unknown watchId', async () => {
@@ -330,7 +330,7 @@ describe('MCP tool handlers', () => {
       );
 
       expect(result.isError, 'to be true');
-      expect(result.content[0].text, 'to contain', 'not found');
+      expect(result.content[0]!.text, 'to contain', 'not found');
     });
   });
 
@@ -353,18 +353,18 @@ defaultInterval: 60s`,
 
       const result = await handleListTriggers({ triggersDir });
 
-      expect(result.content[0].text, 'to contain', 'Available triggers');
-      expect(result.content[0].text, 'to contain', 'trigger-one');
-      expect(result.content[0].text, 'to contain', 'trigger-two');
-      expect(result.content[0].text, 'to contain', 'First test trigger');
-      expect(result.content[0].text, 'to contain', '<pkg>');
-      expect(result.content[0].text, 'to contain', 'Default interval: 60s');
+      expect(result.content[0]!.text, 'to contain', 'Available triggers');
+      expect(result.content[0]!.text, 'to contain', 'trigger-one');
+      expect(result.content[0]!.text, 'to contain', 'trigger-two');
+      expect(result.content[0]!.text, 'to contain', 'First test trigger');
+      expect(result.content[0]!.text, 'to contain', '<pkg>');
+      expect(result.content[0]!.text, 'to contain', 'Default interval: 60s');
     });
 
     it('returns empty message when no triggers', async () => {
       const result = await handleListTriggers({ triggersDir });
 
-      expect(result.content[0].text, 'to contain', 'No triggers found');
+      expect(result.content[0]!.text, 'to contain', 'No triggers found');
     });
   });
 });

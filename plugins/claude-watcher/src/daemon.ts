@@ -69,7 +69,9 @@ export const startDaemon = async (
       const watches = db.getActiveWatches();
 
       for (const watch of watches) {
-        if (!state.running) {break;}
+        if (!state.running) {
+          break;
+        }
 
         // Check if enough time has passed since last poll
         const lastPoll = state.lastPollTimes.get(watch.id) ?? 0;

@@ -53,7 +53,7 @@ describe('action-executor', () => {
       const mockExecutor = async (
         file: string,
         args: string[],
-      ): Promise<{ stderr: string; stdout: string; }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedArgs = args;
         return { stderr: '', stdout: 'success' };
       };
@@ -81,7 +81,7 @@ describe('action-executor', () => {
       const mockExecutor = async (
         file: string,
         args: string[],
-      ): Promise<{ stderr: string; stdout: string; }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedFile = file;
         capturedArgs = args;
         return { stderr: '', stdout: 'result' };
@@ -201,7 +201,7 @@ describe('action-executor', () => {
         _file: string,
         _args: string[],
         options: { cwd: string },
-      ): Promise<{ stderr: string; stdout: string; }> => {
+      ): Promise<{ stderr: string; stdout: string }> => {
         capturedCwd = options.cwd;
         return { stderr: '', stdout: '' };
       };

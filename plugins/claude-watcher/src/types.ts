@@ -18,54 +18,6 @@ export interface ActionResult {
   stdout: string;
 }
 
-/** Input to cancel_watch MCP tool */
-interface _CancelWatchInput {
-  /** Watch ID to cancel */
-  watchId: string;
-}
-
-/** Hook input from Claude Code */
-interface _HookInput {
-  cwd: string;
-  permission_mode: string;
-  prompt: string;
-  session_id: string;
-  transcript_path: string;
-}
-
-/** Hook output to Claude Code */
-interface _HookOutput {
-  continue: boolean;
-  hookSpecificOutput?: {
-    additionalContext?: string;
-    hookEventName: string;
-  };
-  systemMessage?: string;
-}
-
-/** Input to list_watches MCP tool */
-export interface ListWatchesInput {
-  /** Filter by status */
-  status?: 'all' | WatchStatus;
-}
-
-/** Input to register_watch MCP tool */
-export interface RegisterWatchInput {
-  /** Action configuration */
-  action: {
-    cwd?: string;
-    prompt: string;
-  };
-  /** Polling interval override */
-  interval?: string;
-  /** Trigger params */
-  params: string[];
-  /** Trigger name */
-  trigger: string;
-  /** Time-to-live (e.g., "48h", "7d") */
-  ttl?: string;
-}
-
 /** Trigger metadata from YAML sidecar */
 export interface TriggerMetadata {
   /** Argument definitions */
@@ -151,12 +103,6 @@ export interface WatchRow {
 
 /** Status of a watch */
 export type WatchStatus = 'active' | 'cancelled' | 'expired' | 'fired';
-
-/** Input to watch_status MCP tool */
-export interface WatchStatusInput {
-  /** Watch ID to query */
-  watchId: string;
-}
 
 /** Configuration paths */
 export const CONFIG_DIR = '.config/claude-watcher';

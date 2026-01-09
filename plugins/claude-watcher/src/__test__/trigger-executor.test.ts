@@ -8,7 +8,14 @@ import { expect } from 'bupkis';
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { after, afterEach, before, describe, it, type TestContext } from 'node:test';
+import {
+  after,
+  afterEach,
+  before,
+  describe,
+  it,
+  type TestContext,
+} from 'node:test';
 
 import {
   executeTrigger,
@@ -32,7 +39,7 @@ describe('trigger-executor', () => {
   const createTrigger = (
     name: string,
     script: string,
-    options: { executable?: boolean; yaml?: string; } = {},
+    options: { executable?: boolean; yaml?: string } = {},
   ): void => {
     const triggerPath = join(tempDir, name);
     writeFileSync(triggerPath, script, 'utf-8');
@@ -208,7 +215,7 @@ defaultInterval: 60s`,
 
       const triggers = await listTriggers(tempDir);
 
-      expect(triggers[0], 'to satisfy', {
+      expect(triggers[0]!, 'to satisfy', {
         args: [{ description: 'Package name', name: 'pkg' }],
         defaultInterval: '60s',
         description: 'A test trigger',
@@ -223,7 +230,7 @@ defaultInterval: 60s`,
       const triggers = await listTriggers(tempDir);
 
       expect(triggers, 'to have length', 1);
-      expect(triggers[0].name, 'to equal', 'trigger-a');
+      expect(triggers[0]!.name, 'to equal', 'trigger-a');
     });
 
     it('skips hidden files', async () => {
@@ -233,7 +240,7 @@ defaultInterval: 60s`,
       const triggers = await listTriggers(tempDir);
 
       expect(triggers, 'to have length', 1);
-      expect(triggers[0].name, 'to equal', 'trigger-a');
+      expect(triggers[0]!.name, 'to equal', 'trigger-a');
     });
 
     it('returns empty array when triggers dir is empty', async () => {

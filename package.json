@@ -77,7 +77,13 @@
     ],
     "ignoreFiles": [
       "plugins/**/scripts/*"
-    ]
+    ],
+    "node": {
+      "entry": [
+        "plugins/claude-watcher/src/bin/claude-watcher.ts",
+        "plugins/claude-watcher/src/mcp-server.ts"
+      ]
+    }
   },
   "lint-staged": {
     "*.{ts,js,yml,json5}": [

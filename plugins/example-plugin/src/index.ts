@@ -133,7 +133,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case 'calculate':
         result = handleCalculate(
-          args as { a: number; b: number; operation: string; },
+          args as { a: number; b: number; operation: string },
         );
         break;
       case 'greet':

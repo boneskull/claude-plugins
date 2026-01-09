@@ -17,7 +17,7 @@ export interface ToolHandlerOptions {
 
 /** Tool result content type */
 export interface ToolResult {
-  content: Array<{ text: string; type: 'text'; }>;
+  content: Array<{ text: string; type: 'text' }>;
   isError?: boolean;
 }
 
@@ -130,7 +130,7 @@ export const handleListWatches = async (
 /** Handler for register_watch tool */
 export const handleRegisterWatch = async (
   input: {
-    action: { cwd?: string; prompt: string; };
+    action: { cwd?: string; prompt: string };
     interval?: string;
     params: string[];
     trigger: string;

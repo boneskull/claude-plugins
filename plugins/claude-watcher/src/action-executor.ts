@@ -23,7 +23,7 @@ export interface ExecuteActionOptions {
     file: string,
     args: string[],
     options: { cwd: string; env: NodeJS.ProcessEnv },
-  ) => Promise<{ stderr: string; stdout: string; }>;
+  ) => Promise<{ stderr: string; stdout: string }>;
   /** Custom log path (defaults to getLogPath(watchId)) */
   logPath?: string;
 }

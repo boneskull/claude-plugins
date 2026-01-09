@@ -109,6 +109,7 @@ export const interpolatePrompt = (
     }
     // Primitives: string, number, boolean, bigint, symbol
     // Use String() for safe stringification
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     return String(value);
   });
 };
