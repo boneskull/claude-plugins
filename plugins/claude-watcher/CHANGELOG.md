@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/boneskull/claude-plugins/compare/claude-watcher-v0.1.0...claude-watcher-v0.1.1) (2026-01-09)
+
+
+### Bug Fixes
+
+* **claude-watcher:** make tsconfig self-contained so it can actually be built by an end-user ([5155c62](https://github.com/boneskull/claude-plugins/commit/5155c6206fbff9df0f7e23b4717a02cbec1c4f4d))
+
 ## 0.1.0 (2026-01-09)
 
 
