@@ -392,7 +392,7 @@ const main = async () => {
         additionalContext: output, // Added to Claude's context
         hookEventName: 'UserPromptSubmit',
       },
-      systemMessage: output, // Displayed directly to the user
+      // systemMessage: output, // Displayed directly to the user (commented out - too noisy)
     };
 
     console.log(JSON.stringify(hookOutput, null, 2));
