@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/boneskull/claude-plugins/compare/skill-activation-v1.1.0...skill-activation-v1.1.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* **skill-activation:** I believe this works. make it less noisy. ([1b01dba](https://github.com/boneskull/claude-plugins/commit/1b01dba39a95463e3662d2f7c8b41b353e7b92d7))
+
 ## [1.1.0](https://github.com/boneskull/claude-plugins/compare/skill-activation-v1.0.0...skill-activation-v1.1.0) (2025-12-23)
 
 
