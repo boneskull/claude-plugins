@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "7.6.13",
     "@types/ms": "2.1.0",
-    "@types/node": "22.15.21",
+    "@types/node": "22.19.7",
     "bupkis": "0.14.0",
     "typescript": "5.9.3"
   }
