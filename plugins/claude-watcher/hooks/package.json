@@ -8,7 +8,7 @@
     "test": "echo '{\"prompt\": \"test\", \"cwd\": \".\", \"session_id\": \"test\", \"transcript_path\": \"/tmp\", \"permission_mode\": \"auto\"}' | npx tsx scripts/watch-results-hook.ts"
   },
   "devDependencies": {
-    "@types/node": "22.15.21",
+    "@types/node": "22.19.7",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
   }
