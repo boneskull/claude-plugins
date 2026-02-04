@@ -42,6 +42,33 @@
         ]
       },
       "blockMessage": "⚠️ BLOCKED - .gitkeep Anti-Pattern Detected\n\n📋 REQUIRED ACTION:\n1. Use Skill tool: 'tools@boneskull-plugins:git-directory-management'\n2. Review when .gitkeep is actually needed (rarely!)\n3. Add actual files instead of .gitkeep\n\nReason: .gitkeep is ONLY for truly empty directories.\nIf you're about to add files, just add them directly.\n\n💡 TIP: Git tracks directories automatically when they contain files"
+    },
+    "tools@boneskull-plugins:git-rebase-interactive": {
+      "type": "capability",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Programmatic interactive git rebase without user interaction - portable across macOS and Linux",
+      "promptTriggers": {
+        "keywords": [
+          "interactive rebase",
+          "git rebase -i",
+          "squash commits",
+          "fixup commit",
+          "absorb commit",
+          "reorder commits",
+          "drop commit",
+          "combine commits",
+          "clean up commits",
+          "tidy commits"
+        ],
+        "intentPatterns": [
+          "(squash|fixup|absorb|combine|merge|meld).*commit",
+          "rebase.*(interactive|squash|fixup)",
+          "(reorder|rearrange|move).*commit",
+          "(drop|remove|delete).*commit.*history",
+          "clean.*up.*commit.*history"
+        ]
+      }
     }
   },
   "version": "1.0"

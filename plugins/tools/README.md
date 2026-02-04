@@ -173,6 +173,26 @@ Teaches proper git directory management - never create `.gitkeep` files in direc
 
 **When activated:** When creating new directories in a git repository.
 
+### git-rebase-interactive
+
+Programmatic interactive git rebase without user interaction - portable across macOS and Linux.
+
+**Key patterns:**
+
+- Use temp script with `GIT_SEQUENCE_EDITOR` to avoid BSD/GNU sed differences
+- Write complete todo file instead of sed transformations
+- Reusable `git_rebase_todo` function for common operations
+
+**Supported operations:**
+
+- `fixup` - absorb commits into earlier commits (discard message)
+- `squash` - combine commits (merge messages)
+- `pick` - keep commit as-is
+- `drop` - remove commit from history
+- Reordering commits
+
+**When activated:** When asked to squash, fixup, absorb, reorder, or drop commits, or perform interactive rebases programmatically.
+
 ## Future Skills
 
 Additional skills will be added incrementally as needed. Each tool will follow the structure and conventions documented above.
