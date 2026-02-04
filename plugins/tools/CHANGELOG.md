@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/boneskull/claude-plugins/compare/tools-v1.1.0...tools-v1.2.0) (2026-02-04)
+
+
+### Features
+
+* **tools:** add git-rebase-interactive skill ([c6f5e8d](https://github.com/boneskull/claude-plugins/commit/c6f5e8dd2670e0b7a869fb682625d711a140d269))
+
 ## [1.1.0](https://github.com/boneskull/claude-plugins/compare/tools-v1.0.0...tools-v1.1.0) (2025-12-23)
 
 
