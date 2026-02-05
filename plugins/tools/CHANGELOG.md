@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/boneskull/claude-plugins/compare/tools-v1.2.0...tools-v1.2.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* **tools:** make apply-template command non-boneskull-specific ([4912cdf](https://github.com/boneskull/claude-plugins/commit/4912cdf94f7b467a8f1957edf1c565e4f94696e0))
+* **tools:** update git-commit-messages skill ([ecd7227](https://github.com/boneskull/claude-plugins/commit/ecd7227f23d82ad26c00aa4eac20710eb510e7d2))
+
 ## [1.2.0](https://github.com/boneskull/claude-plugins/compare/tools-v1.1.0...tools-v1.2.0) (2026-02-04)
 
 
