@@ -1,29 +1,34 @@
 ---
-description: Retroactively apply configuration and dev dependencies from boneskull-template to an existing project
-argument-hint: [target-directory]
+description: Retroactively apply configuration and dev dependencies from a GitHub template repository to an existing JavaScript/TypeScript project
+argument-hint: <org/repo> [target-directory]
 ---
 
 # /apply-template
 
 ## Purpose
 
-Retroactively apply configuration files and development dependencies from the [boneskull-template](https://github.com/boneskull/boneskull-template) repository to an existing project, intelligently merging package.json and copying missing configuration files.
+Retroactively apply configuration files and development dependencies from a GitHub template repository to an existing JavaScript/TypeScript project, intelligently merging `package.json` and copying missing configuration files.
 
 ## Contract
 
-**Inputs:** `target-directory` (optional) — Target project directory (defaults to current working directory)
+**Inputs:**
+
+- `org/repo` (required) — GitHub repository slug of the template (e.g., `boneskull/boneskull-template`)
+- `target-directory` (optional) — Target project directory (defaults to current working directory)
+
 **Outputs:** Summary of changes made
 
 ## Instructions
 
 ### 1. Preparation
 
+- Parse the `org/repo` argument to extract the organization and repository name
 - Validate target directory exists and contains a `package.json`
 - Verify git working tree is clean in target (warn user if not)
-- Fetch or clone latest boneskull-template:
-  - **Cache location:** `~/.cache/boneskull-template`
-  - If cache exists: `cd ~/.cache/boneskull-template && git pull origin main`
-  - If cache doesn't exist: `git clone https://github.com/boneskull/boneskull-template.git ~/.cache/boneskull-template`
+- Fetch or clone the latest template:
+  - **Cache location:** `~/.cache/apply-template/<org>/<repo>`
+  - If cache exists: `cd ~/.cache/apply-template/<org>/<repo> && git pull origin main`
+  - If cache doesn't exist: `git clone https://github.com/<org>/<repo>.git ~/.cache/apply-template/<org>/<repo>`
   - This avoids repeated clones and speeds up subsequent runs
 
 ### 2. Ignore List
@@ -46,7 +51,7 @@ Retroactively apply configuration files and development dependencies from the [b
    ```bash
    node plugins/tools/scripts/merge-package.js \
      <target-directory>/package.json \
-     ~/.cache/boneskull-template/package.json
+     ~/.cache/apply-template/<org>/<repo>/package.json
    ```
 
 3. **Install dependencies:** Run `npm install` to install newly added dependencies
@@ -62,7 +67,7 @@ The merge script automatically:
 - Adds missing fields like `engines`, `knip`, `lint-staged`, etc.
 - Merges prettier config and adds plugins
 
-**Version comparison logic (handled by merge-package.js):**
+**Version comparison logic (handled by `merge-package.js`):**
 
 ```javascript
 // Use semver comparison - choose higher version
@@ -102,7 +107,8 @@ The merge script automatically:
 - `cspell.json`
 - `.husky/` directory and contents
 - `.github/` directory (non-overlapping files only)
-- `LICENSE` (only if missing)
+- `LICENSE` or `LICENSE.md` (only if missing)
+- `.config/` directory and contents (if present)
 - Other dotfiles in root
 
 ### 5. Post-Application Steps
@@ -125,18 +131,18 @@ After all changes are complete, inform user they should:
 
 3. **Review and customize:**
    - Check new configuration files match project needs
-   - Adjust scripts in package.json
+   - Adjust scripts in `package.json`
    - Customize ESLint/Prettier rules
    - Update README with new tooling info
 
-**Note:** Dependencies are automatically installed during step 3 (after merging package.json), so no separate `npm install` is needed unless the user wants to run it again.
+**Note:** Dependencies are automatically installed during step 3 (after merging `package.json`), so no separate `npm install` is needed unless the user wants to run it again.
 
 ### 6. Output Format
 
 Provide clear summary of actions taken:
 
 ```text
-✅ Applied boneskull-template to project
+✅ Applied <org>/<repo> template to project
 
 Package.json changes:
   📦 Added dependencies: prettier, eslint, typescript
@@ -165,14 +171,17 @@ Next steps:
 ## Example Usage
 
 ```bash
-# Apply to current directory
-/tools:apply-template
+# Apply a template to current directory
+/tools:apply-template boneskull/boneskull-template
 
 # Apply to specific project
-/tools:apply-template ../my-project
+/tools:apply-template boneskull/boneskull-template ../my-project
 
 # Apply to absolute path
-/tools:apply-template /Users/me/projects/my-app
+/tools:apply-template myorg/node-template /Users/me/projects/my-app
+
+# Use any GitHub template repository
+/tools:apply-template sindresorhus/node-module-boilerplate
 ```
 
 ## Constraints
@@ -181,42 +190,51 @@ Next steps:
 - **Always choose newer version** when merging dependencies
 - **Preserve user customizations** in scripts and configs
 - **Git working tree must be clean** (warn and exit if not)
-- **Validate package.json** after merge (must be valid JSON)
-- **Create backup** of original package.json before modifying
+- **Validate `package.json`** after merge (must be valid JSON)
+- **Create backup** of original `package.json` before modifying
 - **Handle errors gracefully** (missing template, network issues, etc.)
 
 ## Edge Cases
 
-1. **Git not clean:**
+1. **Invalid org/repo format:**
+   - Error: "Invalid template format. Expected 'org/repo' (e.g., 'boneskull/boneskull-template')"
+   - Exit without making changes
+
+2. **Git not clean:**
    - Warn user: "Working tree has uncommitted changes. Commit or stash before applying template."
    - Exit without making changes
 
-2. **No package.json in target:**
-   - Error: "Target directory is not a Node.js project (no package.json found)"
+3. **No package.json in target:**
+   - Error: "Target directory is not a JavaScript/TypeScript project (no package.json found)"
    - Exit
 
-3. **Network error fetching template:**
+4. **Template repository not found:**
+   - Error: "Template repository '<org>/<repo>' not found on GitHub"
+   - Exit
+
+5. **Network error fetching template:**
    - Try local cached copy if available
    - Error if no cached copy: "Cannot fetch template. Check network connection."
 
-4. **Version comparison ambiguity:**
+6. **Version comparison ambiguity:**
    - If versions are equivalent (e.g., "^1.0.0" vs "~1.0.2"), prefer exact version
    - If can't parse version, keep target's version and warn user
 
-5. **.gitignore conflicts:**
-   - If target has .gitignore, DON'T overwrite
+7. **.gitignore conflicts:**
+   - If target has `.gitignore`, DON'T overwrite
    - Consider offering to merge (show diff, ask user)
 
 ## Implementation Notes
 
-- **Template cache:** `~/.cache/boneskull-template`
-- **Template URL:** `https://github.com/boneskull/boneskull-template.git`
+- **Template cache:** `~/.cache/apply-template/<org>/<repo>`
+- **Template URL:** `https://github.com/<org>/<repo>.git`
 - **Merge script:** `plugins/tools/scripts/merge-package.js` - handles all package.json merging logic
 - **Workflow:**
-  1. Ensure template cache exists (clone if needed, pull if exists)
-  2. Create package.json.backup
-  3. Run merge-package.js script
-  4. Run npm install
-  5. Copy missing configuration files
-  6. Delete package.json.backup
-  7. Display summary of changes
+  1. Parse `org/repo` slug from arguments
+  2. Ensure template cache exists (clone if needed, pull if exists)
+  3. Create `package.json.backup`
+  4. Run `node plugins/tools/scripts/merge-package.js <target-package.json> <template-package.json>`
+  5. Run `npm install`
+  6. Copy missing configuration files
+  7. Delete `package.json.backup`
+  8. Display summary of changes
