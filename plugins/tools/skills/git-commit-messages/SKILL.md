@@ -80,16 +80,6 @@ Skills now support references/ subdirectory for
 detailed documentation that loads on-demand."
 ```
 
-### Commit with footer
-
-```bash
-git commit -m "chore: update dependencies
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-```
-
 ### Full conventional commit
 
 ```bash
@@ -100,11 +90,7 @@ using multiline strings instead of HEREDOC syntax, which
 fails in certain shell environments.
 
 The pattern uses a single -m flag with the entire message
-in quotes, preserving newlines naturally.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+in quotes, preserving newlines naturally."
 ```
 
 ## Why It Matters
@@ -124,20 +110,6 @@ HEREDOC syntax causes issues because:
 - Unnecessary complexity for the task
 
 ## Quick Reference
-
-**Template for commits with Claude Code attribution:**
-
-```bash
-git commit -m "<type>[optional scope]: <description>
-
-[optional body]
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-```
-
-**Remember:**
 
 - One `-m` flag
 - Entire message in double quotes
