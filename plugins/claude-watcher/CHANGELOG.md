@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.3](https://github.com/boneskull/claude-plugins/compare/claude-watcher-v0.1.2...claude-watcher-v0.1.3) (2026-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @modelcontextprotocol/sdk to v1.26.0 [security] ([#91](https://github.com/boneskull/claude-plugins/issues/91)) ([92ec8a0](https://github.com/boneskull/claude-plugins/commit/92ec8a08eb3e38ce505f6d1a0071d14c0cb89d6c))
+* **deps:** update dependency @modelcontextprotocol/sdk to v1.30.0 ([#113](https://github.com/boneskull/claude-plugins/issues/113)) ([bfe4118](https://github.com/boneskull/claude-plugins/commit/bfe411803eceeec57913e991e3b43e4ec25f199c))
+* **deps:** update dependency better-sqlite3 to v12.11.1 ([#114](https://github.com/boneskull/claude-plugins/issues/114)) ([7f81da7](https://github.com/boneskull/claude-plugins/commit/7f81da73c6f806cbfb8d8a1856f92d4a80207f59))
+* **deps:** update dependency yaml to v2.8.3 [security] ([#90](https://github.com/boneskull/claude-plugins/issues/90)) ([c5ccc4c](https://github.com/boneskull/claude-plugins/commit/c5ccc4c66f15c40c72ad8110b9f0c2501610608d))
+* **deps:** update dependency yaml to v2.9.0 ([#115](https://github.com/boneskull/claude-plugins/issues/115)) ([e7e7b52](https://github.com/boneskull/claude-plugins/commit/e7e7b52564bf9eb73ff8cb49a97cd326b0e5a845))
+
 ## [0.1.2](https://github.com/boneskull/claude-plugins/compare/claude-watcher-v0.1.1...claude-watcher-v0.1.2) (2026-01-09)
 
 
