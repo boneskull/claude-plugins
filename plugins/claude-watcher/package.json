@@ -31,9 +31,9 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "7.6.13",
+    "@types/better-sqlite3": "9.6.0",
     "@types/ms": "2.1.0",
-    "@types/node": "22.20.1",
+    "@types/node": "24.13.3",
     "bupkis": "0.14.0",
     "typescript": "5.9.3"
   }
